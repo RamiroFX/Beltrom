@@ -5,17 +5,31 @@
  */
 package beltrom;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 /**
  *
  * @author Ramiro
  */
 public class Beltrom {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
     
+    private static UIManager.LookAndFeelInfo apariencias[] = UIManager.getInstalledLookAndFeels();
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(apariencias[1].getClassName());
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Beltrom.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(Beltrom.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(Beltrom.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Beltrom.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Inicio inicio = new Inicio();
+        inicio.mostrarLogin();
+    }
 }
