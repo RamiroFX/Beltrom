@@ -19,6 +19,7 @@ public class Inicio {
 
     public Inicio() {
         v_mainframe = new V_inicio();
+        m_funcionario = new M_funcionario();
         c_main = new C_inicio(v_mainframe, m_funcionario);
         c_main.mostrarVista();
     }

@@ -429,42 +429,39 @@ public class DB_Funcionario {
         return f;
     }
 
-    public static M_funcionario obtenerDatosFuncionario(String alias) {
+    public static M_funcionario obtenerDatosFuncionario(String alias, String password) {
         M_funcionario f = null;
-        String genero = "(SELECT SEXO_DESCRIPCION  FROM SEXO WHERE SEXO_ID_SEXO = PERS_ID_SEXO) \"pers_sexo\"";
-        String pais = "(SELECT PAIS_DESCRIPCION FROM PAIS WHERE PERS_ID_PAIS=PAIS_ID_PAIS) \"PERS_NACIONALIDAD\"";
-        String ciudad = " (SELECT CIUD_DESCRIPCION FROM CIUDAD WHERE PERS_ID_CIUDAD=CIUD_ID_CIUDAD)\"PERS_CIUDAD\"";
-        String estadoCivil = " (SELECT ESCI_DESCRIPCION FROM ESTADO_CIVIL WHERE ESCI_ID_ESTADO_CIVIL=PERS_ID_ESTADO_CIVIL)\"pers_estado_civil\"";
-        String estado = " (SELECT ESTA_DESCRIPCION FROM ESTADO WHERE ESTA_ID_ESTADO=FUNC_ID_ESTADO)\"func_estado\"";
-        String queryFunc = "func_id_funcionario, func_id_persona, func_alias,func_fecha_ingreso, " + estado + ", func_fecha_salida,func_salario,func_id_estado, func_nro_celular, func_nro_telefono,func_email, func_direccion, func_observacion";
-        String queryPers = "pers_id_persona, pers_ci, pers_nombre, pers_apellido," + genero + ", pers_fecha_nacimiento, " + pais + "," + ciudad + ", " + estadoCivil + "";
-        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario, persona " + "WHERE func_id_persona = pers_id_persona " + "AND func_alias like '" + alias + "'";
-
+        String genero = "(SELECT DESCRIPCION  FROM SEXO WHERE ID_SEXO = P.ID_SEXO) \"sexo\"";
+        String pais = "(SELECT DESCRIPCION FROM PAIS WHERE ID_PAIS=P.ID_PAIS) \"NACIONALIDAD\"";
+        String ciudad = " (SELECT DESCRIPCION FROM CIUDAD WHERE ID_CIUDAD=P.ID_CIUDAD)\"CIUDAD\"";
+        String estadoCivil = " (SELECT DESCRIPCION FROM ESTADO_CIVIL WHERE ID_ESTADO_CIVIL= P.ID_ESTADO_CIVIL)\"estado_civil\"";
+        String queryFunc = "F.id_funcionario, P.id_persona, alias, fecha_ingreso, nro_celular, nro_telefono,email, direccion, observacion";
+        String queryPers = "ci, nombre, apellido," + genero + ", fecha_nacimiento, " + pais + "," + ciudad + ", " + estadoCivil + "";
+        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario F, persona P " + "WHERE F.id_persona = P.id_persona " 
+                + "AND (ALIAS = '" + alias + "' AND PASSWORD ='"+password+"');";
+        System.out.println("Query: " + Query);
         try {
             st = DB_manager.getConection().createStatement();
             rs = st.executeQuery(Query);
             while (rs.next()) {
                 f = new M_funcionario();
-                f.setPais(rs.getString("PERS_NACIONALIDAD"));
-                f.setSalario(rs.getInt("func_salario"));
-                f.setCiudad(rs.getString("PERS_CIUDAD"));
-                f.setFecha_nacimiento(rs.getDate("PERS_FECHA_NACIMIENTO"));
-                f.setSexo(rs.getString("pers_sexo"));
-                f.setNro_celular(rs.getString("func_nro_celular"));
-                f.setNro_telefono(rs.getString("func_nro_telefono"));
-                f.setEmail(rs.getString("func_email"));
-                f.setDireccion(rs.getString("FUNC_DIRECCION"));
-                f.setAlias(rs.getString("func_alias"));
-                f.setNombre(rs.getString("pers_nombre"));
-                f.setApellido(rs.getString("pers_apellido"));
-                f.setFecha_ingreso(rs.getDate("FUNC_FECHA_INGRESO"));
-                f.setId_persona(rs.getInt("pers_id_persona"));
-                f.setCedula(rs.getInt("pers_ci"));
-                f.setEstado(rs.getString("func_estado"));
-                f.setIdEstado(rs.getInt("func_id_estado"));
-                f.setEstado_civil(rs.getString("pers_estado_civil"));
-                f.setId_funcionario(rs.getInt("func_id_funcionario"));
-                f.setObservacion(rs.getString("FUNC_OBSERVACION"));
+                f.setPais(rs.getString("NACIONALIDAD"));
+                f.setCiudad(rs.getString("CIUDAD"));
+                f.setFecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"));
+                f.setSexo(rs.getString("sexo"));
+                f.setNro_celular(rs.getString("nro_celular"));
+                f.setNro_telefono(rs.getString("nro_telefono"));
+                f.setEmail(rs.getString("email"));
+                f.setDireccion(rs.getString("DIRECCION"));
+                f.setAlias(rs.getString("alias"));
+                f.setNombre(rs.getString("nombre"));
+                f.setApellido(rs.getString("apellido"));
+                f.setFecha_ingreso(rs.getDate("FECHA_INGRESO"));
+                f.setId_persona(rs.getInt("id_persona"));
+                f.setCedula(rs.getInt("ci"));
+                f.setEstado_civil(rs.getString("estado_civil"));
+                f.setId_funcionario(rs.getInt("id_funcionario"));
+                f.setObservacion(rs.getString("OBSERVACION"));
             }
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
@@ -488,17 +485,17 @@ public class DB_Funcionario {
 
     public static Vector obtenerRolFuncionario(M_funcionario f) {
         Vector rol = null;
-        String q = "SELECT rol_descripcion "
+        String q = "SELECT descripcion "
                 + "FROM funcionario f, rol r, rol_usuario ru "
-                + "WHERE ru.rous_id_funcionario = f.func_id_funcionario "
-                + "AND ru.rous_id_rol = r.rol_id_rol "
-                + "AND f.func_alias LIKE ('" + f.getAlias() + "')";
+                + "WHERE ru.id_funcionario = f.id_funcionario "
+                + "AND ru.id_rol = r.id_rol "
+                + "AND f.alias LIKE ('" + f.getAlias() + "')";
         try {
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             rol = new Vector();
             while (rs.next()) {
-                rol.add(rs.getString("rol_descripcion"));
+                rol.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());

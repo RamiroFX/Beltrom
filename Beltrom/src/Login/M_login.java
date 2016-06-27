@@ -25,20 +25,14 @@ public class M_login {
         funcionario = new M_funcionario();
         configuracion = new Config();
     }
-    
 
     public boolean conectar(String user, String password) {
-        boolean b = false;
         try {
-            b = DB_manager.conectarBD(user, password);
-            if (b) {
-                funcionario = DB_Funcionario.obtenerDatosFuncionario(user);
-            }
-            return b;
+            return DB_manager.conectarBD(user, password);
         } catch (SQLException ex) {
             Logger.getLogger(M_login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return b;
+        return false;
     }
 
     public String obtenerNombreUsuario() {
@@ -48,5 +42,14 @@ public class M_login {
             Logger.getLogger(M_login.class.getName()).log(Level.SEVERE, null, ex);
         }
         return "";
+    }
+
+    public boolean verificarUsuario(String alias, String password) {
+        boolean b = false;
+        b = DB_manager.verificarUsuario(alias, password);
+        if (b) {
+            funcionario = DB_Funcionario.obtenerDatosFuncionario(alias, password);
+        }
+        return b;
     }
 }

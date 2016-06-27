@@ -36,7 +36,7 @@ public class C_login implements ActionListener, KeyListener {
     }
 
     public void mostrarVista() {
-        this.vista.setSize(400,200);
+        this.vista.setSize(400, 200);
         this.vista.setLocation(this.c_main.centrarPantalla(this.vista));
         c_main.agregarVentana(vista);
         this.vista.btnAceptar.requestFocusInWindow();
@@ -71,7 +71,7 @@ public class C_login implements ActionListener, KeyListener {
             public void run() {
                 c_main.setFuncionario(modelo.funcionario);
                 c_main.getFuncionario().setAlias(vista.txtNombre.getText());
-                modelo.configuracion.setUser(c_main.getFuncionario().getAlias());
+                //modelo.configuracion.setUser(c_main.getFuncionario().getAlias());
                 //direccion de base de datos
                 String url = vista.Conexion;
                 //alias de usuario
@@ -83,21 +83,22 @@ public class C_login implements ActionListener, KeyListener {
                     password = password + c;
                 }
                 //se conecta contra la base de datos
-                // if (DBmanager.conectarBD(dbms, url, user, password)) {
-                if (modelo.conectar(user, password)) {
-                    c_main.setFuncionario(modelo.funcionario);
-                    mostrarMensaje("La conexion se ha establecido con exito \n"
-                            + "Bienvenido " + c_main.getFuncionario().getNombre() + " " + c_main.getFuncionario().getApellido() + "!");
+                if (modelo.conectar("postgres", "postgres")) {
+                    if (modelo.verificarUsuario(user, password)) {
+                        c_main.setFuncionario(modelo.funcionario);
+                        mostrarMensaje("La conexion se ha establecido con exito \n"
+                                + "Bienvenido " + c_main.getFuncionario().getNombre() + " " + c_main.getFuncionario().getApellido() + "!");
                     //una vez correcto el nombre/contraseña se elimina la pantalla de logeo
-                    //y se procede a mostrar la pantalla de seleccion de rol
-                    vista.dispose();
-                    vista = null;
-                    crearSeleccionRol();
+                        //y se procede a mostrar la pantalla de seleccion de rol
+                        vista.dispose();
+                        vista = null;
+                        crearSeleccionRol();
                     //se habilita la opcion de deslogeo
-                    //c_main.vista.getJMbarraMenu().jmiLogOut.setEnabled(true);
-                    //se coloca en la barra de menu el nombre de usuario
-                    System.out.println("modelo.obtenerNombreUsuario(): " + modelo.obtenerNombreUsuario());
-                    c_main.vista.setJtfUsuario(modelo.obtenerNombreUsuario());
+                        //c_main.vista.getJMbarraMenu().jmiLogOut.setEnabled(true);
+                        //se coloca en la barra de menu el nombre de usuario
+                        System.out.println("modelo.obtenerNombreUsuario(): " + modelo.obtenerNombreUsuario());
+                        c_main.vista.setJtfUsuario(modelo.obtenerNombreUsuario());
+                    }
                 } else {
                     mostrarMensaje("Atencion\n"
                             + "Usuario y/o contraseña incorrectos");

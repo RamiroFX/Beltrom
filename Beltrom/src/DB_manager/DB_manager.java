@@ -590,4 +590,23 @@ public class DB_manager {
         }
         return sq;
     }
+
+    public static boolean verificarUsuario(String alias, String password) {
+        String q = "SELECT alias  FROM FUNCIONARIO WHERE ALIAS ='" + alias + "' AND PASSWORD ='" + password + "';";
+        try {
+            st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(q);
+            if (!rs.isBeforeFirst()) {
+                System.out.println("No data");
+                return false;
+            }else{
+                System.out.println("We got data!");
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        System.out.println("There is NO data");
+        return false;
+    }
 }
