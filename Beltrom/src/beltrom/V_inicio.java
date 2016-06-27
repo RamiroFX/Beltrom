@@ -21,6 +21,7 @@ package beltrom;
  * JDesktopPane que será el encargado de contener a las ventanas internas
  * JInternalFrame.
  */
+import MenuPrincipal.V_BarraMenu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
@@ -40,6 +42,7 @@ public class V_inicio extends JFrame {
     private JToolBar jtbBarraHerramientas = null;
     private JTextField jtfUsuario = null;
     private ImageIcon icono;
+    private V_BarraMenu barraMenu;
 
     /**
      * Constructor que se encarga de inicializar la aplicación definiendo los
@@ -55,6 +58,8 @@ public class V_inicio extends JFrame {
         } catch (Exception e) {
             icono = new ImageIcon();
         }
+        barraMenu = new V_BarraMenu(this);
+        setJMenuBar(barraMenu);
         setIconImage(icono.getImage());
         getDesktop().setLayout(null);
         getDesktop().setBackground(Color.WHITE);
@@ -134,5 +139,9 @@ public class V_inicio extends JFrame {
      */
     public void setCurrentJIF(JInternalFrame currentJIF) {
         this.currentJIF = currentJIF;
+    }
+    
+    public V_BarraMenu getJMenuBar() {
+        return this.barraMenu;
     }
 }

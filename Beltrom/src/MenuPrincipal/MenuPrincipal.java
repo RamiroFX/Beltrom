@@ -12,8 +12,8 @@ import beltrom.C_inicio;
  */
 public class MenuPrincipal {
 
-    V_MenuPrincipal vista;
-    C_MenuPrincipal controlador;
+    public V_MenuPrincipal vista;
+    public C_MenuPrincipal controlador;
 
     public MenuPrincipal(C_inicio inicio) {
         this.vista = new V_MenuPrincipal();

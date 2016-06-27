@@ -7,6 +7,7 @@ package MenuPrincipal;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.text.SimpleDateFormat;
 import javax.swing.JButton;
@@ -24,22 +25,19 @@ import javax.swing.text.DefaultFormatterFactory;
  */
 class V_MenuPrincipal extends JInternalFrame {
 
-    JPanel jpSouth, jpCenter, jpWest, jpNorth;
-    JButton jbSalir, jbProveedores, jbProducto, jbEgreso, jbEmpleados,
-            jbClientes, jbVentas, jbPedidos;
+    JPanel jpSouth, jpCenter, jpNorth;
+    JButton jbSalir, jbProveedores, jbProducto, jbMovimientos, jbEmpleados;
     JFormattedTextField jftFecha;
 
     public V_MenuPrincipal() {
         super("Menú principal", true, true, true, true);
-        setSize(obtenerDimensionDePantalla());
+        setSize(600,400);
         setName("menuPrincipal");
-        setLocation(0, 0);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inicializarVista();
         getContentPane().add(jpNorth, BorderLayout.NORTH);
         getContentPane().add(jpCenter, BorderLayout.CENTER);
         getContentPane().add(jpSouth, BorderLayout.SOUTH);
-        getContentPane().add(jpWest, BorderLayout.WEST);
     }
 
     /**
@@ -64,17 +62,16 @@ class V_MenuPrincipal extends JInternalFrame {
         jpNorth = new JPanel();
         jpSouth = new JPanel();
         jpSouth.setBorder(new EtchedBorder());
-        jpCenter = new JPanel(new BorderLayout());
-        jpWest = new JPanel(new GridLayout(8, 1));
-        jpWest.setBorder(new EtchedBorder());
+        jpCenter = new JPanel();
         jbSalir = new JButton("Salir");
         jbProveedores = new JButton("Proveedores");
+        jbProveedores.setPreferredSize(new Dimension(200, 100));
         jbProducto = new JButton("Productos");
-        jbEgreso = new JButton("Egreso");
+        jbProducto.setPreferredSize(new Dimension(200, 100));
+        jbMovimientos = new JButton("Movimientos");
+        jbMovimientos.setPreferredSize(new Dimension(200, 100));
         jbEmpleados = new JButton("Empleados");
-        jbClientes = new JButton("Clientes");
-        jbVentas = new JButton("Ventas");
-        jbPedidos = new JButton("Pedidos");
+        jbEmpleados.setPreferredSize(new Dimension(200, 100));
         jftFecha = new JFormattedTextField(
                 new DefaultFormatterFactory(
                 new DateFormatter(new SimpleDateFormat("dd/MM/yyyy"))));
@@ -83,12 +80,9 @@ class V_MenuPrincipal extends JInternalFrame {
 
         jpNorth.add(jftFecha);
         jpSouth.add(jbSalir);
-        jpWest.add(jbProveedores);
-        jpWest.add(jbProducto);
-        jpWest.add(jbEgreso);
-        jpWest.add(jbEmpleados);
-        jpWest.add(jbClientes);
-        jpWest.add(jbVentas);
-        jpWest.add(jbPedidos);
+        jpCenter.add(jbProveedores);
+        jpCenter.add(jbProducto);
+        jpCenter.add(jbMovimientos);
+        jpCenter.add(jbEmpleados);
     }
 }

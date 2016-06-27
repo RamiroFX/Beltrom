@@ -5,6 +5,7 @@
 package beltrom;
 
 import Entities.M_funcionario;
+import Login.Login;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -36,16 +37,16 @@ public class C_inicio implements ActionListener {
         wa = new escuchadorVentana();
         agregarListeners();
     }
+
     public void mostrarVista() {
         this.vista.setVisible(true);
     }
 
     private void agregarListeners() {
+        //vista.getJMenuBar().jmiLogIn.addActionListener(this);
+        //vista.getJMenuBar().jmiLogOut.addActionListener(this);
+        vista.getJMenuBar().jmiCerrar.addActionListener(this);
         vista.addWindowListener(wa);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        //Object fuente = e.getSource();
     }
 
     public void agregarVentana(JInternalFrame mdi) {
@@ -108,6 +109,31 @@ public class C_inicio implements ActionListener {
      */
     public void setFuncionario(M_funcionario funcionario) {
         this.m_funcionario = funcionario;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object fuente = e.getSource();
+        //Object enter = ActionEvent.KEY_EVENT_MASK;
+        /*if (fuente == vista.getJMenuBar().jmiLogIn) {
+            //se verifica que el panel login no se encuentre creado.
+            mostrarIngreso();
+            vista.getJMenuBar().jmiLogIn.setEnabled(false);
+            vista.getJMenuBar().jmiLogOut.setEnabled(true);
+        } else if (fuente == vista.getJMenuBar().jmiLogOut) {
+            //frame.getDesktop().getDesktopManager().closeFrame(frame.getCurrentJIF());
+            vista.getDesktop().removeAll();
+            vista.getDesktop().updateUI();
+            vista.setJtfUsuario("");
+            vista.getJMenuBar().jmiLogIn.setEnabled(true);
+            vista.getJMenuBar().jmiLogOut.setEnabled(false);
+        } else*/ if (fuente == vista.getJMenuBar().jmiCerrar) {
+            System.exit(0);
+        }
+    }
+
+    public void mostrarIngreso() {
+        Login login = new Login(this);
     }
 
     private class escuchadorVentana extends WindowAdapter {

@@ -20,8 +20,7 @@ import javax.swing.JInternalFrame;
  */
 public class C_MenuPrincipal implements ActionListener {
 
-    V_MenuPrincipal vista;
-    int idEgresoCabecera;
+    public V_MenuPrincipal vista;
     public C_inicio inicio;
 
     public C_MenuPrincipal(V_MenuPrincipal vista, C_inicio inicio) {
@@ -45,18 +44,16 @@ public class C_MenuPrincipal implements ActionListener {
     private void agregarListeners() {
         this.vista.jbProveedores.addActionListener(this);
         this.vista.jbProducto.addActionListener(this);
-        this.vista.jbEgreso.addActionListener(this);
+        this.vista.jbMovimientos.addActionListener(this);
         this.vista.jbSalir.addActionListener(this);
-        //this.vista.jtEgresos.addMouseListener(this);
         this.vista.jbEmpleados.addActionListener(this);
-        this.vista.jbClientes.addActionListener(this);
-        this.vista.jbVentas.addActionListener(this);
-        this.vista.jbPedidos.addActionListener(this);
     }
 
     void mostrarVista() {
         this.vista.setVisible(true);
         this.inicio.agregarVentana(vista);
+        this.vista.setLocation(this.inicio.centrarPantalla(this.vista));
+        //this.inicio.centrarPantalla(vista);
     }
 
     @Override
