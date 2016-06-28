@@ -12,7 +12,9 @@ package empleado;
 
 import java.awt.BorderLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -32,46 +34,38 @@ public class V_gestion_usuario extends JInternalFrame {
     public javax.swing.JButton jbActualizarUsuario;
     public javax.swing.JButton jbBuscarUsuario;
     public javax.swing.JButton jbCrearUsuario;
-    public javax.swing.JButton jbImagenUsuario;
     private javax.swing.JLabel jlAlias;
     private javax.swing.JLabel jlApellido;
     private javax.swing.JLabel jlCedulaIdentidad;
     private javax.swing.JLabel jlCiudad;
     private javax.swing.JLabel jlCorreoElectronico;
     private javax.swing.JLabel jlDireccion;
-    private javax.swing.JLabel jlEstado;
     private javax.swing.JLabel jlEstadoCivil;
     private javax.swing.JLabel jlFechaIngreso;
     private javax.swing.JLabel jlFechaNacimiento;
-    private javax.swing.JLabel jlFechaSalida;
-    public javax.swing.JLabel jlFoto;
     private javax.swing.JLabel jlGenero;
     private javax.swing.JLabel jlNacionalidad;
     private javax.swing.JLabel jlNombre;
     private javax.swing.JLabel jlNroCelular;
     private javax.swing.JLabel jlRol;
-    private javax.swing.JLabel jlSalario;
     private javax.swing.JLabel jlTelefono;
     private javax.swing.JPanel jpCenter;
     private javax.swing.JPanel jpDatos;
     private javax.swing.JPanel jpDatosEmpresariales;
     private javax.swing.JPanel jpDatosPersonales1;
     private javax.swing.JPanel jpDatosPersonales2;
-    private javax.swing.JPanel jpFoto;
     private javax.swing.JPanel jpSouth;
     public javax.swing.JTable jtUsuario;
     public javax.swing.JTextArea jtaObservacion;
     public javax.swing.JTextField jtfAlias;
     public javax.swing.JTextField jtfApellido;
-    public javax.swing.JFormattedTextField jftCedulaIdentidad,jftSalario;
+    public javax.swing.JFormattedTextField jftCedulaIdentidad;
     public javax.swing.JTextField jtfCiudad;
     public javax.swing.JTextField jtfCorreoElectronico;
     public javax.swing.JTextField jtfDireccion;
-    public javax.swing.JTextField jtfEstado;
     public javax.swing.JTextField jtfEstadoCivil;
     public javax.swing.JTextField jtfFechaIngreso;
     public javax.swing.JTextField jtfFechaNacimiento;
-    public javax.swing.JTextField jtfFechaSalida;
     public javax.swing.JTextField jtfGenero;
     public javax.swing.JTextField jtfNacionalidad;
     public javax.swing.JTextField jtfNombre;
@@ -107,8 +101,6 @@ public class V_gestion_usuario extends JInternalFrame {
         jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setViewportView(jtUsuario);
         jTabbedPane = new javax.swing.JTabbedPane();
-        jpFoto = new javax.swing.JPanel();
-        jlFoto = new javax.swing.JLabel();
         jlNombre = new javax.swing.JLabel();
         jtfNombre = new javax.swing.JTextField();
         jlApellido = new javax.swing.JLabel();
@@ -139,28 +131,16 @@ public class V_gestion_usuario extends JInternalFrame {
         jtfAlias = new javax.swing.JTextField();
         jlFechaIngreso = new javax.swing.JLabel();
         jtfFechaIngreso = new javax.swing.JTextField();
-        jlFechaSalida = new javax.swing.JLabel();
-        jtfFechaSalida = new javax.swing.JTextField();
-        jlSalario = new javax.swing.JLabel();
-        jftSalario = new javax.swing.JFormattedTextField();
         jlCorreoElectronico = new javax.swing.JLabel();
         jtfCorreoElectronico = new javax.swing.JTextField();
         jlRol = new javax.swing.JLabel();
         jcbRol = new javax.swing.JComboBox();
-        jlEstado = new javax.swing.JLabel();
-        jtfEstado = new javax.swing.JTextField();
         jbCrearUsuario = new javax.swing.JButton();
         jbActualizarUsuario = new javax.swing.JButton();
         jbBuscarUsuario = new javax.swing.JButton();
-        jbImagenUsuario = new javax.swing.JButton("Cambiar Imagen");
 
         jpDatosPersonales1 = new javax.swing.JPanel();
         jpDatosPersonales1.setLayout(new java.awt.BorderLayout());
-        jpFoto.setBorder(javax.swing.BorderFactory.createTitledBorder("Imagen identificativa"));
-        jlFoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlFoto.setPreferredSize(new java.awt.Dimension(100, 100));
-        jpFoto.add(jlFoto);
-        jpDatosPersonales1.add(jpFoto, java.awt.BorderLayout.NORTH);
 
 
         jpDatos = new javax.swing.JPanel();
@@ -203,7 +183,7 @@ public class V_gestion_usuario extends JInternalFrame {
 
         jpDatosPersonales2.setLayout(new java.awt.BorderLayout());
 
-        jpDatosPersonalesVarios1 = new javax.swing.JPanel(new java.awt.GridLayout(6, 1));
+        jpDatosPersonalesVarios1 = new javax.swing.JPanel(new java.awt.GridLayout(3, 2));
         jlDireccion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlDireccion.setText("Direccion");
         jlNroCelular.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -238,31 +218,24 @@ public class V_gestion_usuario extends JInternalFrame {
         jlAlias.setText("Alias");
         jlFechaIngreso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlFechaIngreso.setText("Fecha de Ingreso");
-        jlSalario.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlSalario.setText("Salario");
         jlCorreoElectronico.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlCorreoElectronico.setText("Correo electronico");
         jlRol.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlRol.setText("Roles");
-        jlEstado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlEstado.setText("Estado");
-        jlFechaSalida.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlFechaSalida.setText("Fecha de salida");
         jpDatosEmpresariales.add(jlAlias);
         jpDatosEmpresariales.add(jtfAlias);
         jpDatosEmpresariales.add(jlFechaIngreso);
         jpDatosEmpresariales.add(jtfFechaIngreso);
-        jpDatosEmpresariales.add(jlFechaSalida);
-        jpDatosEmpresariales.add(jtfFechaSalida);
-        jpDatosEmpresariales.add(jlSalario);
-        jpDatosEmpresariales.add(jftSalario);
         jpDatosEmpresariales.add(jlCorreoElectronico);
         jpDatosEmpresariales.add(jtfCorreoElectronico);
         jpDatosEmpresariales.add(jlRol);
         jpDatosEmpresariales.add(jcbRol);
-        jpDatosEmpresariales.add(jlEstado);
-        jpDatosEmpresariales.add(jtfEstado);
-
+        jpDatosEmpresariales.add(new JLabel());
+        jpDatosEmpresariales.add(new JLabel());
+        jpDatosEmpresariales.add(new JLabel());
+        jpDatosEmpresariales.add(new JLabel());
+        jpDatosEmpresariales.add(new JLabel());
+        jpDatosEmpresariales.add(new JLabel());
         jTabbedPane.addTab("Datos personales 1", jpDatosPersonales1);
         jTabbedPane.addTab("Datos personales 2", jpDatosPersonales2);
         jTabbedPane.addTab("Datos corporativos", jpDatosEmpresariales);
@@ -283,7 +256,6 @@ public class V_gestion_usuario extends JInternalFrame {
         jpSouth.add(jbCrearUsuario);
         jpSouth.add(jbActualizarUsuario);
         jpSouth.add(jbBuscarUsuario);
-        jpSouth.add(jbImagenUsuario);
 
         //ADDING INTO CONTAINER
         getContentPane().add(jpCenter, java.awt.BorderLayout.CENTER);

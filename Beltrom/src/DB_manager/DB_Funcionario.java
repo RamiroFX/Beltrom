@@ -42,20 +42,19 @@ public class DB_Funcionario {
      */
 
     public static void insertarFuncionario(M_funcionario funcionario, ArrayList rol, String pass) {
-        String idSexo = "(SELECT SEXO_ID_SEXO FROM SEXO WHERE SEXO_DESCRIPCION LIKE'" + funcionario.getSexo() + "%')";
-        String idEstadoCivil = "(SELECT ESCI_ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE ESCI_DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "%')";
-        String idPais = "(SELECT PAIS_ID_PAIS FROM PAIS WHERE PAIS_DESCRIPCION LIKE'" + funcionario.getPais() + "%')";
-        String idCiudad = "(SELECT ciud_id_ciudad FROM CIUDAD WHERE CIUD_DESCRIPCION LIKE'" + funcionario.getCiudad() + "%')";
-        String idEstado = "(SELECT ESTA_ID_ESTADO FROM ESTADO WHERE ESTA_DESCRIPCION LIKE'" + funcionario.getEstado() + "%')";
+        String idSexo = "(SELECT ID_SEXO FROM SEXO WHERE DESCRIPCION LIKE'" + funcionario.getSexo() + "%')";
+        String idEstadoCivil = "(SELECT ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "%')";
+        String idPais = "(SELECT ID_PAIS FROM PAIS WHERE DESCRIPCION LIKE'" + funcionario.getPais() + "%')";
+        String idCiudad = "(SELECT id_ciudad FROM CIUDAD WHERE DESCRIPCION LIKE'" + funcionario.getCiudad() + "%')";
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String insPersona = "INSERT INTO PERSONA "
-                + "(PERS_CI,PERS_NOMBRE,PERS_APELLIDO,"
-                + "PERS_SEXO,PERS_FECHA_NACIMIENTO,PERS_ESTADO_CIVIL,"
-                + "PERS_ID_PAIS,PERS_ID_CIUDAD)"
+                + "(CI,NOMBRE,APELLIDO,"
+                + "SEXO,FECHA_NACIMIENTO,ESTADO_CIVIL,"
+                + "ID_PAIS,ID_CIUDAD)"
                 + "VALUES (" + funcionario.getCedula() + ",'" + funcionario.getNombre() + "','" + funcionario.getApellido() + "'," + idSexo + ",to_date('" + sdf.format(funcionario.getFecha_nacimiento()) + "','dd/mm/yyyy')," + idEstadoCivil + "," + idPais + "," + idCiudad + ")";
         String insFuncionario = "INSERT INTO FUNCIONARIO"
-                + "( func_id_persona, func_alias,func_fecha_ingreso, func_estado,func_salario, func_nro_celular, func_nro_telefono,func_email, func_direccion, func_observacion)"
-                + "VALUES(" + funcionario.getId_persona() + ",'" + funcionario.getAlias() + "',TO_DATE('" + sdf.format(funcionario.getFecha_ingreso()) + "','dd/mm/yyyy')," + idEstado + "," + funcionario.getSalario() + "," + funcionario.getNro_celular() + "," + funcionario.getNro_telefono() + ",'" + funcionario.getEmail() + "','" + funcionario.getDireccion() + "','" + funcionario.getObservacion() + "')";
+                + "( id_persona, alias,fecha_ingreso, estado,salario, nro_celular, nro_telefono,email, direccion, observacion)"
+                + "VALUES(" + funcionario.getId_persona() + ",'" + funcionario.getAlias() + "',TO_DATE('" + sdf.format(funcionario.getFecha_ingreso()) + "','dd/mm/yyyy')," + funcionario.getNro_celular() + "," + funcionario.getNro_telefono() + ",'" + funcionario.getEmail() + "','" + funcionario.getDireccion() + "','" + funcionario.getObservacion() + "')";
         System.out.println("Insert persona: " + insPersona);
         System.out.println("Insert cliente: " + insFuncionario);
         String createUser = "CREATE USER " + funcionario.getAlias() + " "
@@ -79,7 +78,7 @@ public class DB_Funcionario {
             System.out.println("insertarFuncionario(): Asignando roles");
             for (int i = 0; i < rol.size(); i++) {
                 M_rol _rol = (M_rol) rol.get(i);
-                String as = "INSERT INTO ROL_USUARIO (ROUS_ID_ROL,ROUS_ID_FUNCIONARIO)VALUES(" + _rol.getId() + ",+" + funcionario.getId_funcionario() + ")";
+                String as = "INSERT INTO ROL_USUARIO (ID_ROL,ID_FUNCIONARIO)VALUES(" + _rol.getId() + ",+" + funcionario.getId_funcionario() + ")";
                 pst = DB_manager.getConection().prepareStatement(as, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 pst.executeUpdate();
                 pst.close();
@@ -150,13 +149,12 @@ public class DB_Funcionario {
     public static void insertarFuncionarioFX(M_funcionario funcionario, ArrayList rol, String pass) {
         long id_persona = -1L;
         long id_funcionario = -1L;
-        String id_ciudad = "SELECT CIUD_ID_CIUDAD FROM CIUDAD WHERE CIUD_DESCRIPCION LIKE'" + funcionario.getCiudad() + "'";
-        String id_pais = "SELECT PAIS_ID_PAIS FROM PAIS WHERE PAIS_DESCRIPCION LIKE'" + funcionario.getPais() + "'";
-        String id_estado_civil = "SELECT ESCI_ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE ESCI_DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "'";
-        String id_estado = "SELECT ESTA_ID_ESTADO FROM ESTADO WHERE ESTA_DESCRIPCION LIKE'" + funcionario.getEstado() + "'";
-        String id_sexo = "SELECT SEXO_ID_SEXO FROM SEXO WHERE SEXO_DESCRIPCION LIKE'" + funcionario.getSexo() + "'";
-        String INSERT_FUNCIONARIO = "INSERT INTO FUNCIONARIO(FUNC_ID_PERSONA, FUNC_ALIAS, FUNC_FECHA_INGRESO, FUNC_ID_ESTADO, FUNC_FECHA_SALIDA, FUNC_SALARIO, FUNC_NRO_CELULAR, FUNC_NRO_TELEFONO, FUNC_EMAIL, FUNC_DIRECCION, FUNC_OBSERVACION, FUNC_IMAGEN)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        String INSERT_PERSONA = "INSERT INTO PERSONA(PERS_CI, PERS_NOMBRE, PERS_APELLIDO, PERS_ID_SEXO, PERS_FECHA_NACIMIENTO, PERS_ID_ESTADO_CIVIL, PERS_ID_PAIS, PERS_ID_CIUDAD)VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String id_ciudad = "SELECT ID_CIUDAD FROM CIUDAD WHERE DESCRIPCION LIKE'" + funcionario.getCiudad() + "'";
+        String id_pais = "SELECT ID_PAIS FROM PAIS WHERE DESCRIPCION LIKE'" + funcionario.getPais() + "'";
+        String id_estado_civil = "SELECT ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "'";
+        String id_sexo = "SELECT ID_SEXO FROM SEXO WHERE DESCRIPCION LIKE'" + funcionario.getSexo() + "'";
+        String INSERT_FUNCIONARIO = "INSERT INTO FUNCIONARIO(ID_PERSONA, ALIAS, FECHA_INGRESO, NRO_CELULAR, NRO_TELEFONO, EMAIL, DIRECCION, OBSERVACION)VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        String INSERT_PERSONA = "INSERT INTO PERSONA(CI, NOMBRE, APELLIDO, ID_SEXO, FECHA_NACIMIENTO, ID_ESTADO_CIVIL, ID_PAIS, ID_CIUDAD)VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String createUser = "CREATE USER " + funcionario.getAlias() + " "
                 + " PASSWORD '" + pass + "'"
                 + " NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN";
@@ -165,35 +163,28 @@ public class DB_Funcionario {
             pst = DB_manager.getConection().prepareStatement(id_ciudad, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_ciudad(rs.getInt("CIUD_ID_CIUDAD"));
+                funcionario.setId_ciudad(rs.getInt("ID_CIUDAD"));
             }
             rs.close();
             pst.close();
             pst = DB_manager.getConection().prepareStatement(id_pais, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_pais(rs.getInt("PAIS_ID_PAIS"));
-            }
-            rs.close();
-            pst.close();
-            pst = DB_manager.getConection().prepareStatement(id_estado, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = pst.executeQuery();
-            if (rs != null && rs.next()) {
-                funcionario.setIdEstado(rs.getInt("ESTA_ID_ESTADO"));
+                funcionario.setId_pais(rs.getInt("ID_PAIS"));
             }
             rs.close();
             pst.close();
             pst = DB_manager.getConection().prepareStatement(id_estado_civil, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_estado_civil(rs.getInt("ESCI_ID_ESTADO_CIVIL"));
+                funcionario.setId_estado_civil(rs.getInt("ID_ESTADO_CIVIL"));
             }
             rs.close();
             pst.close();
             pst = DB_manager.getConection().prepareStatement(id_sexo, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_sexo(rs.getInt("SEXO_ID_SEXO"));
+                funcionario.setId_sexo(rs.getInt("ID_SEXO"));
             }
             rs.close();
             pst.close();
@@ -241,63 +232,51 @@ public class DB_Funcionario {
             } catch (Exception e) {
                 pst.setNull(3, Types.DATE);
             }
-            pst.setInt(4, funcionario.getIdEstado());//NOT NULL
-            try {
-                if (funcionario.getFecha_salida() == null) {
-                    pst.setNull(5, Types.DATE);
-                } else {
-                    pst.setDate(5, new java.sql.Date(funcionario.getFecha_salida().getTime()));
-                }
-            } catch (Exception e) {
-                pst.setNull(5, Types.DATE);
-            }
-            pst.setInt(6, funcionario.getSalario());//NOT NULL
             try {
                 if (funcionario.getNro_celular() == null) {
+                    pst.setNull(4, Types.VARCHAR);
+                } else {
+                    pst.setString(4, funcionario.getNro_celular());
+                }
+            } catch (Exception e) {
+                pst.setNull(4, Types.VARCHAR);
+            }
+            try {
+                if (funcionario.getNro_telefono() == null) {
+                    pst.setNull(5, Types.VARCHAR);
+                } else {
+                    pst.setString(5, funcionario.getNro_telefono());
+                }
+            } catch (Exception e) {
+                pst.setNull(5, Types.VARCHAR);
+            }
+            try {
+                if (funcionario.getEmail() == null) {
+                    pst.setNull(6, Types.VARCHAR);
+                } else {
+                    pst.setString(6, funcionario.getEmail());
+                }
+            } catch (Exception e) {
+                pst.setNull(6, Types.VARCHAR);
+            }
+            try {
+                if (funcionario.getDireccion() == null) {
                     pst.setNull(7, Types.VARCHAR);
                 } else {
-                    pst.setString(7, funcionario.getNro_celular());
+                    pst.setString(7, funcionario.getDireccion());
                 }
             } catch (Exception e) {
                 pst.setNull(7, Types.VARCHAR);
             }
             try {
-                if (funcionario.getNro_telefono() == null) {
+                if (funcionario.getObservacion() == null) {
                     pst.setNull(8, Types.VARCHAR);
                 } else {
-                    pst.setString(8, funcionario.getNro_telefono());
+                    pst.setString(8, funcionario.getObservacion());
                 }
             } catch (Exception e) {
                 pst.setNull(8, Types.VARCHAR);
             }
-            try {
-                if (funcionario.getEmail() == null) {
-                    pst.setNull(9, Types.VARCHAR);
-                } else {
-                    pst.setString(9, funcionario.getEmail());
-                }
-            } catch (Exception e) {
-                pst.setNull(9, Types.VARCHAR);
-            }
-            try {
-                if (funcionario.getDireccion() == null) {
-                    pst.setNull(10, Types.VARCHAR);
-                } else {
-                    pst.setString(10, funcionario.getDireccion());
-                }
-            } catch (Exception e) {
-                pst.setNull(10, Types.VARCHAR);
-            }
-            try {
-                if (funcionario.getObservacion() == null) {
-                    pst.setNull(11, Types.VARCHAR);
-                } else {
-                    pst.setString(11, funcionario.getObservacion());
-                }
-            } catch (Exception e) {
-                pst.setNull(11, Types.VARCHAR);
-            }
-            pst.setNull(12, Types.BINARY);
             pst.executeUpdate();
             rs = pst.getGeneratedKeys();
             while (rs != null && rs.next()) {
@@ -307,7 +286,7 @@ public class DB_Funcionario {
             pst.close();
             for (int i = 0; i < rol.size(); i++) {
                 M_rol _rol = (M_rol) rol.get(i);
-                String as = "INSERT INTO ROL_USUARIO (ROUS_ID_ROL,ROUS_ID_FUNCIONARIO)VALUES(" + _rol.getId() + "," + id_funcionario + ")";
+                String as = "INSERT INTO ROL_USUARIO (ID_ROL,ID_FUNCIONARIO)VALUES(" + _rol.getId() + "," + id_funcionario + ")";
                 pst = DB_manager.getConection().prepareStatement(as);
                 pst.executeUpdate();
                 pst.close();
@@ -344,7 +323,7 @@ public class DB_Funcionario {
     }
 
     public static void insertarRolUsuario(M_funcionario funcionario, M_rol rol) {
-        String INSERT_PERSONA = "INSERT INTO ROL_USUARIO(ROUS_ID_ROL, ROUS_ID_FUNCIONARIO) VALUES (?, ?);";
+        String INSERT_PERSONA = "INSERT INTO ROL_USUARIO(ID_ROL, ID_FUNCIONARIO) VALUES (?, ?);";
         try {
             DB_manager.habilitarTransaccionManual();
             pst = DB_manager.getConection().prepareStatement(INSERT_PERSONA);
@@ -374,40 +353,36 @@ public class DB_Funcionario {
      */
     public static M_funcionario obtenerDatosFuncionarioID(int idFuncionario) {
         M_funcionario f = null;
-        String genero = "(SELECT SEXO_DESCRIPCION  FROM SEXO WHERE SEXO_ID_SEXO = PERS_ID_SEXO) \"pers_sexo\"";
-        String pais = "(SELECT PAIS_DESCRIPCION FROM PAIS WHERE PERS_ID_PAIS=PAIS_ID_PAIS) \"PERS_NACIONALIDAD\"";
-        String ciudad = " (SELECT CIUD_DESCRIPCION FROM CIUDAD WHERE PERS_ID_CIUDAD=CIUD_ID_CIUDAD)\"PERS_CIUDAD\"";
-        String estadoCivil = " (SELECT ESCI_DESCRIPCION FROM ESTADO_CIVIL WHERE ESCI_ID_ESTADO_CIVIL=PERS_ID_ESTADO_CIVIL)\"pers_estado_civil\"";
-        String estado = " (SELECT ESTA_DESCRIPCION FROM ESTADO WHERE ESTA_ID_ESTADO=FUNC_ID_ESTADO)\"func_estado\"";
-        String queryFunc = "func_id_funcionario, func_id_persona, func_alias,func_fecha_ingreso, " + estado + ", func_fecha_salida,func_salario,func_id_estado, func_nro_celular, func_nro_telefono,func_email, func_direccion, func_observacion";
-        String queryPers = "pers_id_persona, pers_ci, pers_nombre, pers_apellido," + genero + ", pers_fecha_nacimiento, " + pais + "," + ciudad + ", " + estadoCivil + "";
-        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario, persona " + "WHERE func_id_persona = pers_id_persona " + "AND func_id_funcionario =" + idFuncionario;
+        String genero = "(SELECT DESCRIPCION  FROM SEXO WHERE ID_SEXO = P.ID_SEXO) \"sexo\"";
+        String pais = "(SELECT DESCRIPCION FROM PAIS WHERE ID_PAIS=P.ID_PAIS) \"NACIONALIDAD\"";
+        String ciudad = " (SELECT DESCRIPCION FROM CIUDAD WHERE ID_CIUDAD=P.ID_CIUDAD)\"CIUDAD\"";
+        String estadoCivil = " (SELECT DESCRIPCION FROM ESTADO_CIVIL WHERE ID_ESTADO_CIVIL=P.ID_ESTADO_CIVIL)\"estado_civil\"";
+        String queryFunc = "id_funcionario, f.id_persona, alias,fecha_ingreso, nro_celular, nro_telefono,email, direccion, observacion";
+        String queryPers = "p.id_persona, ci, nombre, apellido," + genero + ", fecha_nacimiento, " + pais + "," + ciudad + ", " + estadoCivil + "";
+        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario f, persona p " + "WHERE f.id_persona = p.id_persona " + "AND id_funcionario =" + idFuncionario;
 
         try {
             st = DB_manager.getConection().createStatement();
             rs = st.executeQuery(Query);
             while (rs.next()) {
                 f = new M_funcionario();
-                f.setPais(rs.getString("PERS_NACIONALIDAD"));
-                f.setSalario(rs.getInt("func_salario"));
-                f.setCiudad(rs.getString("PERS_CIUDAD"));
-                f.setFecha_nacimiento(rs.getDate("PERS_FECHA_NACIMIENTO"));
-                f.setSexo(rs.getString("pers_sexo"));
-                f.setNro_celular(rs.getString("func_nro_celular"));
-                f.setNro_telefono(rs.getString("func_nro_telefono"));
-                f.setEmail(rs.getString("func_email"));
-                f.setDireccion(rs.getString("FUNC_DIRECCION"));
-                f.setAlias(rs.getString("func_alias"));
-                f.setNombre(rs.getString("pers_nombre"));
-                f.setApellido(rs.getString("pers_apellido"));
-                f.setFecha_ingreso(rs.getDate("FUNC_FECHA_INGRESO"));
-                f.setId_persona(rs.getInt("pers_id_persona"));
-                f.setCedula(rs.getInt("pers_ci"));
-                f.setEstado(rs.getString("func_estado"));
-                f.setIdEstado(rs.getInt("func_id_estado"));
-                f.setEstado_civil(rs.getString("pers_estado_civil"));
-                f.setId_funcionario(rs.getInt("func_id_funcionario"));
-                f.setObservacion(rs.getString("FUNC_OBSERVACION"));
+                f.setPais(rs.getString("NACIONALIDAD"));
+                f.setCiudad(rs.getString("CIUDAD"));
+                f.setFecha_nacimiento(rs.getDate("FECHA_NACIMIENTO"));
+                f.setSexo(rs.getString("sexo"));
+                f.setNro_celular(rs.getString("nro_celular"));
+                f.setNro_telefono(rs.getString("nro_telefono"));
+                f.setEmail(rs.getString("email"));
+                f.setDireccion(rs.getString("DIRECCION"));
+                f.setAlias(rs.getString("alias"));
+                f.setNombre(rs.getString("nombre"));
+                f.setApellido(rs.getString("apellido"));
+                f.setFecha_ingreso(rs.getDate("FECHA_INGRESO"));
+                f.setId_persona(rs.getInt("id_persona"));
+                f.setCedula(rs.getInt("ci"));
+                f.setEstado_civil(rs.getString("estado_civil"));
+                f.setId_funcionario(rs.getInt("id_funcionario"));
+                f.setObservacion(rs.getString("OBSERVACION"));
             }
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
@@ -519,11 +494,11 @@ public class DB_Funcionario {
 
     public static M_rol obtenerRolesFuncionario(M_funcionario f) {
         M_rol roles = null;
-        String q = "SELECT rol_descripcion "
-                + "FROM funcionario f, rol r, rol_usuario ru "
-                + "WHERE ru.rous_id_funcionario = f.func_id_funcionario "
-                + "AND ru.rous_id_rol = r.rol_id_rol "
-                + "AND f.func_alias LIKE ('" + f.getAlias() + "')";
+        String q = "SELECT descripcion "
+                + "FROM funcionario f, rol r, usuario ru "
+                + "WHERE ru.id_funcionario = f.id_funcionario "
+                + "AND ru.id_rol = r.id_rol "
+                + "AND f.alias LIKE ('" + f.getAlias() + "')";
         try {
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
@@ -531,8 +506,8 @@ public class DB_Funcionario {
             roles = new M_rol();
             rs.beforeFirst();
             while (rs.next()) {
-                //roles.getRol()[rs.getRow()-1]=(rs.getString("rol_descripcion"));
-                roles = new M_rol(rs.getInt("rol_id_rol"), rs.getString("rol_descripcion"));
+                //roles.getRol()[rs.getRow()-1]=(rs.getString("descripcion"));
+                roles = new M_rol(rs.getInt("id_rol"), rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
@@ -556,14 +531,14 @@ public class DB_Funcionario {
 
     public static M_rol obtenerRol(String rolDescripcion) {
         M_rol roles = null;
-        String q = "SELECT rol_id_rol,rol_descripcion "
+        String q = "SELECT id_rol,descripcion "
                 + "FROM rol "
-                + "WHERE rol_descripcion  LIKE ('" + rolDescripcion + "')";
+                + "WHERE descripcion  LIKE ('" + rolDescripcion + "')";
         try {
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                roles = new M_rol(rs.getInt("rol_id_rol"), rs.getString("rol_descripcion"));
+                roles = new M_rol(rs.getInt("id_rol"), rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
@@ -588,19 +563,19 @@ public class DB_Funcionario {
     public static Vector obtenerChoferes() {
         Vector funcionario = null;
         String q = "SELECT "
-                + "PERS_NOMBRE, "
-                + "PERS_APELLIDO "
+                + "NOMBRE, "
+                + "APELLIDO "
                 + "FROM PERSONA P, FUNCIONARIO F, ROL_USUARIO, ROL "
-                + "WHERE P.PERS_ID_PERSONA = F.FUNC_ID_PERSONA "
-                + "AND ROUS_ID_FUNCIONARIO = FUNC_ID_FUNCIONARIO "
-                + "AND ROUS_ID_ROL = ROL_ID_ROL "
+                + "WHERE P.ID_PERSONA = F.ID_PERSONA "
+                + "AND ID_FUNCIONARIO = ID_FUNCIONARIO "
+                + "AND ID_ROL = ROL_ID_ROL "
                 + "AND ROL_DESCRIPCION LIKE 'CHOFER'";
         try {
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             funcionario = new Vector();
             while (rs.next()) {
-                funcionario.add(rs.getString("pers_nombre") + " " + rs.getString("pers_apellido"));
+                funcionario.add(rs.getString("nombre") + " " + rs.getString("apellido"));
             }
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
@@ -628,33 +603,33 @@ public class DB_Funcionario {
             if (DB_manager.getConection() == null) {
                 throw new IllegalStateException("Connection already closed.");
             }
-            /*String genero = "(SELECT SEXO_DESCRIPCION  FROM SEXO WHERE SEXO_ID_SEXO = PERS_SEXO) \"Genero\"";
-             String pais = "(SELECT PAIS_DESCRIPCION FROM PAIS WHERE PERS_ID_PAIS=PAIS_ID_PAIS) \"Nacionalidad\"";
-             String ciudad = " (SELECT CIUD_DESCRIPCION FROM CIUDAD WHERE PERS_ID_CIUDAD=CIUD_ID_CIUDAD)\"Ciudad\"";
-             String estadoCivil = " (SELECT ESCI_DESCRIPCION FROM ESTADO_CIVIL WHERE ESCI_ID_ESTADO_CIVIL=PERS_ESTADO_CIVIL)\"Estado civil\"";
-             String estado = " (SELECT ESTA_DESCRIPCION FROM ESTADO WHERE ESTA_ID_ESTADO=FUNC_ESTADO)\"Estado\"";
-             String q2 = "SELECT FUNC_ID_FUNCIONARIO\"ID\",FUNC_ALIAS \"Alias\", PERS_CI\"CI\",PERS_NOMBRE\"Nombre\",PERS_APELLIDO\"Apellido\" "
+            /*String genero = "(SELECT DESCRIPCION  FROM SEXO WHERE ID_SEXO = SEXO) \"Genero\"";
+             String pais = "(SELECT DESCRIPCION FROM PAIS WHERE ID_PAIS=ID_PAIS) \"Nacionalidad\"";
+             String ciudad = " (SELECT DESCRIPCION FROM CIUDAD WHERE ID_CIUDAD=ID_CIUDAD)\"Ciudad\"";
+             String estadoCivil = " (SELECT DESCRIPCION FROM ESTADO_CIVIL WHERE ID_ESTADO_CIVIL=ESTADO_CIVIL)\"Estado civil\"";
+             String estado = " (SELECT DESCRIPCION FROM ESTADO WHERE ID_ESTADO=ESTADO)\"Estado\"";
+             String q2 = "SELECT ID_FUNCIONARIO\"ID\",ALIAS \"Alias\", CI\"CI\",NOMBRE\"Nombre\",APELLIDO\"Apellido\" "
              + "FROM funcionario, persona " + ""
-             + "WHERE func_id_persona = pers_id_persona " + "AND pers_nombre LIKE '" + busqueda + "%'";
+             + "WHERE id_persona = id_persona " + "AND nombre LIKE '" + busqueda + "%'";
              */
 
-            String SELECT = "SELECT FUNC_ID_FUNCIONARIO\"ID\",FUNC_ALIAS \"Alias\", PERS_CI\"CI\",PERS_NOMBRE\"Nombre\",PERS_APELLIDO\"Apellido\" ";
-            String FROM = "FROM funcionario, persona ";
-            String WHERE = "WHERE func_id_persona = pers_id_persona AND ";
-            String ORDER_BY = " ORDER BY PERS_NOMBRE ";
+            String SELECT = "SELECT ID_FUNCIONARIO\"ID\",ALIAS \"Alias\", CI\"CI\",NOMBRE\"Nombre\",APELLIDO\"Apellido\" ";
+            String FROM = "FROM funcionario f, persona p ";
+            String WHERE = "WHERE f.id_persona = p.id_persona AND ";
+            String ORDER_BY = " ORDER BY NOMBRE ";
             if (isExclusivo) {
                 busqueda = busqueda + "%";
             } else {
                 busqueda = "%" + busqueda + "%";
             }
             if (entidad && ci) {
-                WHERE = WHERE + "(LOWER(pers_nombre) LIKE '" + busqueda + "' OR LOWER(PERS_APELLIDO) LIKE '" + busqueda + "' OR CAST(PERS_CI AS TEXT) LIKE '" + busqueda + "')";
+                WHERE = WHERE + "(LOWER(nombre) LIKE '" + busqueda + "' OR LOWER(APELLIDO) LIKE '" + busqueda + "' OR CAST(CI AS TEXT) LIKE '" + busqueda + "')";
             } else if (entidad) {
-                WHERE = WHERE + "(LOWER(pers_nombre) LIKE '" + busqueda + "' OR LOWER(PERS_APELLIDO) LIKE '" + busqueda + "')";
+                WHERE = WHERE + "(LOWER(nombre) LIKE '" + busqueda + "' OR LOWER(APELLIDO) LIKE '" + busqueda + "')";
             } else if (ci) {
-                WHERE = WHERE + "CAST(PERS_CI AS TEXT) LIKE  LIKE '" + busqueda + "'";
+                WHERE = WHERE + "CAST(CI AS TEXT) LIKE  LIKE '" + busqueda + "'";
             } else if (!entidad && !ci) {
-                WHERE = WHERE + "(LOWER(pers_nombre) LIKE '" + busqueda + "' OR LOWER(PERS_APELLIDO) LIKE '" + busqueda + "' OR CAST(PERS_CI AS TEXT) LIKE '" + busqueda + "')";
+                WHERE = WHERE + "(LOWER(nombre) LIKE '" + busqueda + "' OR LOWER(APELLIDO) LIKE '" + busqueda + "' OR CAST(CI AS TEXT) LIKE '" + busqueda + "')";
             }
             String query = SELECT + FROM + WHERE + ORDER_BY;
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -699,22 +674,22 @@ public class DB_Funcionario {
                 throw new IllegalStateException("Connection already closed.");
             }
             String query = "SELECT "
-                    + "FUNC_ID_FUNCIONARIO \"ID\", "
-                    + "PERS_NOMBRE \"Nombre\", "
-                    + "PERS_APELLIDO \"Apellido\", "
-                    + "PERS_CI \"Cedula de identidad\", "
-                    + "PERS_FECHA_NACIMIENTO \"Fecha de nacimiento\" "
+                    + "ID_FUNCIONARIO \"ID\", "
+                    + "NOMBRE \"Nombre\", "
+                    + "APELLIDO \"Apellido\", "
+                    + "CI \"Cedula de identidad\", "
+                    + "FECHA_NACIMIENTO \"Fecha de nacimiento\" "
                     + "FROM "
                     + "FUNCIONARIO, "
                     + "PERSONA, "
                     + "ROL, "
                     + "ROL_USUARIO "
                     + "WHERE "
-                    + "FUNC_ID_PERSONA = PERS_ID_PERSONA AND "
-                    + "FUNC_ID_FUNCIONARIO = ROUS_ID_FUNCIONARIO AND "
-                    + "ROUS_ID_ROL = ROL_ID_ROL AND "
+                    + "ID_PERSONA = ID_PERSONA AND "
+                    + "ID_FUNCIONARIO = ID_FUNCIONARIO AND "
+                    + "ID_ROL = ROL_ID_ROL AND "
                     + "ROL_DESCRIPCION LIKE 'CHOFER' AND "
-                    + "FUNC_ESTADO = 2";
+                    + "ESTADO = 2";
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             // se ejecuta el query y se obtienen los resultados en un ResultSet
             rs = st.executeQuery(query);
@@ -756,54 +731,45 @@ public class DB_Funcionario {
      */
     public static void actualizarFuncionario(M_funcionario funcionario) {
         System.out.println("actualizarFuncionario: " + funcionario.getId_funcionario());
-        String id_ciudad = "SELECT CIUD_ID_CIUDAD FROM CIUDAD WHERE CIUD_DESCRIPCION LIKE'" + funcionario.getCiudad() + "'";
-        String id_pais = "SELECT PAIS_ID_PAIS FROM PAIS WHERE PAIS_DESCRIPCION LIKE'" + funcionario.getPais() + "'";
-        String id_estado_civil = "SELECT ESCI_ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE ESCI_DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "'";
-        String id_estado = "SELECT ESTA_ID_ESTADO FROM ESTADO WHERE ESTA_DESCRIPCION LIKE'" + funcionario.getEstado() + "'";
-        String id_sexo = "SELECT SEXO_ID_SEXO FROM SEXO WHERE SEXO_DESCRIPCION LIKE'" + funcionario.getSexo() + "'";
-        String UPDATE_FUNCIONARIO = "UPDATE FUNCIONARIO SET FUNC_ALIAS=?, "
-                + "FUNC_FECHA_INGRESO=?, FUNC_ID_ESTADO=?, FUNC_FECHA_SALIDA=?, "
-                + "FUNC_SALARIO=?, FUNC_NRO_CELULAR=?, FUNC_NRO_TELEFONO=?, "
-                + "FUNC_EMAIL=?, FUNC_DIRECCION=?, FUNC_OBSERVACION=?, "
-                + "FUNC_IMAGEN=? WHERE FUNC_ID_FUNCIONARIO = ?;";
-        String UPDATE_PERSONA = "UPDATE PERSONA SET PERS_CI=?, PERS_NOMBRE=?, "
-                + "PERS_APELLIDO=?, PERS_ID_SEXO=?, PERS_FECHA_NACIMIENTO=?, "
-                + "PERS_ID_ESTADO_CIVIL=?, PERS_ID_PAIS=?, PERS_ID_CIUDAD=? "
-                + "WHERE PERS_ID_PERSONA = ?;";
+        String id_ciudad = "SELECT ID_CIUDAD FROM CIUDAD WHERE DESCRIPCION LIKE'" + funcionario.getCiudad() + "'";
+        String id_pais = "SELECT ID_PAIS FROM PAIS WHERE DESCRIPCION LIKE'" + funcionario.getPais() + "'";
+        String id_estado_civil = "SELECT ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "'";
+        String id_sexo = "SELECT ID_SEXO FROM SEXO WHERE DESCRIPCION LIKE'" + funcionario.getSexo() + "'";
+        String UPDATE_FUNCIONARIO = "UPDATE FUNCIONARIO SET ALIAS=?, "
+                + "FECHA_INGRESO=?, NRO_CELULAR=?, NRO_TELEFONO=?, "
+                + "EMAIL=?, DIRECCION=?, OBSERVACION=? "
+                + "WHERE ID_FUNCIONARIO = ?;";
+        String UPDATE_PERSONA = "UPDATE PERSONA SET CI=?, NOMBRE=?, "
+                + "APELLIDO=?, ID_SEXO=?, FECHA_NACIMIENTO=?, "
+                + "ID_ESTADO_CIVIL=?, ID_PAIS=?, ID_CIUDAD=? "
+                + "WHERE ID_PERSONA = ?;";
         try {
             DB_manager.habilitarTransaccionManual();
             pst = DB_manager.getConection().prepareStatement(id_ciudad, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_ciudad(rs.getInt("CIUD_ID_CIUDAD"));
+                funcionario.setId_ciudad(rs.getInt("ID_CIUDAD"));
             }
             rs.close();
             pst.close();
             pst = DB_manager.getConection().prepareStatement(id_pais, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_pais(rs.getInt("PAIS_ID_PAIS"));
-            }
-            rs.close();
-            pst.close();
-            pst = DB_manager.getConection().prepareStatement(id_estado, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = pst.executeQuery();
-            if (rs != null && rs.next()) {
-                funcionario.setIdEstado(rs.getInt("ESTA_ID_ESTADO"));
+                funcionario.setId_pais(rs.getInt("ID_PAIS"));
             }
             rs.close();
             pst.close();
             pst = DB_manager.getConection().prepareStatement(id_estado_civil, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_estado_civil(rs.getInt("ESCI_ID_ESTADO_CIVIL"));
+                funcionario.setId_estado_civil(rs.getInt("ID_ESTADO_CIVIL"));
             }
             rs.close();
             pst.close();
             pst = DB_manager.getConection().prepareStatement(id_sexo, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = pst.executeQuery();
             if (rs != null && rs.next()) {
-                funcionario.setId_sexo(rs.getInt("SEXO_ID_SEXO"));
+                funcionario.setId_sexo(rs.getInt("ID_SEXO"));
             }
             rs.close();
             pst.close();
@@ -818,64 +784,52 @@ public class DB_Funcionario {
             } catch (Exception e) {
                 pst.setNull(2, Types.DATE);
             }
-            pst.setInt(3, funcionario.getIdEstado());//NOT NULL
-            try {
-                if (funcionario.getFecha_salida() == null) {
-                    pst.setNull(4, Types.DATE);
-                } else {
-                    pst.setDate(4, new java.sql.Date(funcionario.getFecha_salida().getTime()));
-                }
-            } catch (Exception e) {
-                pst.setNull(4, Types.DATE);
-            }
-            pst.setInt(5, funcionario.getSalario());//NOT NULL
             try {
                 if (funcionario.getNro_celular() == null) {
+                    pst.setNull(3, Types.VARCHAR);
+                } else {
+                    pst.setString(3, funcionario.getNro_celular());
+                }
+            } catch (Exception e) {
+                pst.setNull(3, Types.VARCHAR);
+            }
+            try {
+                if (funcionario.getNro_telefono() == null) {
+                    pst.setNull(4, Types.VARCHAR);
+                } else {
+                    pst.setString(4, funcionario.getNro_telefono());
+                }
+            } catch (Exception e) {
+                pst.setNull(4, Types.VARCHAR);
+            }
+            try {
+                if (funcionario.getEmail() == null) {
+                    pst.setNull(5, Types.VARCHAR);
+                } else {
+                    pst.setString(5, funcionario.getEmail());
+                }
+            } catch (Exception e) {
+                pst.setNull(5, Types.VARCHAR);
+            }
+            try {
+                if (funcionario.getDireccion() == null) {
                     pst.setNull(6, Types.VARCHAR);
                 } else {
-                    pst.setString(6, funcionario.getNro_celular());
+                    pst.setString(6, funcionario.getDireccion());
                 }
             } catch (Exception e) {
                 pst.setNull(6, Types.VARCHAR);
             }
             try {
-                if (funcionario.getNro_telefono() == null) {
+                if (funcionario.getObservacion() == null) {
                     pst.setNull(7, Types.VARCHAR);
                 } else {
-                    pst.setString(7, funcionario.getNro_telefono());
+                    pst.setString(7, funcionario.getObservacion());
                 }
             } catch (Exception e) {
                 pst.setNull(7, Types.VARCHAR);
             }
-            try {
-                if (funcionario.getEmail() == null) {
-                    pst.setNull(8, Types.VARCHAR);
-                } else {
-                    pst.setString(8, funcionario.getEmail());
-                }
-            } catch (Exception e) {
-                pst.setNull(8, Types.VARCHAR);
-            }
-            try {
-                if (funcionario.getDireccion() == null) {
-                    pst.setNull(9, Types.VARCHAR);
-                } else {
-                    pst.setString(9, funcionario.getDireccion());
-                }
-            } catch (Exception e) {
-                pst.setNull(9, Types.VARCHAR);
-            }
-            try {
-                if (funcionario.getObservacion() == null) {
-                    pst.setNull(10, Types.VARCHAR);
-                } else {
-                    pst.setString(10, funcionario.getObservacion());
-                }
-            } catch (Exception e) {
-                pst.setNull(10, Types.VARCHAR);
-            }
-            pst.setNull(11, Types.BINARY);
-            pst.setInt(12, funcionario.getId_funcionario());
+            pst.setInt(8, funcionario.getId_funcionario());
             pst.executeUpdate();
             pst = DB_manager.getConection().prepareStatement(UPDATE_PERSONA);
             try {
@@ -935,11 +889,11 @@ public class DB_Funcionario {
     public static void eliminarFuncionario(M_funcionario funcionario) {
         System.out.println("eliminarFuncionario: " + funcionario.getId_funcionario());
         String deleteFuncionario = "DELETE FROM  funcionario "
-                + " WHERE func_id_funcionario = " + funcionario.getId_funcionario() + "";
-        //String idPersona="(SELECT PERS_ID_PERSONA FROM PERSONA,FUNCIONARIO WHERE PERS_ID_PERSONA = FUNC_ID_PERSONA AND FUNC_ID_FUNCIONARIO ="+funcionario+")";
+                + " WHERE id_funcionario = " + funcionario.getId_funcionario() + "";
+        //String idPersona="(SELECT ID_PERSONA FROM PERSONA,FUNCIONARIO WHERE ID_PERSONA = ID_PERSONA AND ID_FUNCIONARIO ="+funcionario+")";
         String deletePersona = "DELETE FROM  persona "
-                + " WHERE pers_id_persona =" + funcionario.getId_persona();
-        String borrarPermisos = "DELETE FROM ROL_USUARIO WHERE ROUS_ID_FUNCIONARIO = " + funcionario.getId_funcionario();
+                + " WHERE id_persona =" + funcionario.getId_persona();
+        String borrarPermisos = "DELETE FROM ROL_USUARIO WHERE ID_FUNCIONARIO = " + funcionario.getId_funcionario();
 
         String borrarUSUARIO = "DROP USER " + funcionario.getAlias() + " CASCADE ";
 
@@ -991,8 +945,8 @@ public class DB_Funcionario {
             File file = new File(pathname);
             fis = new FileInputStream(file);
             PreparedStatement ps = DB_manager.getConection().prepareStatement("UPDATE funcionario "
-                    + "SET func_nombre_imagen=?, func_imagen=? "
-                    + "WHERE func_id_funcionario = ?");
+                    + "SET nombre_imagen=?, imagen=? "
+                    + "WHERE id_funcionario = ?");
             ps.setString(1, file.getName());
             ps.setBinaryStream(2, fis, file.length());
             ps.setInt(3, idUsuario);
@@ -1031,8 +985,8 @@ public class DB_Funcionario {
         try {
 
             String sql = "UPDATE funcionario "
-                    + "SET func_nombre_imagen=?, func_imagen=? "
-                    + "WHERE func_id_funcionario = ?";
+                    + "SET nombre_imagen=?, imagen=? "
+                    + "WHERE id_funcionario = ?";
             pst = DB_manager.getConection().prepareStatement(sql);
 
             pst.setString(1, imgName);
@@ -1111,30 +1065,28 @@ public class DB_Funcionario {
     public static M_funcionario consultarFuncionarioPorID(Integer id_chofer) {
         M_funcionario f = null;
         String q = "SELECT *  FROM PERSONA P, FUNCIONARIO F "
-                + "WHERE p.pers_id_persona = f.func_id_persona "
-                + "AND func_id_funcionario = " + id_chofer + "";
+                + "WHERE p.id_persona = f.id_persona "
+                + "AND id_funcionario = " + id_chofer + "";
         try {
             st = DB_manager.getConection().createStatement();
             rs = st.executeQuery(q);
             while (rs.next()) {
                 f = new M_funcionario();
-                f.setFecha_nacimiento(rs.getDate("pers_fecha_nacimiento"));
-                f.setSexo(rs.getString("pers_sexo"));
-                f.setNro_celular(rs.getString("func_nro_celular"));
-                f.setNro_telefono(rs.getString("func_nro_telefono"));
-                f.setEmail(rs.getString("func_email"));
-                f.setDireccion(rs.getString("FUNC_DIRECCION"));
-                f.setAlias(rs.getString("func_alias"));
-                f.setNombre(rs.getString("pers_nombre"));
-                f.setApellido(rs.getString("pers_apellido"));
-                f.setFecha_ingreso(rs.getDate("FUNC_FECHA_INGRESO"));
-                f.setId_persona(rs.getInt("pers_id_persona"));
-                f.setCedula(rs.getInt("pers_ci"));
-                f.setEstado(rs.getString("func_estado"));
-                f.setEstado_civil(rs.getString("pers_estado_civil"));
-                f.setSalario(rs.getInt("func_salario"));
-                f.setId_funcionario(rs.getInt("func_id_funcionario"));
-                f.setObservacion(rs.getString("FUNC_OBSERVACION"));
+                f.setFecha_nacimiento(rs.getDate("fecha_nacimiento"));
+                f.setSexo(rs.getString("sexo"));
+                f.setNro_celular(rs.getString("nro_celular"));
+                f.setNro_telefono(rs.getString("nro_telefono"));
+                f.setEmail(rs.getString("email"));
+                f.setDireccion(rs.getString("DIRECCION"));
+                f.setAlias(rs.getString("alias"));
+                f.setNombre(rs.getString("nombre"));
+                f.setApellido(rs.getString("apellido"));
+                f.setFecha_ingreso(rs.getDate("FECHA_INGRESO"));
+                f.setId_persona(rs.getInt("id_persona"));
+                f.setCedula(rs.getInt("ci"));
+                f.setEstado_civil(rs.getString("estado_civil"));
+                f.setId_funcionario(rs.getInt("id_funcionario"));
+                f.setObservacion(rs.getString("OBSERVACION"));
                 //f.setRol(obtenerRolesFuncionario(f));
             }
         } catch (SQLException ex) {
@@ -1158,7 +1110,7 @@ public class DB_Funcionario {
     }
 
     public static void eliminarRolFuncionario(M_funcionario m_funcionario, M_rol rol) {
-        String DELETE_ROL_USUARIO = "DELETE FROM ROL_USUARIO WHERE ROUS_ID_ROL = ? AND ROUS_ID_FUNCIONARIO = ? ;";
+        String DELETE_ROL_USUARIO = "DELETE FROM ROL_USUARIO WHERE ID_ROL = ? AND ID_FUNCIONARIO = ? ;";
         try {
             DB_manager.habilitarTransaccionManual();
             pst = DB_manager.getConection().prepareStatement(DELETE_ROL_USUARIO);

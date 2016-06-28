@@ -54,16 +54,11 @@ public class C_gestion_usuario implements Gestion {
 
     @Override
     public final void inicializarVista() {
-        this.vista.jtUsuario.setModel(DB_Funcionario.consultarFuncionario("", false, true, true));
+        //this.vista.jtUsuario.setModel(DB_Funcionario.consultarFuncionario("", false, true, true));
         c_packColumn.packColumns(this.vista.jtUsuario, 2);
         this.vista.jbBuscarUsuario.setEnabled(false);
         this.vista.jbActualizarUsuario.setEnabled(false);
-        this.vista.jbImagenUsuario.setEnabled(false);
         this.vista.jftCedulaIdentidad.setFormatterFactory(
-                new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(
-                new java.text.DecimalFormat("#,##0"))));
-        this.vista.jftSalario.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
                 new javax.swing.text.NumberFormatter(
                 new java.text.DecimalFormat("#,##0"))));
@@ -96,7 +91,6 @@ public class C_gestion_usuario implements Gestion {
         //this.v_jifGesUsu.jtfBuscar.addActionListener(this);
         this.vista.jbCrearUsuario.addActionListener(this);
         this.vista.jbActualizarUsuario.addActionListener(this);
-        this.vista.jbImagenUsuario.addActionListener(this);
         this.vista.jtUsuario.addMouseListener(this);
         this.vista.jtfBuscar.addKeyListener(this);
         this.vista.jckbCedula.addActionListener(this);
@@ -161,8 +155,6 @@ public class C_gestion_usuario implements Gestion {
          }*/
         if (e.getSource() == this.vista.jbCrearUsuario) {
         } else if (e.getSource() == this.vista.jbActualizarUsuario) {
-        } else if (e.getSource() == this.vista.jbImagenUsuario) {
-            //cambiarImagen();
         } else if (e.getSource() == this.vista.jrbExclusivo) {
             displayQueryResults();
         } else if (e.getSource() == this.vista.jrbInclusivo) {
@@ -205,12 +197,10 @@ public class C_gestion_usuario implements Gestion {
         setFuncionario(DB_Funcionario.obtenerDatosFuncionarioID(idFuncionario));
         if ((fila > -1) && (columna > -1)) {
             this.vista.jbActualizarUsuario.setEnabled(true);
-            this.vista.jbImagenUsuario.setEnabled(true);
             //this.v_jifGesUsu.jbEliminar.setEnabled(true);
             this.vista.jtfAlias.setText(getFuncionario().getAlias());
             this.vista.jtfDireccion.setText(getFuncionario().getDireccion());
             this.vista.jtfCorreoElectronico.setText(getFuncionario().getEmail());
-            this.vista.jtfEstado.setText(getFuncionario().getEstado());
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             try {
                 this.vista.jtfFechaIngreso.setText(sdf.format(getFuncionario().getFecha_ingreso()));
@@ -222,13 +212,7 @@ public class C_gestion_usuario implements Gestion {
             } catch (java.lang.NullPointerException ex) {
                 this.vista.jtfFechaNacimiento.setText("");
             }
-            try {
-                this.vista.jtfFechaSalida.setText(sdf.format(getFuncionario().getFecha_salida()));
-            } catch (java.lang.NullPointerException ex) {
-                this.vista.jtfFechaSalida.setText("");
-            }
             this.vista.jtaObservacion.setText(getFuncionario().getObservacion());
-            this.vista.jftSalario.setValue(getFuncionario().getSalario());
             this.vista.jtfNroCelular.setText(getFuncionario().getNro_celular());
             this.vista.jtfNroTelefono.setText(getFuncionario().getNro_telefono());
             //Datos personales
@@ -248,7 +232,6 @@ public class C_gestion_usuario implements Gestion {
             //this.vista.jlFoto.setIcon((Icon) DB_Funcionario.obtenerImagenFuncionario(idFuncionario));
         } else {
             this.vista.jbActualizarUsuario.setEnabled(false);
-            this.vista.jbImagenUsuario.setEnabled(false);
         }
         if (e.getClickCount() == 2) {
         }

@@ -7,17 +7,10 @@ import java.util.Date;
 
 public class M_funcionario extends M_persona {
 
-    private String ocupacion, observacion, estado, alias, email, nro_celular, nro_telefono,direccion;
-    private Date fechaIngreso, fechaSalida;
-    private Integer id_funcionario, salario,idEstado;
+    private String ocupacion, observacion, alias, email, nro_celular, nro_telefono,direccion;
+    private Date fechaIngreso;
+    private Integer id_funcionario;
 
-    public Integer getIdEstado() {
-        return idEstado;
-    }
-
-    public void setIdEstado(Integer idEstado) {
-        this.idEstado = idEstado;
-    }
     private ArrayList rol;
 
     public M_funcionario() {
@@ -61,20 +54,6 @@ public class M_funcionario extends M_persona {
     }
 
     /**
-     * @return the fechaSalida
-     */
-    public Date getFecha_salida() {
-        return fechaSalida;
-    }
-
-    /**
-     * @param fechaSalida the fechaSalida to set
-     */
-    public void setFecha_salida(Date fechaSalida) {
-        this.fechaSalida = fechaSalida;
-    }
-
-    /**
      * @return the idUsuario
      */
     public Integer getId_funcionario() {
@@ -87,27 +66,7 @@ public class M_funcionario extends M_persona {
     public void setId_funcionario(Integer id_funcionario) {
         this.id_funcionario = id_funcionario;
     }
-
-    /**
-     * @return the salario
-     */
-    public int getSalario() {
-        return salario;
-    }
-
-    /**
-     * @param salario the salario to set
-     */
-    public void setSalario(int salario) {
-        this.salario = salario;
-    }
-
-    public String imprimirFuncionario() {
-        String f = null;
-        f = super.getNombre() + ", " + super.getApellido() + ", " + super.getCedula() + ", " + this.getSalario();
-        return f;
-    }
-
+    
     /**
      * @return the observacion
      */
@@ -120,20 +79,6 @@ public class M_funcionario extends M_persona {
      */
     public void setObservacion(String observacion) {
         this.observacion = observacion;
-    }
-
-    /**
-     * @return the estado
-     */
-    public String getEstado() {
-        return estado;
-    }
-
-    /**
-     * @param estado the estado to set
-     */
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 
     /**
