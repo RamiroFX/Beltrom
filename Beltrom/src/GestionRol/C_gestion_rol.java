@@ -50,12 +50,12 @@ public class C_gestion_rol extends MouseAdapter implements ActionListener {
         if (e.equals(this.vista.jbCrearRol)) {
             Crear_rol crear_rol = new Crear_rol(this.vista);
             crear_rol.mostrarVista();
+            inicializarVista();
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent me) {
-
         int fila = this.vista.jtRoles.rowAtPoint(me.getPoint());
         int columna = this.vista.jtRoles.columnAtPoint(me.getPoint());
         int idRol = (Integer.valueOf((String) this.vista.jtRoles.getValueAt(fila, 0)));

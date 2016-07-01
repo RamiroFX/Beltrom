@@ -4,19 +4,17 @@
  */
 package GestionRol;
 
-import beltrom.V_inicio;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
 /**
  *
@@ -35,16 +33,16 @@ public class V_crear_rol extends JDialog {
         super(frame, "Crear rol", DEFAULT_MODALITY_TYPE);
         setName("crearRol");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(600, 400);
+        setSize(800, 600);
         setLocationRelativeTo(frame);
         inicializarComponentes();
     }
-    
+
     public V_crear_rol(JDialog dialog) {
         super(dialog, "Crear rol", DEFAULT_MODALITY_TYPE);
         setName("crearRol");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(600, 400);
+        setSize(800, 600);
         setLocationRelativeTo(dialog);
         inicializarComponentes();
     }
@@ -53,7 +51,9 @@ public class V_crear_rol extends JDialog {
         jlNombreRol = new JLabel("Nombre de rol");
         jtfNombreRol = new JTextField();
         jpPermisosSeleccionados = new JPanel(new BorderLayout());
+        jpPermisosSeleccionados.setBorder(new TitledBorder("Accesos seleccionados"));
         jpPermisosDisponibles = new JPanel(new BorderLayout());
+        jpPermisosDisponibles.setBorder(new TitledBorder("Accesos disponibles"));
         jtPermisosSeleccionados = new JTable();
         jtPermisosDisponibles = new JTable();
         jspPermisosSeleccionados = new JScrollPane(jtPermisosSeleccionados);
@@ -68,21 +68,21 @@ public class V_crear_rol extends JDialog {
         jpSouth.add(jbCancelar);
 
         jpPermisosDisponibles.add(jspPermisosDisponibles, BorderLayout.CENTER);
-        jpPermisosDisponibles.add(jbQuitar, BorderLayout.SOUTH);
+        jpPermisosDisponibles.add(jbAgregar, BorderLayout.SOUTH);
         jpPermisosSeleccionados.add(jspPermisosSeleccionados, BorderLayout.CENTER);
-        jpPermisosSeleccionados.add(jbAgregar, BorderLayout.SOUTH);
+        jpPermisosSeleccionados.add(jbQuitar, BorderLayout.SOUTH);
 
         JPanel jpCenter = new JPanel(new GridLayout(1, 2));
-        jpSouth.add(jpPermisosDisponibles);
-        jpSouth.add(jpPermisosSeleccionados);
+        jpCenter.add(jpPermisosSeleccionados);
+        jpCenter.add(jpPermisosDisponibles);
 
         JPanel jpNorth = new JPanel(new BorderLayout());
-        jpNorth.add(jlNombreRol, BorderLayout.EAST);
-        jpNorth.add(jtfNombreRol, BorderLayout.WEST);
+        jpNorth.add(jlNombreRol, BorderLayout.WEST);
+        jpNorth.add(jtfNombreRol, BorderLayout.CENTER);
 
+        getContentPane().setLayout(new BorderLayout());
         getContentPane().add(jpNorth, BorderLayout.NORTH);
         getContentPane().add(jpCenter, BorderLayout.CENTER);
         getContentPane().add(jpSouth, BorderLayout.SOUTH);
     }
-
 }
