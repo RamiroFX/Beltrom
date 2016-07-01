@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package empleado;
+package GestionRol;
 
 /**
  *
  * @author Ramiro
  */
-public class M_crear_rol {
+public class M_gestion_rol {
     
 }

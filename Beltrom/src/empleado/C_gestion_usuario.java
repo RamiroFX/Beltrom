@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import Entities.M_funcionario;
+import GestionRol.Gestion_rol;
 import Interface.Gestion;
 import beltrom.C_inicio;
 import java.awt.event.KeyEvent;
@@ -60,8 +61,8 @@ public class C_gestion_usuario implements Gestion {
         this.vista.jbActualizarUsuario.setEnabled(false);
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(
-                new java.text.DecimalFormat("#,##0"))));
+                        new javax.swing.text.NumberFormatter(
+                                new java.text.DecimalFormat("#,##0"))));
     }
 
     /**
@@ -93,6 +94,7 @@ public class C_gestion_usuario implements Gestion {
         this.vista.jbActualizarUsuario.addActionListener(this);
         this.vista.jtUsuario.addMouseListener(this);
         this.vista.jtfBuscar.addKeyListener(this);
+        this.vista.jbGestionRol.addActionListener(this);
         this.vista.jckbCedula.addActionListener(this);
         this.vista.jckbNombreApellido.addActionListener(this);
         this.vista.jrbExclusivo.addActionListener(this);
@@ -155,6 +157,9 @@ public class C_gestion_usuario implements Gestion {
          }*/
         if (e.getSource() == this.vista.jbCrearUsuario) {
         } else if (e.getSource() == this.vista.jbActualizarUsuario) {
+        } else if (e.getSource() == this.vista.jbGestionRol) {
+            Gestion_rol gestion_rol = new Gestion_rol(c_main);
+            gestion_rol.mostrarVista();
         } else if (e.getSource() == this.vista.jrbExclusivo) {
             displayQueryResults();
         } else if (e.getSource() == this.vista.jrbInclusivo) {
