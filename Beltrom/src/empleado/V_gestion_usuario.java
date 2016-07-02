@@ -11,8 +11,8 @@ package empleado;
 
 
 import java.awt.BorderLayout;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,6 +34,7 @@ public class V_gestion_usuario extends JInternalFrame {
     public javax.swing.JButton jbActualizarUsuario;
     public javax.swing.JButton jbBuscarUsuario;
     public javax.swing.JButton jbCrearUsuario;
+    public javax.swing.JButton jbGestionRol;
     private javax.swing.JLabel jlAlias;
     private javax.swing.JLabel jlApellido;
     private javax.swing.JLabel jlCedulaIdentidad;
@@ -253,9 +254,11 @@ public class V_gestion_usuario extends JInternalFrame {
         jbCrearUsuario.setText("Crear usuario");
         jbActualizarUsuario.setText("Actualizar usuario");
         jbBuscarUsuario.setText("Buscar usuario");
+        jbGestionRol = new JButton("Gestión de roles");
         jpSouth.add(jbCrearUsuario);
         jpSouth.add(jbActualizarUsuario);
         jpSouth.add(jbBuscarUsuario);
+        jpSouth.add(jbGestionRol);
 
         //ADDING INTO CONTAINER
         getContentPane().add(jpCenter, java.awt.BorderLayout.CENTER);
