@@ -5,11 +5,11 @@
  */
 package GestionRol;
 
-import DB_manager.DB_rol;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,8 +18,10 @@ import java.awt.event.MouseEvent;
 public class C_gestion_rol extends MouseAdapter implements ActionListener {
 
     private V_gestion_rol vista;
+    private M_gestion_rol modelo;
 
     public C_gestion_rol(M_gestion_rol modelo, V_gestion_rol vista) {
+        this.modelo = modelo;
         this.vista = vista;
         inicializarVista();
         agregarListeners();
@@ -33,7 +35,9 @@ public class C_gestion_rol extends MouseAdapter implements ActionListener {
     }
 
     private void inicializarVista() {
-        this.vista.jtRoles.setModel(DB_rol.consultarRoles(""));
+        this.vista.jbModificarRol.setEnabled(false);
+        this.vista.jbEliminarRol.setEnabled(false);
+        this.vista.jtRoles.setModel(this.modelo.consultarRoles(""));
     }
 
     public void mostrarVista() {
@@ -41,7 +45,14 @@ public class C_gestion_rol extends MouseAdapter implements ActionListener {
     }
 
     private void mostrarPermisos(int idRol) {
-        this.vista.jtPermisos.setModel(DB_rol.consultarPermisos(idRol));
+        this.vista.jtPermisos.setModel(this.modelo.consultarPermisos(idRol));
+        Utils.c_packColumn.packColumns(this.vista.jtPermisos, 1);
+    }
+
+    private void eliminarRol() {
+        int idRol = Integer.valueOf(String.valueOf(this.vista.jtRoles.getValueAt(this.vista.jtRoles.getSelectedRow(), 0)));
+        this.modelo.eliminarRol(idRol);
+        inicializarVista();
     }
 
     @Override
@@ -51,7 +62,24 @@ public class C_gestion_rol extends MouseAdapter implements ActionListener {
             Crear_rol crear_rol = new Crear_rol(this.vista);
             crear_rol.mostrarVista();
             inicializarVista();
+        } else if (e.equals(this.vista.jbModificarRol)) {
+            int idRol = (Integer.valueOf((String) this.vista.jtRoles.getValueAt(this.vista.jtRoles.getSelectedRow(), 0)));
+            if (idRol == 1) {
+                JOptionPane.showMessageDialog(vista, "El rol administrador no puede ser modificado.", "Atención", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                Modificar_rol modificar_rol = new Modificar_rol(this.vista, idRol);
+                modificar_rol.mostrarVista();
+                inicializarVista();
+            }
+        } else if (e.equals(this.vista.jbEliminarRol)) {
+            int idRol = (Integer.valueOf((String) this.vista.jtRoles.getValueAt(this.vista.jtRoles.getSelectedRow(), 0)));
+            if (idRol == 1) {
+                JOptionPane.showMessageDialog(vista, "El rol administrador no puede ser eliminado.", "Atención", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                eliminarRol();
+            }
         }
+
     }
 
     @Override
@@ -68,7 +96,13 @@ public class C_gestion_rol extends MouseAdapter implements ActionListener {
             this.vista.jbEliminarRol.setEnabled(false);
         }
         if (me.getClickCount() == 2) {
-            //modificar rol
+            if (idRol == 1) {
+                JOptionPane.showMessageDialog(vista, "El rol administrador no puede ser modificado.", "Atención", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                Modificar_rol modificar_rol = new Modificar_rol(this.vista, idRol);
+                modificar_rol.mostrarVista();
+                inicializarVista();
+            }
         }
     }
 }
