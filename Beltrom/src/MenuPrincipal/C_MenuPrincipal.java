@@ -5,7 +5,7 @@
 package MenuPrincipal;
 
 import beltrom.C_inicio;
-import empleado.C_gestion_usuario;
+import empleado.Gestion_empleado;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -60,7 +60,7 @@ public class C_MenuPrincipal implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         if (src.equals(this.vista.jbEmpleados)) {
-            C_gestion_usuario ges_usuario = new C_gestion_usuario(inicio);
+            Gestion_empleado ges_usuario = new Gestion_empleado(inicio);
             ges_usuario.mostrarVista();
         } else if (src.equals(this.vista.jbSalir)) {
             System.exit(0);
