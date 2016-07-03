@@ -38,7 +38,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
      * Establece el tamaño, posicion y visibilidad de la vista.
      */
     public void mostrarVista() {
-        this.vista.setSize(800, 650);
+        this.vista.setSize(800, 350);
         this.vista.setLocationRelativeTo(this.vista.getOwner());
         this.vista.setVisible(true);
     }
@@ -60,7 +60,6 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         this.vista.jbQuitarRol.addActionListener(this);
         this.vista.jbAgregarRol.addActionListener(this);
         this.vista.jftCedulaIdentidad.addKeyListener(this);
-        this.vista.jftSalario.addKeyListener(this);
         this.vista.jtfNombre.addMouseListener(this);
         this.vista.jtfApellido.addMouseListener(this);
         this.vista.jftCedulaIdentidad.addMouseListener(this);
@@ -69,13 +68,16 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         this.vista.jpassword1.addMouseListener(this);
         this.vista.jpassword2.addMouseListener(this);
         this.vista.jtfAlias.addMouseListener(this);
+        this.vista.jtRolesDisponibles.addMouseListener(this);
+        this.vista.jtRolesSeleccionados.addMouseListener(this);
     }
 
     /**
      * Agrega valores a los componentes.
      */
     private void inicializarVista() {
-        this.vista.jtfIdFuncionario.setText("");
+        this.vista.jbAgregarRol.setEnabled(false);
+        this.vista.jbQuitarRol.setEnabled(false);
         Vector genero = modelo.obtenerGenero();
         for (int i = 0; i < genero.size(); i++) {
             this.vista.jcbGenero.addItem(genero.get(i));
@@ -92,20 +94,12 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         for (int i = 0; i < estadoCivil.size(); i++) {
             this.vista.jcbEstadoCivil.addItem(estadoCivil.get(i));
         }
-        Vector roles = modelo.obtenerRoles();
-        for (Object role : roles) {
-            this.vista.jcbRoles.addItem(role);
-        }
-        this.vista.jltRol.setModel(this.modelo.lmRol);
         this.vista.dccFechaIngreso.setDate(Calendar.getInstance().getTime());
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
                         new javax.swing.text.NumberFormatter(
                                 new java.text.DecimalFormat("#,##0"))));
-        this.vista.jftSalario.setFormatterFactory(
-                new javax.swing.text.DefaultFormatterFactory(
-                        new javax.swing.text.NumberFormatter(
-                                new java.text.DecimalFormat("#,##0"))));
+        this.vista.jtRolesDisponibles.setModel(modelo.obtenerRolesDisp());
     }
 
     private boolean isValidDataEntry() {
@@ -122,7 +116,17 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales1);
             return false;
         } else {
-            nombre = this.vista.jtfNombre.getText();
+            if (this.vista.jtfNombre.getText().length() > 30) {
+                this.vista.jtfNombre.setBackground(Color.red);
+                javax.swing.JOptionPane.showMessageDialog(this.vista,
+                        "El campo nombre sobrepasa el limite permitido(30) de caracteres",
+                        "Parametros incorrectos",
+                        javax.swing.JOptionPane.OK_OPTION);
+                this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales1);
+                return false;
+            } else {
+                nombre = this.vista.jtfNombre.getText();
+            }
 
         }
         /*
@@ -138,7 +142,17 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales1);
             return false;
         } else {
-            apellido = this.vista.jtfApellido.getText();
+            if (this.vista.jtfApellido.getText().length() > 30) {
+                this.vista.jtfApellido.setBackground(Color.red);
+                javax.swing.JOptionPane.showMessageDialog(this.vista,
+                        "El campo apellido sobrepasa el limite permitido(30) de caracteres",
+                        "Parametros incorrectos",
+                        javax.swing.JOptionPane.OK_OPTION);
+                this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales1);
+                return false;
+            } else {
+                apellido = this.vista.jtfApellido.getText();
+            }
         }
         /*
          *VALIDAR CI
@@ -183,28 +197,17 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             this.vista.jtpCenter.setSelectedComponent(vista.jpDatosEmpresariales);
             return false;
         } else {
-            alias = this.vista.jtfAlias.getText().toLowerCase();
-        }
-        /*
-         *VALIDAR SALARIO
-         */
-        Integer salario;
-        try {
-            String valor = this.vista.jftSalario.getText();
-            if (valor.isEmpty()) {
-                salario = 0;
+            if (this.vista.jtfAlias.getText().length() > 30) {
+                this.vista.jtfAlias.setBackground(Color.red);
+                javax.swing.JOptionPane.showMessageDialog(this.vista,
+                        "El campo alias sobrepasa el limite permitido(30) de caracteres",
+                        "Parametros incorrectos",
+                        javax.swing.JOptionPane.OK_OPTION);
+                this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales1);
+                return false;
             } else {
-                salario = Integer.valueOf(this.vista.jftSalario.getText());
+                alias = this.vista.jtfAlias.getText().toLowerCase();
             }
-        } catch (NumberFormatException e) {
-            this.vista.jftSalario.setBackground(Color.red);
-            javax.swing.JOptionPane.showMessageDialog(this.vista,
-                    "Coloque un numero salario valido",
-                    "Parametros incorrectos",
-                    javax.swing.JOptionPane.OK_OPTION);
-            this.vista.jtpCenter.setSelectedComponent(vista.jpDatosEmpresariales);
-
-            return false;
         }
         /*
          * VALIDAR TELEFONO
@@ -214,8 +217,19 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             String valor = this.vista.jtfNroTelefono.getText();
             if (valor.isEmpty()) {
                 telefono = null;
+                return false;
             } else {
-                telefono = this.vista.jtfNroTelefono.getText();
+                if (this.vista.jtfNroTelefono.getText().length() > 30) {
+                    this.vista.jtfNroTelefono.setBackground(Color.red);
+                    javax.swing.JOptionPane.showMessageDialog(this.vista,
+                            "El campo teléfono sobrepasa el limite permitido(30) de caracteres",
+                            "Parametros incorrectos",
+                            javax.swing.JOptionPane.OK_OPTION);
+                    this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales1);
+                    return false;
+                } else {
+                    telefono = this.vista.jtfNroTelefono.getText();
+                }
             }
         } catch (NumberFormatException e) {
             this.vista.jtfNroTelefono.setBackground(Color.red);
@@ -234,13 +248,24 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             String valor = this.vista.jtfNroCelular.getText();
             if (valor.isEmpty()) {
                 celular = null;
+                return false;
             } else {
-                celular = this.vista.jtfNroCelular.getText();
+                if (this.vista.jtfNroTelefono.getText().length() > 30) {
+                    this.vista.jtfNroTelefono.setBackground(Color.red);
+                    javax.swing.JOptionPane.showMessageDialog(this.vista,
+                            "El campo celular sobrepasa el limite permitido(30) de caracteres",
+                            "Parametros incorrectos",
+                            javax.swing.JOptionPane.OK_OPTION);
+                    this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales1);
+                    return false;
+                } else {
+                    celular = this.vista.jtfNroCelular.getText();
+                }
             }
         } catch (NumberFormatException e) {
             this.vista.jtfNroCelular.setBackground(Color.red);
             javax.swing.JOptionPane.showMessageDialog(this.vista,
-                    "Coloque un numero de celular valido",
+                    "Coloque un numero de celular válido",
                     "Parametros incorrectos",
                     javax.swing.JOptionPane.OK_OPTION);
             this.vista.jtpCenter.setSelectedComponent(vista.jpDatosPersonales2);
@@ -260,13 +285,13 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         } catch (Exception e) {
             this.vista.dccFechaIngreso.setBackground(Color.red);
             javax.swing.JOptionPane.showMessageDialog(this.vista,
-                    "Ingrese una fecha valida en el campo Fecha ingreso",
+                    "Ingrese una fecha válida en el campo Fecha ingreso",
                     "Parametros incorrectos",
                     javax.swing.JOptionPane.OK_OPTION);
             this.vista.jtpCenter.setSelectedComponent(vista.jpDatosEmpresariales);
             return false;
         }
-        if (this.vista.jltRol.getModel().getSize() < 1) {
+        if (this.vista.jtRolesSeleccionados.getRowCount() < 1) {
             javax.swing.JOptionPane.showMessageDialog(this.vista,
                     "Seleccione por lo menos un rol",
                     "Parametros incorrectos",
@@ -274,26 +299,6 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             this.vista.jtpCenter.setSelectedComponent(vista.jpRol);
             return false;
         }
-        M_funcionario funcionario = new M_funcionario();
-        String email = this.vista.jtfCorreoElectronico.getText();
-        String direccion = this.vista.jtfDireccion.getText();
-        String observacion = this.vista.jtaObservacion.getText();
-        funcionario.setNombre(nombre);
-        funcionario.setApellido(apellido);
-        funcionario.setCedula(cedula);
-        funcionario.setFecha_nacimiento(fechaNacimiento);
-        funcionario.setAlias(alias);
-        funcionario.setNro_telefono(telefono);
-        funcionario.setNro_celular(celular);
-        funcionario.setFecha_ingreso(fechaIngreso);
-        funcionario.setEstado_civil((String) this.vista.jcbEstadoCivil.getSelectedItem());
-        funcionario.setObservacion(observacion);
-        funcionario.setDireccion(direccion);
-        funcionario.setEmail(email);
-        funcionario.setCiudad((String) this.vista.jcbCiudad.getSelectedItem());
-        funcionario.setRol(null);//se establece en el modelo
-        funcionario.setSexo((String) this.vista.jcbGenero.getSelectedItem());
-        funcionario.setPais((String) this.vista.jcbNacionalidad.getSelectedItem());
         return true;
     }
 
@@ -318,31 +323,44 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         });
     }
 
-    private void checkJFTsalario() {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                String valorIngresado = vista.jftSalario.getText().replace(".", "");
-                Long StringToLong = null;
-                try {
-                    StringToLong = Long.valueOf(valorIngresado);
-                } catch (NumberFormatException numberFormatException) {
-                    javax.swing.JOptionPane.showMessageDialog(vista, "Ingrese solo numeros",
-                            "Parametros incorrectos",
-                            javax.swing.JOptionPane.OK_OPTION);
-                }
-                vista.jftSalario.setValue(StringToLong);
-                String valorJFT = vista.jftSalario.getText();
-                vista.jftSalario.select(valorJFT.length(), valorJFT.length());
-            }
-        });
-    }
-
     private void crearUsuario() {
         if (isValidDataEntry()) {
             char[] password1 = vista.jpassword1.getPassword();
             char[] password2 = vista.jpassword2.getPassword();
-            modelo.crearUsuario(password1, password2);
+            
+            String email = this.vista.jtfCorreoElectronico.getText();
+            String direccion = this.vista.jtfDireccion.getText();
+            String observacion = this.vista.jtaObservacion.getText();
+            String nombre = this.vista.jtfNombre.getText();
+            String apellido = this.vista.jtfApellido.getText();
+            String LongToString = String.valueOf(this.vista.jftCedulaIdentidad.getValue());
+            Integer cedula = Integer.valueOf(LongToString.replace(".", ""));
+            Date fechaNacimiento = this.vista.dccFechaNacimiento.getDate();
+            String alias = this.vista.jtfAlias.getText().toLowerCase();
+            String telefono = this.vista.jtfNroTelefono.getText();
+            String celular = this.vista.jtfNroCelular.getText();
+            Date fechaIngreso = this.vista.dccFechaIngreso.getDate();
+
+            M_funcionario funcionario = new M_funcionario();
+            funcionario.setNombre(nombre);
+            funcionario.setApellido(apellido);
+            funcionario.setCedula(cedula);
+            funcionario.setFecha_nacimiento(fechaNacimiento);
+            funcionario.setAlias(alias);
+            funcionario.setPassword(String.copyValueOf(password1));
+            funcionario.setNro_telefono(telefono);
+            funcionario.setNro_celular(celular);
+            funcionario.setFecha_ingreso(fechaIngreso);
+            funcionario.setEstado_civil((String) this.vista.jcbEstadoCivil.getSelectedItem());
+            funcionario.setObservacion(observacion);
+            funcionario.setDireccion(direccion);
+            funcionario.setEmail(email);
+            funcionario.setCiudad((String) this.vista.jcbCiudad.getSelectedItem());
+            funcionario.setRol(null);//se establece en el modelo
+            funcionario.setSexo((String) this.vista.jcbGenero.getSelectedItem());
+            funcionario.setPais((String) this.vista.jcbNacionalidad.getSelectedItem());
+            
+            modelo.crearUsuario(funcionario, password1, password2);
             cerrar();
         } else {
             JOptionPane.showMessageDialog(vista, "Failed", "Attention", JOptionPane.INFORMATION_MESSAGE);
@@ -350,11 +368,25 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
     }
 
     private void agregarRol() {
-        modelo.agregarRol(vista.jcbRoles.getSelectedItem().toString());
+        int fila = this.vista.jtRolesDisponibles.getSelectedRow();
+        int idRol = (Integer.valueOf((String) this.vista.jtRolesDisponibles.getValueAt(fila, 0)));
+        String descripcionRol = (String) this.vista.jtRolesDisponibles.getValueAt(fila, 1);
+        this.modelo.agregarRol(idRol, descripcionRol);
+        this.vista.jtRolesSeleccionados.setModel(this.modelo.obtenerRolesSelecc());
+        Utils.c_packColumn.packColumns(this.vista.jtRolesSeleccionados, 1);
+        this.vista.jbAgregarRol.setEnabled(false);
+        this.vista.jbQuitarRol.setEnabled(false);
     }
 
     private void quitarRol() {
-        modelo.quitarRol(vista.jltRol.getSelectedIndex());
+        //modelo.quitarRol(vista.jltRol.getSelectedIndex());
+        int fila = this.vista.jtRolesSeleccionados.getSelectedRow();
+        int idRol = (int) this.vista.jtRolesSeleccionados.getValueAt(fila, 0);
+        this.modelo.quitarRol(idRol);
+        this.vista.jtRolesSeleccionados.setModel(this.modelo.obtenerRolesSelecc());
+        Utils.c_packColumn.packColumns(this.vista.jtRolesSeleccionados, 1);
+        this.vista.jbAgregarRol.setEnabled(false);
+        this.vista.jbQuitarRol.setEnabled(false);
     }
 
     @Override
@@ -389,14 +421,47 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         } else if (this.vista.jpassword2.hasFocus()) {
             this.vista.jpassword2.setBackground(Color.white);
         }
+        if (e.getSource().equals(this.vista.jtRolesDisponibles)) {
+            int fila = this.vista.jtRolesDisponibles.rowAtPoint(e.getPoint());
+            int columna = this.vista.jtRolesDisponibles.columnAtPoint(e.getPoint());
+            int idRol = (Integer.valueOf((String) this.vista.jtRolesDisponibles.getValueAt(fila, 0)));
+            String descripcionRol = (String) this.vista.jtRolesDisponibles.getValueAt(fila, 1);
+            if ((fila > -1) && (columna > -1)) {
+                this.vista.jbAgregarRol.setEnabled(true);
+            } else {
+                this.vista.jbAgregarRol.setEnabled(false);
+            }
+            if (e.getClickCount() == 2) {
+                this.modelo.agregarRol(idRol, descripcionRol);
+                this.vista.jtRolesSeleccionados.setModel(this.modelo.obtenerRolesSelecc());
+                Utils.c_packColumn.packColumns(this.vista.jtRolesSeleccionados, 1);
+                this.vista.jbAgregarRol.setEnabled(false);
+                this.vista.jbQuitarRol.setEnabled(false);
+            }
+        }
+        if (e.getSource().equals(this.vista.jtRolesSeleccionados)) {
+            int fila = this.vista.jtRolesSeleccionados.rowAtPoint(e.getPoint());
+            int columna = this.vista.jtRolesSeleccionados.columnAtPoint(e.getPoint());
+            int idRol = (int) this.vista.jtRolesSeleccionados.getValueAt(fila, 0);
+            if ((fila > -1) && (columna > -1)) {
+                this.vista.jbQuitarRol.setEnabled(true);
+            } else {
+                this.vista.jbQuitarRol.setEnabled(false);
+            }
+            if (e.getClickCount() == 2) {
+                this.modelo.quitarRol(idRol);
+                this.vista.jtRolesSeleccionados.setModel(this.modelo.obtenerRolesSelecc());
+                Utils.c_packColumn.packColumns(this.vista.jtRolesSeleccionados, 1);
+                this.vista.jbAgregarRol.setEnabled(false);
+                this.vista.jbQuitarRol.setEnabled(false);
+            }
+        }
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         if (e.getSource() == this.vista.jftCedulaIdentidad) {
             checkJFTcedula();
-        } else if (e.getSource() == this.vista.jftSalario) {
-            checkJFTsalario();
         }
     }
 

@@ -130,14 +130,14 @@ public class DB_manager {
 
     public static Vector obtenerRubro() {
         Vector rubro = null;
-        String q = "SELECT rubr_descripcion "
+        String q = "SELECT descripcion "
                 + "FROM rubro ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             rubro = new Vector();
             while (rs.next()) {
-                rubro.add(rs.getString("rubr_descripcion"));
+                rubro.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -147,7 +147,7 @@ public class DB_manager {
 
     public static ResultSetTableModel consultarRubro() {
         ResultSetTableModel rubro = null;
-        String q = "SELECT rubr_id_rubro \"ID\" ,rubr_descripcion \"Descripcion\" "
+        String q = "SELECT id_rubro \"ID\" ,descripcion \"Descripcion\" "
                 + "FROM rubro ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -161,14 +161,14 @@ public class DB_manager {
 
     public static Vector obtenerImpuesto() {
         Vector impuesto = null;
-        String q = "SELECT impu_descripcion "
+        String q = "SELECT descripcion "
                 + "FROM impuesto ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             impuesto = new Vector();
             while (rs.next()) {
-                impuesto.add(rs.getString("impu_descripcion"));
+                impuesto.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -178,7 +178,7 @@ public class DB_manager {
 
     public static ResultSetTableModel consultarImpuesto() {
         ResultSetTableModel impuesto = null;
-        String q = "SELECT impu_id_impuesto \"ID\" , impu_descripcion\"Descripcion\" "
+        String q = "SELECT id_impuesto \"ID\" , descripcion\"Descripcion\" "
                 + "FROM impuesto ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -192,14 +192,14 @@ public class DB_manager {
 
     public static Vector obtenerEstado() {
         Vector estado = null;
-        String q = "SELECT esta_descripcion "
+        String q = "SELECT descripcion "
                 + "FROM estado ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             estado = new Vector();
             while (rs.next()) {
-                estado.add(rs.getString("esta_descripcion"));
+                estado.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -209,14 +209,14 @@ public class DB_manager {
 
     public static Vector consultarRespuesta() {
         Vector respuesta = null;
-        String q = "SELECT resp_descripcion "
+        String q = "SELECT descripcion "
                 + "FROM respuesta ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             respuesta = new Vector();
             while (rs.next()) {
-                respuesta.add(rs.getString("resp_descripcion"));
+                respuesta.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -226,7 +226,7 @@ public class DB_manager {
 
     public static ResultSetTableModel consultarMarca() {
         ResultSetTableModel impuesto = null;
-        String q = "SELECT marc_id_marca \"ID\" ,marc_descripcion \"Descripcion\" "
+        String q = "SELECT id_marca \"ID\" ,descripcion \"Descripcion\" "
                 + "FROM marca ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -240,14 +240,14 @@ public class DB_manager {
 
     public static Vector obtenerMarca() {
         Vector impuesto = null;
-        String q = "SELECT marc_descripcion  "
+        String q = "SELECT descripcion  "
                 + "FROM marca ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             impuesto = new Vector();
             while (rs.next()) {
-                impuesto.add(rs.getString("marc_descripcion"));
+                impuesto.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -257,14 +257,14 @@ public class DB_manager {
 
     public static Vector obtenerPais() {
         Vector pais = null;
-        String q = "SELECT pais_descripcion  "
+        String q = "SELECT descripcion  "
                 + "FROM pais ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             pais = new Vector();
             while (rs.next()) {
-                pais.add(rs.getString("pais_descripcion"));
+                pais.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -274,14 +274,14 @@ public class DB_manager {
 
     public static Integer obtenerIdPais(String nombrePais) {
         Integer pais = null;
-        String q = "SELECT pais_id_pais  "
+        String q = "SELECT id_pais  "
                 + "FROM pais "
-                + " WHERE PAIS_DESCRIPCION LIKE '" + nombrePais + "'";
+                + " WHERE DESCRIPCION LIKE '" + nombrePais + "'";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                pais = (rs.getInt("pais_id_pais"));
+                pais = (rs.getInt("id_pais"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -291,14 +291,14 @@ public class DB_manager {
 
     public static Integer obtenerIdGenero(String genero) {
         Integer sexo = null;
-        String q = "SELECT SEXO_ID_SEXO "
+        String q = "SELECT ID_SEXO "
                 + "FROM SEXO "
-                + "WHERE SEXO_DESCRIPCION LIKE '" + genero + "'";
+                + "WHERE DESCRIPCION LIKE '" + genero + "'";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                sexo = (rs.getInt("SEXO_ID_SEXO"));
+                sexo = (rs.getInt("ID_SEXO"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -308,14 +308,14 @@ public class DB_manager {
 
     public static Integer obtenerIdEstadoCivil(String estado_civil) {
         Integer est_civil = null;
-        String q = "SELECT ESCI_ID_ESTADO_CIVIL "
+        String q = "SELECT ID_ESTADO_CIVIL "
                 + "FROM ESTADO_CIVIL "
-                + "WHERE ESCI_DESCRIPCION LIKE '" + estado_civil + "'";
+                + "WHERE DESCRIPCION LIKE '" + estado_civil + "'";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                est_civil = (rs.getInt("ESCI_ID_ESTADO_CIVIL"));
+                est_civil = (rs.getInt("ID_ESTADO_CIVIL"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -325,14 +325,14 @@ public class DB_manager {
 
     public static Integer obtenerIdCiudad(String ciudad) {
         Integer id_ciudad = null;
-        String q = "SELECT CIUD_ID_CIUDAD "
+        String q = "SELECT ID_CIUDAD "
                 + "FROM CIUDAD "
-                + "WHERE CIUD_DESCRIPCION LIKE '" + ciudad + "'";
+                + "WHERE DESCRIPCION LIKE '" + ciudad + "'";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                id_ciudad = (rs.getInt("CIUD_ID_CIUDAD"));
+                id_ciudad = (rs.getInt("ID_CIUDAD"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -342,14 +342,14 @@ public class DB_manager {
 
     public static String obtenerCiudad(int id) {
         String ciudad = null;
-        String q = "SELECT CIUD_DESCRIPCION "
+        String q = "SELECT DESCRIPCION "
                 + "FROM CIUDAD "
-                + "WHERE CIUD_ID_CIUDAD = " + id;
+                + "WHERE ID_CIUDAD = " + id;
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                ciudad = (rs.getString("CIUD_DESCRIPCION"));
+                ciudad = (rs.getString("DESCRIPCION"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -359,14 +359,14 @@ public class DB_manager {
 
     public static String obtenerEstadoCivil(Integer id_estado_civil) {
         String estado_civil = null;
-        String q = "SELECT ESCI_DESCRIPCION "
+        String q = "SELECT DESCRIPCION "
                 + "FROM ESTADO_CIVIL "
-                + "WHERE ESCI_ID_ESTADO_CIVIL = " + id_estado_civil;
+                + "WHERE ID_ESTADO_CIVIL = " + id_estado_civil;
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                estado_civil = (rs.getString("ESCI_DESCRIPCION"));
+                estado_civil = (rs.getString("DESCRIPCION"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -376,14 +376,14 @@ public class DB_manager {
 
     public static String obtenerGenero(Integer id_genero) {
         String genero = null;
-        String q = "SELECT SEXO_DESCRIPCION "
+        String q = "SELECT DESCRIPCION "
                 + "FROM SEXO "
-                + "WHERE SEXO_ID_SEXO = " + id_genero;
+                + "WHERE ID_SEXO = " + id_genero;
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                genero = (rs.getString("SEXO_DESCRIPCION"));
+                genero = (rs.getString("DESCRIPCION"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -393,14 +393,14 @@ public class DB_manager {
 
     public static String obtenerPais(Integer id_pais) {
         String pais = null;
-        String q = "SELECT PAIS_DESCRIPCION "
+        String q = "SELECT DESCRIPCION "
                 + "FROM PAIS "
-                + "WHERE PAIS_ID_PAIS = " + id_pais;
+                + "WHERE ID_PAIS = " + id_pais;
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             while (rs.next()) {
-                pais = (rs.getString("PAIS_DESCRIPCION"));
+                pais = (rs.getString("DESCRIPCION"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -410,14 +410,14 @@ public class DB_manager {
 
     public static Vector obtenerCiudad() {
         Vector ciudad = null;
-        String q = "SELECT Ciud_descripcion  "
+        String q = "SELECT descripcion  "
                 + "FROM Ciudad ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             ciudad = new Vector();
             while (rs.next()) {
-                ciudad.add(rs.getString("Ciud_descripcion"));
+                ciudad.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -427,14 +427,14 @@ public class DB_manager {
 
     public static Vector obtenerEstadoCivil() {
         Vector estadoCivil = null;
-        String q = "SELECT esci_descripcion  "
+        String q = "SELECT descripcion  "
                 + "FROM estado_civil ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             estadoCivil = new Vector();
             while (rs.next()) {
-                estadoCivil.add(rs.getString("esci_descripcion"));
+                estadoCivil.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -444,14 +444,14 @@ public class DB_manager {
 
     public static Vector obtenerGenero() {
         Vector impuesto = null;
-        String q = "SELECT sexo_descripcion "
+        String q = "SELECT descripcion "
                 + "FROM sexo ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             impuesto = new Vector();
             while (rs.next()) {
-                impuesto.add(rs.getString("sexo_descripcion"));
+                impuesto.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -461,66 +461,20 @@ public class DB_manager {
 
     public static Vector obtenerRoles() {
         Vector rol = null;
-        String q = "SELECT rol_descripcion "
+        String q = "SELECT descripcion "
                 + "FROM rol ";
         try {
             st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(q);
             rol = new Vector();
             while (rs.next()) {
-                rol.add(rs.getString("rol_descripcion"));
+                rol.add(rs.getString("descripcion"));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return rol;
     }
-
-    public static Vector obtenerTablas(String rol) {
-        Vector tablas = null;
-        String q = "SELECT DISTINCT menu_descripcion "
-                + "FROM funcionario f, rol r, rol_usuario ru, menu m, menu_item mi, permiso_rol pr "
-                + "WHERE func_id_funcionario = rous_id_funcionario "
-                + "AND   rol_id_rol = rous_id_rol "
-                + "AND   menu_id_menu = pero_id_menu "
-                + "AND   rol_id_rol = pero_id_rol "
-                + "AND   meit_id_menu_item = pero_id_menu_item "
-                + "AND   rol_descripcion = '" + rol + "' ";
-        try {
-            st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            rs = st.executeQuery(q);
-            tablas = new Vector();
-            while (rs.next()) {
-                tablas.add(rs.getString("menu_descripcion"));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return tablas;
-    }
-    /* public static c_ResultSetTableModel consultarProducto(producto producto)
-     throws SQLException {
-
-     if (con == null)
-     throw new IllegalStateException("Connection already closed.");
-     String q= "SELECT prod_id_producto  AS codigo   , "
-     + "       prod_descripcion AS  Descripcion    "
-     + "FROM producto "
-     + "WHERE prod_descripcion LIKE '"+producto.getDescripcion()+"%' "
-     + "ORDER BY prod_id_producto desc";
-     //SELECT prod_id_producto   "ID producto"  ,  prod_descripcion  "Descripcion"   FROM producto
-     //se crea una sentencia
-     Statement statement =
-     con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-
-     // se ejecuta el query y se obtienen los resultados en un ResultSet
-     ResultSet r = statement.executeQuery(q);
-
-     c_ResultSetTableModel rstm = new c_ResultSetTableModel(r);
-
-     return rstm;
-     }*/
-
 
     /*
      * Metodo para manejo de transaccion manual

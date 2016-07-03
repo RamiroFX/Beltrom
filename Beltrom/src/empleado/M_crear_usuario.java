@@ -6,6 +6,8 @@ package empleado;
 
 import DB_manager.DB_Funcionario;
 import DB_manager.DB_manager;
+import DB_manager.DB_rol;
+import DB_manager.ResultSetTableModel;
 import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -17,7 +19,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import Entities.M_funcionario;
 import Entities.M_rol;
+import Utils.ArrayListTableModel;
 import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -26,59 +31,22 @@ import java.util.Vector;
 public class M_crear_usuario {
 
     M_funcionario m_funcionario;
-    DefaultListModel lmRol;
     String password;
     String nombreImagen;
-    ImageIcon imagen;
-    File fileImage;
-    ArrayList roles;
+    ArrayList<M_rol> roles;
+    M_rol rol;
 
     public M_crear_usuario() {
         m_funcionario = new M_funcionario();
-        lmRol = new DefaultListModel();
         password = "";
         nombreImagen = "";
-        imagen = new ImageIcon();
-        fileImage = null;
         roles = new ArrayList();
     }
 
-    public void agregarRol(String rol) {
-        String rolActual = rol;
-        String rolLista[] = new String[lmRol.getSize()];
-        for (int i = 0; i < rolLista.length; i++) {
-            rolLista[i] = lmRol.getElementAt(i).toString();
-        }
-        boolean existe = false;
-        for (int i = 0; i < rolLista.length; i++) {
-            if (rolLista[i].equals(rolActual)) {
-                existe = true;
-                break;
-            }
-        }
-        if (!existe) {
-            lmRol.addElement(rolActual);
-        }
-    }
-
-    public void quitarRol(int selectedIndex) {
-        if (selectedIndex < 0 || selectedIndex >= lmRol.size()) {
-            lmRol.remove(selectedIndex);
-        }
-    }
-
     public boolean establecerRoles() {
-        if (lmRol.isEmpty()) {
-            /*JOptionPane.showMessageDialog(v_jdCreUsu, "Escoja un rol", "Parametros incompletos", JOptionPane.ERROR_MESSAGE, null);
-             this.v_jdCreUsu.jtpCenter.setSelectedComponent(v_jdCreUsu.jpRol);*/
+        if (roles.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Escoja un rol como mínimo", "Parametros incompletos", JOptionPane.ERROR_MESSAGE, null);
             return false;
-        }
-        String nombreRol = "";
-        roles.clear();
-        for (int i = 0; i < lmRol.size(); i++) {
-            nombreRol = (String) lmRol.getElementAt(i);
-            M_rol rol = DB_Funcionario.obtenerRol(nombreRol);
-            roles.add(rol);
         }
         return true;
     }
@@ -95,9 +63,9 @@ public class M_crear_usuario {
         }
     }
 
-    public boolean crearUsuario(char[] charPasswordTemp, char[] charPasswordTemp2) {
+    public boolean crearUsuario(M_funcionario funcionario, char[] charPasswordTemp, char[] charPasswordTemp2) {
         if (isPasswordCorrect(charPasswordTemp, charPasswordTemp2) && establecerRoles()) {
-            DB_Funcionario.insertarFuncionarioFX(m_funcionario, roles, password);
+            DB_Funcionario.insertarFuncionarioFX(funcionario, roles, password);
             return true;
         }
         return false;
@@ -121,5 +89,41 @@ public class M_crear_usuario {
 
     public Vector obtenerRoles() {
         return DB_manager.obtenerRoles();
+    }
+
+    public ArrayListTableModel obtenerRolesSelecc() {
+        ArrayListTableModel model = new ArrayListTableModel();
+        model.addColumn("Id");
+        model.addColumn("Rol");
+        for (int i = 0; i < roles.size(); i++) {
+            Object[] fila = {roles.get(i).getId(),
+                roles.get(i).getDescripcion()};
+            model.addRow(fila);
+        }
+        return model;
+    }
+
+    void agregarRol(int idRol, String descripcion) {
+        for (int i = 0; i < roles.size(); i++) {
+            if (roles.get(i).getId() == idRol) {
+                JOptionPane.showMessageDialog(null, "El Rol seleccionado ya se ha encuentra", "Atención", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        M_rol menu_item = new M_rol(idRol, descripcion);
+        roles.add(menu_item);
+    }
+
+    void quitarRol(int idRol) {
+        for (int i = 0; i < roles.size(); i++) {
+            if (roles.get(i).getId() == idRol) {
+                roles.remove(i);
+                return;
+            }
+        }
+    }
+
+    public ResultSetTableModel obtenerRolesDisp() {
+        return DB_rol.consultarRoles("");
     }
 }

@@ -153,11 +153,9 @@ public class DB_Funcionario {
         String id_pais = "SELECT ID_PAIS FROM PAIS WHERE DESCRIPCION LIKE'" + funcionario.getPais() + "'";
         String id_estado_civil = "SELECT ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "'";
         String id_sexo = "SELECT ID_SEXO FROM SEXO WHERE DESCRIPCION LIKE'" + funcionario.getSexo() + "'";
-        String INSERT_FUNCIONARIO = "INSERT INTO FUNCIONARIO(ID_PERSONA, ALIAS, FECHA_INGRESO, NRO_CELULAR, NRO_TELEFONO, EMAIL, DIRECCION, OBSERVACION)VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        String INSERT_FUNCIONARIO = "INSERT INTO FUNCIONARIO(ID_PERSONA, ALIAS, FECHA_INGRESO, NRO_CELULAR, NRO_TELEFONO, EMAIL, DIRECCION, OBSERVACION, PASSWORD)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         String INSERT_PERSONA = "INSERT INTO PERSONA(CI, NOMBRE, APELLIDO, ID_SEXO, FECHA_NACIMIENTO, ID_ESTADO_CIVIL, ID_PAIS, ID_CIUDAD)VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        String createUser = "CREATE USER " + funcionario.getAlias() + " "
-                + " PASSWORD '" + pass + "'"
-                + " NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN";
+
         try {
             DB_manager.habilitarTransaccionManual();
             pst = DB_manager.getConection().prepareStatement(id_ciudad, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -277,6 +275,7 @@ public class DB_Funcionario {
             } catch (Exception e) {
                 pst.setNull(8, Types.VARCHAR);
             }
+            pst.setString(9, funcionario.getPassword());//NOT NULL
             pst.executeUpdate();
             rs = pst.getGeneratedKeys();
             while (rs != null && rs.next()) {
@@ -291,9 +290,6 @@ public class DB_Funcionario {
                 pst.executeUpdate();
                 pst.close();
             }
-            pst = DB_manager.getConection().prepareStatement(createUser);
-            pst.executeUpdate();
-            pst.close();
             DB_manager.establecerTransaccion();
         } catch (SQLException ex) {
             System.out.println(ex.getNextException());
@@ -412,8 +408,8 @@ public class DB_Funcionario {
         String estadoCivil = " (SELECT DESCRIPCION FROM ESTADO_CIVIL WHERE ID_ESTADO_CIVIL= P.ID_ESTADO_CIVIL)\"estado_civil\"";
         String queryFunc = "F.id_funcionario, P.id_persona, alias, fecha_ingreso, nro_celular, nro_telefono,email, direccion, observacion";
         String queryPers = "ci, nombre, apellido," + genero + ", fecha_nacimiento, " + pais + "," + ciudad + ", " + estadoCivil + "";
-        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario F, persona P " + "WHERE F.id_persona = P.id_persona " 
-                + "AND (ALIAS = '" + alias + "' AND PASSWORD ='"+password+"');";
+        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario F, persona P " + "WHERE F.id_persona = P.id_persona "
+                + "AND (ALIAS = '" + alias + "' AND PASSWORD ='" + password + "');";
         System.out.println("Query: " + Query);
         try {
             st = DB_manager.getConection().createStatement();

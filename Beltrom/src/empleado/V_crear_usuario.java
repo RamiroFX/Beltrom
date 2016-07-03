@@ -5,10 +5,14 @@
 package empleado;
 
 import com.toedter.calendar.JDateChooser;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -16,22 +20,22 @@ import javax.swing.JTabbedPane;
  */
 public class V_crear_usuario extends javax.swing.JDialog {
 
-    private javax.swing.JPanel jpImagen, jpNorth;
-    private javax.swing.JScrollPane jspObservacion, jspRol;
+    private javax.swing.JPanel jpNorth;
+    private javax.swing.JScrollPane jspObservacion;
     public javax.swing.JButton jbAceptar, jbAgregarRol, jbCancelar, jbQuitarRol;
-    public javax.swing.JComboBox jcbCiudad, jcbEstadoCivil, jcbGenero, jcbNacionalidad, jcbRoles;
+    public javax.swing.JComboBox jcbCiudad, jcbEstadoCivil, jcbGenero, jcbNacionalidad;
     public javax.swing.JLabel jlAlias, jlApellido, jlCedulaIdentidad, jlCiudad, jlEstadoCivil,
-            jlFechaNacimiento, jlGenero, jlIdEmpleado, jlImagen, jlNacionalidad, jlNombre,
-            jlNroCelular, jlNroTelefono, jlPassword, jlRepetirPassword, jlFechaIngreso, jlSalario, jlCorreoElectronico, jlDireccion;
-    public javax.swing.JList jltRol;
+            jlFechaNacimiento, jlGenero, jlNacionalidad, jlNombre,
+            jlNroCelular, jlNroTelefono, jlPassword, jlRepetirPassword, jlFechaIngreso, jlCorreoElectronico, jlDireccion;
     public javax.swing.JPanel jpDatosEmpresariales, jpSouth, jpDatosPersonales1, jpRol, jpDatosPersonales2;
     public javax.swing.JPasswordField jpassword1, jpassword2;
-    public javax.swing.JTextArea jtaObservacion, jtaAyuda;
-    public javax.swing.JFormattedTextField jftCedulaIdentidad, jftSalario;
+    public javax.swing.JTextArea jtaObservacion;
+    public javax.swing.JFormattedTextField jftCedulaIdentidad;
     public javax.swing.JTextField jtfAlias, jtfApellido, jtfCorreoElectronico,
-            jtfDireccion, jtfIdFuncionario, jtfNombre, jtfNroCelular, jtfNroTelefono;
+            jtfDireccion, jtfNombre, jtfNroCelular, jtfNroTelefono;
     public JDateChooser dccFechaNacimiento, dccFechaIngreso;
     public javax.swing.JTabbedPane jtpCenter;
+    public JTable jtRolesSeleccionados, jtRolesDisponibles;
 
     public V_crear_usuario(JFrame frame) {
         super(frame, true);
@@ -139,40 +143,41 @@ public class V_crear_usuario extends javax.swing.JDialog {
 
     private void initPanelDatosPersonales2() {
         //Panel
-        jpDatosPersonales2 = new javax.swing.JPanel(new java.awt.GridLayout(6, 2));
-        int swingConstant = javax.swing.SwingConstants.CENTER;
+        //jpDatosPersonales2 = new javax.swing.JPanel(new java.awt.GridLayout(9, 2));
+        jpDatosPersonales2 = new javax.swing.JPanel(new MigLayout());
+        //int swingConstant = javax.swing.SwingConstants.CENTER;
         //Labels, Textfields & textarea
         jlNroTelefono = new javax.swing.JLabel("Número de telefono");
-        jlNroTelefono.setHorizontalAlignment(swingConstant);
+        //jlNroTelefono.setHorizontalAlignment(swingConstant);
         jtfNroTelefono = new javax.swing.JTextField();
         jlNroCelular = new javax.swing.JLabel("Número de celular");
-        jlNroCelular.setHorizontalAlignment(swingConstant);
+        //jlNroCelular.setHorizontalAlignment(swingConstant);
         jtfNroCelular = new javax.swing.JTextField();
         jtaObservacion = new javax.swing.JTextArea();
         jspObservacion = new javax.swing.JScrollPane(jtaObservacion);
         jspObservacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Observaciones"));
         jlDireccion = new javax.swing.JLabel("Dirección");
-        jlDireccion.setHorizontalAlignment(swingConstant);
+        //jlDireccion.setHorizontalAlignment(swingConstant);
         jtfDireccion = new javax.swing.JTextField();
         //Adding components into panel
         jpDatosPersonales2.add(jlDireccion);
-        jpDatosPersonales2.add(jtfDireccion);
-        jpDatosPersonales2.add(new Component() {
-        });
-        jpDatosPersonales2.add(new Component() {
-        });
+        jpDatosPersonales2.add(jtfDireccion, "pushx, grow, wrap");
+        /*jpDatosPersonales2.add(new Component() {
+         });
+         jpDatosPersonales2.add(new Component() {
+         });*/
         jpDatosPersonales2.add(jlNroTelefono);
-        jpDatosPersonales2.add(jtfNroTelefono);
-        jpDatosPersonales2.add(new Component() {
-        });
-        jpDatosPersonales2.add(new Component() {
-        });
+        jpDatosPersonales2.add(jtfNroTelefono, "pushx, grow, wrap");
+        /*jpDatosPersonales2.add(new Component() {
+         });
+         jpDatosPersonales2.add(new Component() {
+         });*/
         jpDatosPersonales2.add(jlNroCelular);
-        jpDatosPersonales2.add(jtfNroCelular);
-        jpDatosPersonales2.add(new Component() {
-        });
-        jpDatosPersonales2.add(new Component() {
-        });
+        jpDatosPersonales2.add(jtfNroCelular, "pushx, grow, wrap");
+        /*jpDatosPersonales2.add(new Component() {
+         });
+         jpDatosPersonales2.add(new Component() {
+         });*/
     }
 
     private void initPanelDatosEmpresariales() {
@@ -190,15 +195,6 @@ public class V_crear_usuario extends javax.swing.JDialog {
         jlFechaIngreso.setText("Fecha de ingreso");
         dccFechaIngreso = new JDateChooser();
         dccFechaIngreso.setDateFormatString("dd/MM/yyyy");
-        jlSalario = new javax.swing.JLabel();
-        jlSalario.setHorizontalAlignment(swingConstant);
-        jlSalario.setText("Salario");
-        jftSalario = new javax.swing.JFormattedTextField();
-        jlIdEmpleado = new javax.swing.JLabel();
-        jlIdEmpleado.setHorizontalAlignment(swingConstant);
-        jlIdEmpleado.setText("Id. funcionario");
-        jtfIdFuncionario = new javax.swing.JTextField();
-        jtfIdFuncionario.setEditable(false);
         jlPassword = new javax.swing.JLabel();
         jlPassword.setHorizontalAlignment(swingConstant);
         jlPassword.setText("Contraseña (*)");
@@ -211,9 +207,6 @@ public class V_crear_usuario extends javax.swing.JDialog {
         jlCorreoElectronico.setHorizontalAlignment(swingConstant);
         jlCorreoElectronico.setText("Correo electrónico");
         jtfCorreoElectronico = new javax.swing.JTextField();
-
-        jpDatosEmpresariales.add(jlIdEmpleado);
-        jpDatosEmpresariales.add(jtfIdFuncionario);
         jpDatosEmpresariales.add(jlAlias);
         jpDatosEmpresariales.add(jtfAlias);
         jpDatosEmpresariales.add(new Component() {
@@ -251,8 +244,6 @@ public class V_crear_usuario extends javax.swing.JDialog {
         jpDatosEmpresariales.add(new Component() {
         });
 
-        jpDatosEmpresariales.add(jlSalario);
-        jpDatosEmpresariales.add(jftSalario);
         jpDatosEmpresariales.add(new Component() {
         });
         jpDatosEmpresariales.add(new Component() {
@@ -269,46 +260,30 @@ public class V_crear_usuario extends javax.swing.JDialog {
     }
 
     private void initPaneNorth() {
-        //Panel
-        jpImagen = new javax.swing.JPanel(new java.awt.BorderLayout());
-        jpImagen.setBorder(javax.swing.BorderFactory.createTitledBorder("Imagen"));
-        //Label & Button
-        jlImagen = new javax.swing.JLabel();
-        jlImagen.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jlImagen.setPreferredSize(new java.awt.Dimension(200, 200));
-        //Adding components into panel
-        jpImagen.add(jlImagen, java.awt.BorderLayout.CENTER);
-        jpNorth = new javax.swing.JPanel(new java.awt.GridLayout(1, 2));
-        jtaAyuda = new javax.swing.JTextArea();
-        jtaAyuda.setEditable(false);
-        jtaAyuda.setEnabled(false);
-        jtaAyuda.setText("Los campos marcados con un asterisco(*) son obligatorios.");
-        jpNorth.add(jpImagen);
+        jpNorth = new javax.swing.JPanel();
         jpNorth.add(new JLabel("Los campos marcados con un asterisco(*) son obligatorios."));
     }
 
     private void initPaneRol() {
         //Panel
         jpRol = new javax.swing.JPanel(new java.awt.GridLayout(1, 2));
-        javax.swing.JPanel left = new javax.swing.JPanel(new java.awt.GridLayout(2, 1));
-        javax.swing.JPanel right = new javax.swing.JPanel(new java.awt.BorderLayout());
-        javax.swing.JPanel botones = new javax.swing.JPanel();
-        javax.swing.JPanel comobox = new javax.swing.JPanel(new java.awt.BorderLayout());
+        jbAgregarRol = new javax.swing.JButton("Agregar");
+        jbQuitarRol = new javax.swing.JButton("Quitar");
 
-        jcbRoles = new javax.swing.JComboBox();
-        jltRol = new javax.swing.JList();
-        jltRol.setBorder(javax.swing.BorderFactory.createTitledBorder("Roles (*)"));
-        jspRol = new javax.swing.JScrollPane(jltRol);
-        jbAgregarRol = new javax.swing.JButton();
-        jbAgregarRol.setText("Agregar");
-        jbQuitarRol = new javax.swing.JButton();
-        jbQuitarRol.setText("Quitar");
-        comobox.add(jcbRoles, java.awt.BorderLayout.SOUTH);
-        botones.add(jbAgregarRol);
-        botones.add(jbQuitarRol);
-        left.add(comobox);
-        left.add(botones);
-        right.add(jspRol);
+        jtRolesSeleccionados = new JTable();
+        jtRolesDisponibles = new JTable();
+        JScrollPane jspRolesSeleccionados = new JScrollPane(jtRolesSeleccionados);
+        jspRolesSeleccionados.setBorder(javax.swing.BorderFactory.createTitledBorder("Roles seleccionados(*)"));
+        JScrollPane jspRolesDisponibles = new JScrollPane(jtRolesDisponibles);
+        jspRolesDisponibles.setBorder(javax.swing.BorderFactory.createTitledBorder("Roles disponibles"));
+
+        javax.swing.JPanel left = new javax.swing.JPanel(new java.awt.BorderLayout());
+        javax.swing.JPanel right = new javax.swing.JPanel(new java.awt.BorderLayout());
+        left.add(jspRolesSeleccionados,BorderLayout.CENTER);
+        left.add(jbQuitarRol,BorderLayout.SOUTH);
+        right.add(jspRolesDisponibles,BorderLayout.CENTER);
+        right.add(jbAgregarRol,BorderLayout.SOUTH);
+
         jpRol.add(left);
         jpRol.add(right);
     }
