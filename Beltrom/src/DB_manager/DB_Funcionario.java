@@ -1194,4 +1194,17 @@ public class DB_Funcionario {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
+
+    public static boolean existeEmpleado(M_funcionario funcionario) {
+        String QUERY = "SELECT alias,ci FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (ALIAS = '" + funcionario.getAlias() + "' OR CI = " + funcionario.getCedula() + ");";
+        System.out.println("existeEmpleado: " + QUERY);
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            return rs.isBeforeFirst();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
 }

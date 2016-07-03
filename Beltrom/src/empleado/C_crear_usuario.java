@@ -106,6 +106,8 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         /*
          * VALIDAR NOMBRE
          */
+        System.out.println("isValidDataEntry");
+        System.out.println("nombre");
         String nombre;
         if (this.vista.jtfNombre.getText().isEmpty()) {
             this.vista.jtfNombre.setBackground(Color.red);
@@ -127,11 +129,11 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             } else {
                 nombre = this.vista.jtfNombre.getText();
             }
-
         }
         /*
          * VALIDAR APELLIDO
          */
+        System.out.println("apellido");
         String apellido;
         if (this.vista.jtfApellido.getText().isEmpty()) {
             this.vista.jtfApellido.setBackground(Color.red);
@@ -157,6 +159,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         /*
          *VALIDAR CI
          */
+        System.out.println("cedula");
         Integer cedula;
         try {
             String LongToString = String.valueOf(this.vista.jftCedulaIdentidad.getValue());
@@ -172,6 +175,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         /*
          * VALIDAR FECHA NACIMIENTO
          */
+        System.out.println("fechaNacimiento");
         Date fechaNacimiento;
         try {
             fechaNacimiento = this.vista.dccFechaNacimiento.getDate();
@@ -187,6 +191,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         /*
          * VALIDAR ALIAS
          */
+        System.out.println("alias");
         String alias;
         if (this.vista.jtfAlias.getText().isEmpty()) {
             this.vista.jtfAlias.setBackground(Color.red);
@@ -212,12 +217,12 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         /*
          * VALIDAR TELEFONO
          */
+        System.out.println("telefono");
         String telefono;
         try {
             String valor = this.vista.jtfNroTelefono.getText();
             if (valor.isEmpty()) {
                 telefono = null;
-                return false;
             } else {
                 if (this.vista.jtfNroTelefono.getText().length() > 30) {
                     this.vista.jtfNroTelefono.setBackground(Color.red);
@@ -243,12 +248,12 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         /*
          * VALIDAR CELULAR
          */
+        System.out.println("CELULAR");
         String celular;
         try {
             String valor = this.vista.jtfNroCelular.getText();
             if (valor.isEmpty()) {
                 celular = null;
-                return false;
             } else {
                 if (this.vista.jtfNroTelefono.getText().length() > 30) {
                     this.vista.jtfNroTelefono.setBackground(Color.red);
@@ -274,6 +279,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         /*
          * VALIDAR FECHA INGRESOO
          */
+        System.out.println("fechaIngreso");
         Date fechaIngreso;
         try {
             //Inicio fechas
@@ -291,6 +297,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             this.vista.jtpCenter.setSelectedComponent(vista.jpDatosEmpresariales);
             return false;
         }
+        System.out.println("Roles");
         if (this.vista.jtRolesSeleccionados.getRowCount() < 1) {
             javax.swing.JOptionPane.showMessageDialog(this.vista,
                     "Seleccione por lo menos un rol",
@@ -327,7 +334,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
         if (isValidDataEntry()) {
             char[] password1 = vista.jpassword1.getPassword();
             char[] password2 = vista.jpassword2.getPassword();
-            
+
             String email = this.vista.jtfCorreoElectronico.getText();
             String direccion = this.vista.jtfDireccion.getText();
             String observacion = this.vista.jtaObservacion.getText();
@@ -359,11 +366,10 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             funcionario.setRol(null);//se establece en el modelo
             funcionario.setSexo((String) this.vista.jcbGenero.getSelectedItem());
             funcionario.setPais((String) this.vista.jcbNacionalidad.getSelectedItem());
-            
-            modelo.crearUsuario(funcionario, password1, password2);
-            cerrar();
-        } else {
-            JOptionPane.showMessageDialog(vista, "Failed", "Attention", JOptionPane.INFORMATION_MESSAGE);
+
+            if (modelo.crearUsuario(funcionario, password1, password2)) {
+                cerrar();
+            }
         }
     }
 

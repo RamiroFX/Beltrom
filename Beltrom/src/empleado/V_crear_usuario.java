@@ -75,9 +75,9 @@ public class V_crear_usuario extends javax.swing.JDialog {
         //Labels, textfields, combobox
         jlNombre = new javax.swing.JLabel("Nombre (*)");
         jlNombre.setHorizontalAlignment(swingConstant);
-        jtfNombre = new javax.swing.JTextField();
+        jtfNombre = new javax.swing.JTextField("Ramiro Nicolás");
         jlApellido = new javax.swing.JLabel("Apellido (*)");
-        jtfApellido = new javax.swing.JTextField();
+        jtfApellido = new javax.swing.JTextField("Ferreira Carello");
         jlApellido.setHorizontalAlignment(swingConstant);
         jlFechaNacimiento = new javax.swing.JLabel("Fecha de nacimiento");
         jlFechaNacimiento.setHorizontalAlignment(swingConstant);
@@ -86,6 +86,7 @@ public class V_crear_usuario extends javax.swing.JDialog {
         jlCedulaIdentidad = new javax.swing.JLabel("Cedula de identidad (*)");
         jlCedulaIdentidad.setHorizontalAlignment(swingConstant);
         jftCedulaIdentidad = new javax.swing.JFormattedTextField();
+        jftCedulaIdentidad.setValue(6344586);
         jlNacionalidad = new javax.swing.JLabel("Nacionalidad");
         jlNacionalidad.setHorizontalAlignment(swingConstant);
         jcbNacionalidad = new javax.swing.JComboBox();
@@ -189,7 +190,7 @@ public class V_crear_usuario extends javax.swing.JDialog {
         jlAlias = new javax.swing.JLabel();
         jlAlias.setHorizontalAlignment(swingConstant);
         jlAlias.setText("Alias (*)");
-        jtfAlias = new javax.swing.JTextField();
+        jtfAlias = new javax.swing.JTextField("rferreira");
         jlFechaIngreso = new javax.swing.JLabel();
         jlFechaIngreso.setHorizontalAlignment(swingConstant);
         jlFechaIngreso.setText("Fecha de ingreso");

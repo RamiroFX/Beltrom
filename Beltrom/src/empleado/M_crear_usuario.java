@@ -8,21 +8,13 @@ import DB_manager.DB_Funcionario;
 import DB_manager.DB_manager;
 import DB_manager.DB_rol;
 import DB_manager.ResultSetTableModel;
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import Entities.M_funcionario;
 import Entities.M_rol;
 import Utils.ArrayListTableModel;
 import java.util.Vector;
 import javax.swing.JOptionPane;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -31,15 +23,11 @@ import javax.swing.table.TableModel;
 public class M_crear_usuario {
 
     M_funcionario m_funcionario;
-    String password;
-    String nombreImagen;
     ArrayList<M_rol> roles;
     M_rol rol;
 
     public M_crear_usuario() {
         m_funcionario = new M_funcionario();
-        password = "";
-        nombreImagen = "";
         roles = new ArrayList();
     }
 
@@ -55,19 +43,22 @@ public class M_crear_usuario {
         if (charPasswordTemp.length == 0 || charPasswordTemp2.length == 0) {
             return false;
         }
-        if (Arrays.equals(charPasswordTemp, charPasswordTemp2)) {
-            password = String.copyValueOf(charPasswordTemp);
-            return true;
-        } else {
-            return false;
-        }
+        return Arrays.equals(charPasswordTemp, charPasswordTemp2);
     }
 
     public boolean crearUsuario(M_funcionario funcionario, char[] charPasswordTemp, char[] charPasswordTemp2) {
         if (isPasswordCorrect(charPasswordTemp, charPasswordTemp2) && establecerRoles()) {
-            DB_Funcionario.insertarFuncionarioFX(funcionario, roles, password);
-            return true;
+            String password = String.copyValueOf(charPasswordTemp);
+            if (!verificarDatosEmpleado(funcionario)) {
+                DB_Funcionario.insertarFuncionarioFX(funcionario, roles, password);
+                JOptionPane.showMessageDialog(null, "Nuevo usuario creado", "Atención", JOptionPane.INFORMATION_MESSAGE);
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "El número de cedula o el Alias seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
         }
+        JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden", "Atención", JOptionPane.ERROR_MESSAGE);
         return false;
     }
 
@@ -125,5 +116,9 @@ public class M_crear_usuario {
 
     public ResultSetTableModel obtenerRolesDisp() {
         return DB_rol.consultarRoles("");
+    }
+
+    private boolean verificarDatosEmpleado(M_funcionario funcionario) {
+        return DB_Funcionario.existeEmpleado(funcionario);
     }
 }
