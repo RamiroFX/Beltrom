@@ -81,7 +81,7 @@ public class DB_manager {
         return BaseDatos;
     }
 
-    public static String obtenerNombreUsuario() throws SQLException {
+    public static String obtenerNombreUsuarioDB() throws SQLException {
         String usuario = null;
         usuario = con.getMetaData().getUserName();
         return usuario;

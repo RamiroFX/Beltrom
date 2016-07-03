@@ -410,7 +410,6 @@ public class DB_Funcionario {
         String queryPers = "ci, nombre, apellido," + genero + ", fecha_nacimiento, " + pais + "," + ciudad + ", " + estadoCivil + "";
         String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario F, persona P " + "WHERE F.id_persona = P.id_persona "
                 + "AND (ALIAS = '" + alias + "' AND PASSWORD ='" + password + "');";
-        System.out.println("Query: " + Query);
         try {
             st = DB_manager.getConection().createStatement();
             rs = st.executeQuery(Query);
@@ -853,6 +852,51 @@ public class DB_Funcionario {
             pst.setInt(7, funcionario.getId_pais());
             pst.setInt(8, funcionario.getId_ciudad());
             pst.setInt(9, funcionario.getId_persona());
+            pst.executeUpdate();
+            DB_manager.establecerTransaccion();
+        } catch (SQLException ex) {
+            System.out.println(ex.getNextException());
+            if (DB_manager.getConection() != null) {
+                try {
+                    DB_manager.getConection().rollback();
+                } catch (SQLException ex1) {
+                    Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                    lgr.log(Level.WARNING, ex1.getMessage(), ex1);
+                }
+            }
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+    }
+
+    public static boolean isPasswordCorrect(int idFuncionario, String alias, String password) {
+        String QUERY = "SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE ID_FUNCIONARIO = " + idFuncionario + " AND ALIAS ='" + alias + "' AND PASSWORD ='" + password + "';";
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            return rs.isBeforeFirst();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void actualizarContraseña(int idFuncionario, String alias, String password) {
+        String UPDATE_FUNCIONARIO = "UPDATE FUNCIONARIO SET PASSWORD = ?  "
+                + "WHERE ID_FUNCIONARIO = " + idFuncionario + " AND ALIAS = '" + alias + "';";
+        try {
+            DB_manager.habilitarTransaccionManual();
+            pst = DB_manager.getConection().prepareStatement(UPDATE_FUNCIONARIO);
+            pst.setString(1, password);//NOT NULL
             pst.executeUpdate();
             DB_manager.establecerTransaccion();
         } catch (SQLException ex) {

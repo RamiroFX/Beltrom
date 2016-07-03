@@ -20,10 +20,10 @@ public class C_login implements ActionListener, KeyListener {
 
     M_login modelo;
     V_login vista;
-    C_inicio c_main;
+    C_inicio c_inicio;
 
     public C_login(M_login modelo, V_login vista, C_inicio c_main) {
-        this.c_main = c_main;
+        this.c_inicio = c_main;
         this.modelo = modelo;
         this.vista = vista;
         inicializarVista();
@@ -39,8 +39,8 @@ public class C_login implements ActionListener, KeyListener {
 
     public void mostrarVista() {
         this.vista.setSize(400, 200);
-        this.vista.setLocation(this.c_main.centrarPantalla(this.vista));
-        c_main.agregarVentana(vista);
+        this.vista.setLocation(this.c_inicio.centrarPantalla(this.vista));
+        c_inicio.agregarVentana(vista);
         this.vista.btnAceptar.requestFocusInWindow();
     }
 
@@ -59,7 +59,7 @@ public class C_login implements ActionListener, KeyListener {
     }
 
     private void crearSeleccionRol() {
-        seleccionarRol seleccionarRol = new seleccionarRol(c_main, c_main.getFuncionario());
+        seleccionarRol seleccionarRol = new seleccionarRol(c_inicio, c_inicio.getFuncionario());
         seleccionarRol.mostrarVista();
     }
 
@@ -71,13 +71,11 @@ public class C_login implements ActionListener, KeyListener {
     public void logIn() {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                c_main.setFuncionario(modelo.funcionario);
-                c_main.getFuncionario().setAlias(vista.txtNombre.getText());
-                //modelo.configuracion.setUser(c_main.getFuncionario().getAlias());
+                //modelo.configuracion.setUser(c_inicio.getFuncionario().getAlias());
                 //direccion de base de datos
                 String url = vista.Conexion;
                 //alias de usuario
-                String user = c_main.getFuncionario().getAlias();
+                String user = vista.txtNombre.getText();
                 //contraseña
                 String password = "";
                 char[] pss = vista.txtPassword.getPassword();
@@ -87,9 +85,9 @@ public class C_login implements ActionListener, KeyListener {
                 //se conecta contra la base de datos
                 if (modelo.conectar("postgres", "postgres")) {
                     if (modelo.verificarUsuario(user, password)) {
-                        c_main.setFuncionario(modelo.funcionario);
+                        c_inicio.setFuncionario(modelo.funcionario);
                         mostrarMensaje("La conexion se ha establecido con exito \n"
-                                + "Bienvenido " + c_main.getFuncionario().getNombre() + " " + c_main.getFuncionario().getApellido() + "!");
+                                + "Bienvenido " + c_inicio.getFuncionario().getNombre() + " " + c_inicio.getFuncionario().getApellido() + "!");
                     //una vez correcto el nombre/contraseña se elimina la pantalla de logeo
                         //y se procede a mostrar la pantalla de seleccion de rol
                         vista.dispose();
@@ -98,8 +96,7 @@ public class C_login implements ActionListener, KeyListener {
                     //se habilita la opcion de deslogeo
                         //c_main.vista.getJMbarraMenu().jmiLogOut.setEnabled(true);
                         //se coloca en la barra de menu el nombre de usuario
-                        System.out.println("modelo.obtenerNombreUsuario(): " + modelo.obtenerNombreUsuario());
-                        c_main.vista.setJtfUsuario(modelo.obtenerNombreUsuario());
+                        c_inicio.vista.setJtfUsuario(c_inicio.getFuncionario().getAlias());
                     }
                 } else {
                     mostrarMensaje("Atencion\n"

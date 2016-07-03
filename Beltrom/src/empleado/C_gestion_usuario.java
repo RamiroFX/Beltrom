@@ -36,8 +36,7 @@ public class C_gestion_usuario implements Gestion {
     @Override
     public final void inicializarVista() {
         c_packColumn.packColumns(this.vista.jtUsuario, 2);
-        this.vista.jbBuscarUsuario.setEnabled(false);
-        this.vista.jbActualizarUsuario.setEnabled(false);
+        this.vista.jbModificarUsuario.setEnabled(false);
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
                         new javax.swing.text.NumberFormatter(
@@ -68,7 +67,7 @@ public class C_gestion_usuario implements Gestion {
     @Override
     public final void agregarListeners() {
         this.vista.jbCrearUsuario.addActionListener(this);
-        this.vista.jbActualizarUsuario.addActionListener(this);
+        this.vista.jbModificarUsuario.addActionListener(this);
         this.vista.jtUsuario.addMouseListener(this);
         this.vista.jtfBuscar.addKeyListener(this);
         this.vista.jbGestionRol.addActionListener(this);
@@ -76,6 +75,7 @@ public class C_gestion_usuario implements Gestion {
         this.vista.jckbNombreApellido.addActionListener(this);
         this.vista.jrbExclusivo.addActionListener(this);
         this.vista.jrbInclusivo.addActionListener(this);
+        this.vista.jbCambiarPassword.addActionListener(this);
     }
 
     public void displayQueryResults() {
@@ -105,16 +105,23 @@ public class C_gestion_usuario implements Gestion {
                 }
                 vista.jtUsuario.setModel(modelo.consultarFuncionario(busqueda, isExclusivo, entidad, ruc));
                 c_packColumn.packColumns(vista.jtUsuario, 2);
-                vista.jbActualizarUsuario.setEnabled(false);
+                vista.jbModificarUsuario.setEnabled(false);
             }
         });
+    }
+
+    private void cambiarContraseña() {
+        CambiarPassword cp = new CambiarPassword(this.c_main.vista, c_main);
+        cp.setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.vista.jbCrearUsuario) {
             Crear_empleado crearEmpleado = new Crear_empleado(c_main);
             crearEmpleado.mostrarVista();
-        } else if (e.getSource() == this.vista.jbActualizarUsuario) {
+        } else if (e.getSource() == this.vista.jbModificarUsuario) {
+        } else if (e.getSource() == this.vista.jbCambiarPassword) {
+            cambiarContraseña();
         } else if (e.getSource() == this.vista.jbGestionRol) {
             Gestion_rol gestion_rol = new Gestion_rol(c_main);
             gestion_rol.mostrarVista();
@@ -137,7 +144,7 @@ public class C_gestion_usuario implements Gestion {
         //modelo.setFuncionario(DB_Funcionario.obtenerDatosFuncionarioID(idFuncionario));
         modelo.setFuncionario(modelo.obtenerDatosFuncionarioID(idFuncionario));
         if ((fila > -1) && (columna > -1)) {
-            this.vista.jbActualizarUsuario.setEnabled(true);
+            this.vista.jbModificarUsuario.setEnabled(true);
             //this.v_jifGesUsu.jbEliminar.setEnabled(true);
             this.vista.jtfAlias.setText(modelo.getFuncionario().getAlias());
             this.vista.jtfDireccion.setText(modelo.getFuncionario().getDireccion());
@@ -170,7 +177,7 @@ public class C_gestion_usuario implements Gestion {
                 this.vista.jcbRol.addItem(vRolUsuario.get(i));
             }
         } else {
-            this.vista.jbActualizarUsuario.setEnabled(false);
+            this.vista.jbModificarUsuario.setEnabled(false);
         }
         if (e.getClickCount() == 2) {
         }
