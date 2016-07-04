@@ -4,6 +4,7 @@
  */
 package empleado;
 
+import Entities.M_funcionario;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -12,21 +13,23 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
-import Entities.M_funcionario;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import java.util.Date;
 
 /**
  *
- * @author Ramiro
+ * @author Ramiro Ferreira
  */
-public class C_crear_usuario extends MouseAdapter implements ActionListener, KeyListener {
+public class C_modificar_usuario extends MouseAdapter implements ActionListener, KeyListener {
 
-    private V_crear_usuario vista;
-    private M_crear_usuario modelo;
+    private V_modificar_usuario vista;
+    private M_modificar_usuario modelo;
 
-    public C_crear_usuario(M_crear_usuario modelo, V_crear_usuario vista) {
+    public C_modificar_usuario(M_modificar_usuario modelo, V_modificar_usuario vista) {
         this.modelo = modelo;
         this.vista = vista;
         inicializarVista();
@@ -331,9 +334,6 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
 
     private void crearUsuario() {
         if (isValidDataEntry()) {
-            char[] password1 = vista.jpassword1.getPassword();
-            char[] password2 = vista.jpassword2.getPassword();
-
             String email = this.vista.jtfCorreoElectronico.getText();
             if (email.isEmpty()) {
                 email = null;
@@ -368,7 +368,6 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             funcionario.setCedula(cedula);
             funcionario.setFecha_nacimiento(fechaNacimiento);
             funcionario.setAlias(alias);
-            funcionario.setPassword(String.copyValueOf(password1));
             funcionario.setNro_telefono(telefono);
             funcionario.setNro_celular(celular);
             funcionario.setFecha_ingreso(fechaIngreso);
@@ -381,7 +380,7 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             funcionario.setSexo((String) this.vista.jcbGenero.getSelectedItem());
             funcionario.setPais((String) this.vista.jcbNacionalidad.getSelectedItem());
 
-            if (modelo.crearUsuario(funcionario, password1, password2)) {
+            if (modelo.modificarUsuario(funcionario)) {
                 cerrar();
             }
         }
@@ -476,19 +475,34 @@ public class C_crear_usuario extends MouseAdapter implements ActionListener, Key
             }
         }
     }
+    
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        if (e.getSource() == this.vista.jftCedulaIdentidad) {
-            checkJFTcedula();
+    public void mouseClicked(MouseEvent e) {
+        if (this.vista.jftCedulaIdentidad.hasFocus()) {
+            this.vista.jftCedulaIdentidad.setBackground(Color.white);
+        } else if (this.vista.jtfNombre.hasFocus()) {
+            this.vista.jtfNombre.setBackground(Color.white);
+        } else if (this.vista.jtfApellido.hasFocus()) {
+            this.vista.jtfApellido.setBackground(Color.white);
+        } else if (this.vista.jtfAlias.hasFocus()) {
+            this.vista.jtfAlias.setBackground(Color.white);
+        } else if (this.vista.dccFechaIngreso.hasFocus()) {
+            this.vista.dccFechaIngreso.setBackground(Color.white);
+        } else if (this.vista.dccFechaNacimiento.hasFocus()) {
+            this.vista.dccFechaNacimiento.setBackground(Color.white);
         }
     }
 
-    @Override
+    public void keyTyped(KeyEvent e) {
+        if (e.getSource() == this.vista.jftCedulaIdentidad) {
+            checkJFTcedula();
+        } 
+    }
+
     public void keyPressed(KeyEvent e) {
     }
 
-    @Override
     public void keyReleased(KeyEvent e) {
     }
 }
