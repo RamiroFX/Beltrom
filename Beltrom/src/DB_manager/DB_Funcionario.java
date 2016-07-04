@@ -1207,4 +1207,87 @@ public class DB_Funcionario {
         }
         return false;
     }
+
+    public static void agregarRol(int idRol) {
+        String INSERT_ROL_USUARIO = "INSERT INTO ROL_USUARIO(ID_ROL, ID_FUNCIONARIO)VALUES (?, ?);";
+
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public static ResultSetTableModel consultarRolUsuario(int idFuncionario) {
+        ResultSetTableModel rstm = null;
+        String q = "SELECT r.id_rol \"ID\", r.descripcion \"Descripción\" "
+                + "FROM funcionario f, rol r, rol_usuario ru "
+                + "WHERE ru.id_funcionario = f.id_funcionario "
+                + "AND ru.id_rol = r.id_rol "
+                + "AND F.ID_FUNCIONARIO =" + idFuncionario + ";";
+        try {
+            String query = q;
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            // se ejecuta el query y se obtienen los resultados en un ResultSet
+            rs = st.executeQuery(query);
+            rstm = new ResultSetTableModel(rs);
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } /*finally {
+         try {
+         if (rs != null) {
+         rs.close();
+         }
+         if (st != null) {
+         st.close();
+         }
+         } catch (SQLException ex) {
+         Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+         lgr.log(Level.WARNING, ex.getMessage(), ex);
+         } /*finally {
+         try {
+         if (rs != null) {
+         rs.close();
+         }
+         if (st != null) {
+         st.close();
+         }
+         } catch (SQLException ex) {
+         Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+         lgr.log(Level.WARNING, ex.getMessage(), ex);
+         }
+         }*/
+
+        return rstm;
+    }
+
+    public static void quitarRol(Integer id_funcionario, int idRol) {
+        String QUITAR_ROL_USUARIO = "DELETE FROM ROL_USUARIO WHERE ID_ROL = " + idRol + " AND ID_FUNCIONARIO = " + id_funcionario + ";";
+
+        try {
+            DB_manager.habilitarTransaccionManual();
+            st = DB_manager.getConection().createStatement();
+            st.executeUpdate(QUITAR_ROL_USUARIO);
+            st.close();
+            DB_manager.establecerTransaccion();
+        } catch (SQLException ex) {
+            System.out.println(ex.getNextException());
+            if (DB_manager.getConection() != null) {
+                try {
+                    DB_manager.getConection().rollback();
+                } catch (SQLException ex1) {
+                    Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                    lgr.log(Level.WARNING, ex1.getMessage(), ex1);
+                }
+            }
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+    }
 }

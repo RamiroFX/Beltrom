@@ -13,11 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
-import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 import java.util.Date;
 
 /**
@@ -99,9 +96,27 @@ public class C_modificar_usuario extends MouseAdapter implements ActionListener,
         this.vista.dccFechaIngreso.setDate(Calendar.getInstance().getTime());
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
-                        new javax.swing.text.NumberFormatter(
-                                new java.text.DecimalFormat("#,##0"))));
+                new javax.swing.text.NumberFormatter(
+                new java.text.DecimalFormat("#,##0"))));
         this.vista.jtRolesDisponibles.setModel(modelo.obtenerRolesDisp());
+        this.vista.jtRolesSeleccionados.setModel(modelo.obtenerRolesSelecc());
+        //datos generales
+        this.vista.jtfNombre.setText(modelo.getFuncionario().getNombre());
+        this.vista.jtfApellido.setText(modelo.getFuncionario().getApellido());
+        this.vista.dccFechaNacimiento.setDate(modelo.getFuncionario().getFecha_nacimiento());
+        this.vista.jftCedulaIdentidad.setValue(modelo.getFuncionario().getCedula());
+        this.vista.jcbNacionalidad.setSelectedItem(modelo.getFuncionario().getPais());
+        this.vista.jcbCiudad.setSelectedItem(modelo.getFuncionario().getCiudad());
+        this.vista.jcbGenero.setSelectedItem(modelo.getFuncionario().getSexo());
+        this.vista.jcbEstadoCivil.setSelectedItem(modelo.getFuncionario().getEstado_civil());
+        //datos personales
+        this.vista.jtfDireccion.setText(modelo.getFuncionario().getDireccion());
+        this.vista.jtfNroTelefono.setText(modelo.getFuncionario().getNro_telefono());
+        this.vista.jtfNroCelular.setText(modelo.getFuncionario().getNro_celular());
+        //datos empresariales
+        this.vista.jtfAlias.setText(modelo.getFuncionario().getAlias());
+        this.vista.jtfCorreoElectronico.setText(modelo.getFuncionario().getEmail());
+        this.vista.dccFechaIngreso.setDate(modelo.getFuncionario().getFecha_ingreso());
     }
 
     private boolean isValidDataEntry() {
@@ -399,7 +414,7 @@ public class C_modificar_usuario extends MouseAdapter implements ActionListener,
 
     private void quitarRol() {
         int fila = this.vista.jtRolesSeleccionados.getSelectedRow();
-        int idRol = (int) this.vista.jtRolesSeleccionados.getValueAt(fila, 0);
+        int idRol = Integer.valueOf(String.valueOf(this.vista.jtRolesSeleccionados.getValueAt(fila, 0)));
         this.modelo.quitarRol(idRol);
         this.vista.jtRolesSeleccionados.setModel(this.modelo.obtenerRolesSelecc());
         Utils.c_packColumn.packColumns(this.vista.jtRolesSeleccionados, 1);
@@ -460,7 +475,7 @@ public class C_modificar_usuario extends MouseAdapter implements ActionListener,
         if (e.getSource().equals(this.vista.jtRolesSeleccionados)) {
             int fila = this.vista.jtRolesSeleccionados.rowAtPoint(e.getPoint());
             int columna = this.vista.jtRolesSeleccionados.columnAtPoint(e.getPoint());
-            int idRol = (int) this.vista.jtRolesSeleccionados.getValueAt(fila, 0);
+            int idRol = Integer.valueOf(String.valueOf(this.vista.jtRolesSeleccionados.getValueAt(fila, 0)));
             if ((fila > -1) && (columna > -1)) {
                 this.vista.jbQuitarRol.setEnabled(true);
             } else {
@@ -475,29 +490,11 @@ public class C_modificar_usuario extends MouseAdapter implements ActionListener,
             }
         }
     }
-    
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        if (this.vista.jftCedulaIdentidad.hasFocus()) {
-            this.vista.jftCedulaIdentidad.setBackground(Color.white);
-        } else if (this.vista.jtfNombre.hasFocus()) {
-            this.vista.jtfNombre.setBackground(Color.white);
-        } else if (this.vista.jtfApellido.hasFocus()) {
-            this.vista.jtfApellido.setBackground(Color.white);
-        } else if (this.vista.jtfAlias.hasFocus()) {
-            this.vista.jtfAlias.setBackground(Color.white);
-        } else if (this.vista.dccFechaIngreso.hasFocus()) {
-            this.vista.dccFechaIngreso.setBackground(Color.white);
-        } else if (this.vista.dccFechaNacimiento.hasFocus()) {
-            this.vista.dccFechaNacimiento.setBackground(Color.white);
-        }
-    }
 
     public void keyTyped(KeyEvent e) {
         if (e.getSource() == this.vista.jftCedulaIdentidad) {
             checkJFTcedula();
-        } 
+        }
     }
 
     public void keyPressed(KeyEvent e) {

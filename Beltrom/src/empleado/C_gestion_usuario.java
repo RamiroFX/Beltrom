@@ -39,8 +39,8 @@ public class C_gestion_usuario implements Gestion {
         this.vista.jbModificarUsuario.setEnabled(false);
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
-                        new javax.swing.text.NumberFormatter(
-                                new java.text.DecimalFormat("#,##0"))));
+                new javax.swing.text.NumberFormatter(
+                new java.text.DecimalFormat("#,##0"))));
     }
 
     /**
@@ -120,6 +120,10 @@ public class C_gestion_usuario implements Gestion {
             Crear_empleado crearEmpleado = new Crear_empleado(c_main);
             crearEmpleado.mostrarVista();
         } else if (e.getSource() == this.vista.jbModificarUsuario) {
+            int row = this.vista.jtUsuario.getSelectedRow();
+            int idEmpleado = Integer.valueOf(String.valueOf(this.vista.jtUsuario.getValueAt(row, 0)));
+            Modificar_empleado modEmpleado = new Modificar_empleado(c_main, idEmpleado);
+            modEmpleado.mostrarVista();
         } else if (e.getSource() == this.vista.jbCambiarPassword) {
             cambiarContraseña();
         } else if (e.getSource() == this.vista.jbGestionRol) {
