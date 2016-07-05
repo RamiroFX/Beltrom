@@ -11,10 +11,9 @@ import DB_manager.DB_rol;
 import DB_manager.ResultSetTableModel;
 import Entities.M_funcionario;
 import Entities.M_rol;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.JOptionPane;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -103,5 +102,10 @@ class M_modificar_usuario {
         }
         M_rol rol = new M_rol(idRol, rolDescripcion);
         DB_Funcionario.insertarRolUsuario(getFuncionario(), rol);
+    }
+
+    public boolean modificarUsuario(String nombre, String apellido, Integer cedula, Date fechaNacimiento, String alias, String telefono, String celular, Date fechaIngreso, String estadoCivil, String observacion, String direccion, String email, String ciudad, String sexo, String pais) {
+
+        return false;
     }
 }

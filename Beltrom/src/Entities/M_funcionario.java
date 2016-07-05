@@ -17,6 +17,21 @@ public class M_funcionario extends M_persona {
     public M_funcionario() {
         super();
     }
+    
+    public M_funcionario(String ocupacion, String observacion, String alias, String email, String nro_celular, String nro_telefono, String direccion, String password, Date fechaIngreso, Integer id_funcionario, ArrayList rol, String nombre, String apellido, String sexo, String pais, String ciudad, Date fechaNacimiento, String estadoCivil, Integer idPersona, Integer ci) {
+        super(nombre, apellido, sexo, pais, ciudad, fechaNacimiento, estadoCivil, idPersona, ci);
+        this.ocupacion = ocupacion;
+        this.observacion = observacion;
+        this.alias = alias;
+        this.email = email;
+        this.nro_celular = nro_celular;
+        this.nro_telefono = nro_telefono;
+        this.direccion = direccion;
+        this.password = password;
+        this.fechaIngreso = fechaIngreso;
+        this.id_funcionario = id_funcionario;
+        this.rol = rol;
+    }
 
     public boolean validarUsuario(String url, int dbms, String pass) throws SQLException {
         return DB_manager.conectarBD(dbms, url, getAlias(), pass);

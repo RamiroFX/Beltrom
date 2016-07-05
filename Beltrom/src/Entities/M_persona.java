@@ -26,7 +26,7 @@ public class M_persona {
         super();
     }
 
-    public M_persona(String nombre, String apellido, String sexo, String pais, String ciudad, Date fechaNacimiento, String estadoCivil, Integer id, Integer ci) {
+    public M_persona(String nombre, String apellido, String sexo, String pais, String ciudad, Date fechaNacimiento, String estadoCivil, Integer idPersona, Integer ci) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.sexo = sexo;
@@ -34,7 +34,7 @@ public class M_persona {
         this.ciudad = ciudad;
         this.fechaNacimiento = fechaNacimiento;
         this.estadoCivil = estadoCivil;
-        this.id_persona = id;
+        this.id_persona = idPersona;
         this.cedula = ci;
     }
 

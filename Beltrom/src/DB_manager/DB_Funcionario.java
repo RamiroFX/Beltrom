@@ -1197,7 +1197,6 @@ public class DB_Funcionario {
 
     public static boolean existeEmpleado(M_funcionario funcionario) {
         String QUERY = "SELECT alias,ci FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (ALIAS = '" + funcionario.getAlias() + "' OR CI = " + funcionario.getCedula() + ");";
-        System.out.println("existeEmpleado: " + QUERY);
         try {
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(QUERY);
@@ -1207,11 +1206,20 @@ public class DB_Funcionario {
         }
         return false;
     }
-
-    public static void agregarRol(int idRol) {
-        String INSERT_ROL_USUARIO = "INSERT INTO ROL_USUARIO(ID_ROL, ID_FUNCIONARIO)VALUES (?, ?);";
-
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+/*
+ * 
+ * 
+ */
+    public static boolean existeEmpleado2(M_funcionario funcionario) {
+        String QUERY = "SELECT alias,ci FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (ALIAS = '" + funcionario.getAlias() + "' OR CI = " + funcionario.getCedula() + ");";
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            return rs.isBeforeFirst();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
     }
 
     public static ResultSetTableModel consultarRolUsuario(int idFuncionario) {

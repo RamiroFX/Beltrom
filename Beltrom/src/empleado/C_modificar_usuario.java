@@ -376,7 +376,10 @@ public class C_modificar_usuario extends MouseAdapter implements ActionListener,
             Integer cedula = Integer.valueOf(LongToString.replace(".", ""));
             Date fechaNacimiento = this.vista.dccFechaNacimiento.getDate();
             String alias = this.vista.jtfAlias.getText().toLowerCase();
-
+            String estadoCivil = (String) this.vista.jcbEstadoCivil.getSelectedItem();
+            String ciudad = (String) this.vista.jcbCiudad.getSelectedItem();
+            String sexo = (String) this.vista.jcbGenero.getSelectedItem();
+            String pais = (String) this.vista.jcbNacionalidad.getSelectedItem();
             M_funcionario funcionario = new M_funcionario();
             funcionario.setNombre(nombre);
             funcionario.setApellido(apellido);
@@ -386,18 +389,20 @@ public class C_modificar_usuario extends MouseAdapter implements ActionListener,
             funcionario.setNro_telefono(telefono);
             funcionario.setNro_celular(celular);
             funcionario.setFecha_ingreso(fechaIngreso);
-            funcionario.setEstado_civil((String) this.vista.jcbEstadoCivil.getSelectedItem());
+            funcionario.setEstado_civil(estadoCivil);
             funcionario.setObservacion(observacion);
             funcionario.setDireccion(direccion);
             funcionario.setEmail(email);
-            funcionario.setCiudad((String) this.vista.jcbCiudad.getSelectedItem());
-            funcionario.setRol(null);//se establece en el modelo
-            funcionario.setSexo((String) this.vista.jcbGenero.getSelectedItem());
-            funcionario.setPais((String) this.vista.jcbNacionalidad.getSelectedItem());
-
-            if (modelo.modificarUsuario(funcionario)) {
+            funcionario.setCiudad(ciudad);
+            funcionario.setSexo(sexo);
+            funcionario.setPais(pais);
+            if(modelo.modificarUsuario(nombre, apellido, cedula, fechaNacimiento, alias, telefono, celular, fechaIngreso, estadoCivil,
+                    observacion, direccion, email, ciudad, sexo, pais)){
                 cerrar();
             }
+            /*if (modelo.modificarUsuario(funcionario)) {
+             * cerrar();
+             * }*/
         }
     }
 
