@@ -4,7 +4,6 @@
  */
 package empleado;
 
-import Entities.M_funcionario;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -380,29 +379,10 @@ public class C_modificar_usuario extends MouseAdapter implements ActionListener,
             String ciudad = (String) this.vista.jcbCiudad.getSelectedItem();
             String sexo = (String) this.vista.jcbGenero.getSelectedItem();
             String pais = (String) this.vista.jcbNacionalidad.getSelectedItem();
-            M_funcionario funcionario = new M_funcionario();
-            funcionario.setNombre(nombre);
-            funcionario.setApellido(apellido);
-            funcionario.setCedula(cedula);
-            funcionario.setFecha_nacimiento(fechaNacimiento);
-            funcionario.setAlias(alias);
-            funcionario.setNro_telefono(telefono);
-            funcionario.setNro_celular(celular);
-            funcionario.setFecha_ingreso(fechaIngreso);
-            funcionario.setEstado_civil(estadoCivil);
-            funcionario.setObservacion(observacion);
-            funcionario.setDireccion(direccion);
-            funcionario.setEmail(email);
-            funcionario.setCiudad(ciudad);
-            funcionario.setSexo(sexo);
-            funcionario.setPais(pais);
-            if(modelo.modificarUsuario(nombre, apellido, cedula, fechaNacimiento, alias, telefono, celular, fechaIngreso, estadoCivil,
-                    observacion, direccion, email, ciudad, sexo, pais)){
+            if (modelo.modificarUsuario(nombre, apellido, cedula, fechaNacimiento, alias, telefono, celular, fechaIngreso, estadoCivil,
+                    observacion, direccion, email, ciudad, sexo, pais)) {
                 cerrar();
             }
-            /*if (modelo.modificarUsuario(funcionario)) {
-             * cerrar();
-             * }*/
         }
     }
 

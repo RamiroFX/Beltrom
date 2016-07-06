@@ -1206,16 +1206,37 @@ public class DB_Funcionario {
         }
         return false;
     }
-/*
- * 
- * 
- */
-    public static boolean existeEmpleado2(M_funcionario funcionario) {
-        String QUERY = "SELECT alias,ci FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (ALIAS = '" + funcionario.getAlias() + "' OR CI = " + funcionario.getCedula() + ");";
+    /*
+     * 
+     * 
+     */
+
+    public static boolean verificarAlias(M_funcionario funcionario) {
+        String QUERY = "SELECT alias FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (ALIAS = '" + funcionario.getAlias() + "');";
         try {
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = st.executeQuery(QUERY);
-            return rs.isBeforeFirst();
+            //retorna TRUE si contiene filas, si no contiene filas retorna FALSE
+            boolean b = rs.isBeforeFirst();
+            System.out.println("1226-verificarAlias: " + QUERY);
+            System.out.println("1226-verificarAlias: " + b);
+            return b;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean verificarCI(M_funcionario funcionario) {
+        String QUERY = "SELECT P.CI FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (CI = " + funcionario.getCedula() + ");";
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            //retorna TRUE si contiene filas, si no contiene filas retorna FALSE
+            boolean b = rs.isBeforeFirst();
+            System.out.println("1226-verificarCI: " + QUERY);
+            System.out.println("1226-verificarCI: " + b);
+            return b;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

@@ -69,17 +69,6 @@ class M_modificar_usuario {
         return DB_Funcionario.existeEmpleado(funcionario);
     }
 
-    boolean modificarUsuario(M_funcionario funcionario) {
-        if (!verificarDatosEmpleado(funcionario)) {
-            DB_Funcionario.actualizarFuncionario(funcionario);
-            JOptionPane.showMessageDialog(null, "Usuario modificado", "Atención", JOptionPane.INFORMATION_MESSAGE);
-            return true;
-        } else {
-            JOptionPane.showMessageDialog(null, "El número de cedula o el Alias seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
-
     public void quitarRol(int idRol) {
         int opcion = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea quitar el rol seleccionado?", "Atención", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (opcion == JOptionPane.YES_OPTION) {
@@ -105,7 +94,71 @@ class M_modificar_usuario {
     }
 
     public boolean modificarUsuario(String nombre, String apellido, Integer cedula, Date fechaNacimiento, String alias, String telefono, String celular, Date fechaIngreso, String estadoCivil, String observacion, String direccion, String email, String ciudad, String sexo, String pais) {
-
+        M_funcionario nuevo = new M_funcionario(null, observacion, alias, email, celular, telefono, direccion, null, fechaIngreso, null, null, nombre, apellido, sexo, pais, ciudad, fechaNacimiento, estadoCivil, null, cedula);
+        nuevo.setId_persona(funcionario.getId_persona());
+        nuevo.setId_funcionario(funcionario.getId_funcionario());
+        //pregunta si el alias y el numero de cedula son iguales, que son los valores unicos de cada funcionario
+        System.out.println("funcionario.getAlias()" + funcionario.getAlias());
+        System.out.println("nuevo.getAlias()" + nuevo.getAlias());
+        System.out.println("compare" + funcionario.getAlias().compareTo(nuevo.getAlias()));
+        System.out.println("funcionario.getCedula()" + funcionario.getCedula());
+        System.out.println("nuevo.getCedula()" + nuevo.getCedula());
+        boolean b = funcionario.getAlias().compareTo(nuevo.getAlias()) == 0;
+        System.out.println("alias: " + b);
+        b = funcionario.getCedula().intValue() == nuevo.getCedula().intValue();
+        System.out.println("cedula: " + b);
+        if ((funcionario.getAlias().compareTo(nuevo.getAlias()) == 0) && (funcionario.getCedula().intValue() == nuevo.getCedula().intValue())) {
+            System.out.println("if ((funcionario.getAlias().compareTo(nuevo.getAlias()) == 0) && (funcionario.getCedula() == nuevo.getCedula()))");
+            DB_Funcionario.actualizarFuncionario(nuevo);
+            JOptionPane.showMessageDialog(null, "Usuario modificado", "Atención", JOptionPane.INFORMATION_MESSAGE);
+            return true;
+        } else {
+            //PREGUNTAMOS SI CAMBIO EL ALIAS
+            if (funcionario.getAlias().compareTo(nuevo.getAlias()) != 0) {
+                System.out.println("if (funcionario.getAlias().compareTo(nuevo.getAlias()) != 0)");
+                //SE PREGUNTA SI ES REPETIDO
+                if (!DB_Funcionario.verificarAlias(nuevo)) {
+                    System.out.println("if (DB_Funcionario.verificarAlias(nuevo))");
+                    if (funcionario.getCedula().intValue() != nuevo.getCedula().intValue()) {
+                        if (!DB_Funcionario.verificarCI(nuevo)) {
+                            System.out.println("DB_Funcionario.verificarCI(nuevo)");
+                            DB_Funcionario.actualizarFuncionario(nuevo);
+                            JOptionPane.showMessageDialog(null, "Usuario modificado", "Atención", JOptionPane.INFORMATION_MESSAGE);
+                            return true;
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El número de C.I. seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                    } else {
+                        DB_Funcionario.actualizarFuncionario(nuevo);
+                        JOptionPane.showMessageDialog(null, "Usuario modificado", "Atención", JOptionPane.INFORMATION_MESSAGE);
+                        return true;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "El Alias seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+            if (funcionario.getCedula().intValue() != nuevo.getCedula().intValue()) {
+                System.out.println("if (funcionario.getCedula().intValue() != nuevo.getCedula().intValue())");
+                if (!DB_Funcionario.verificarCI(nuevo)) {
+                    System.out.println("DB_Funcionario.verificarCI(nuevo)");
+                    if (!DB_Funcionario.verificarAlias(nuevo)) {
+                        System.out.println("if (DB_Funcionario.verificarAlias(nuevo))");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "El Alias seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
+                    DB_Funcionario.actualizarFuncionario(nuevo);
+                    JOptionPane.showMessageDialog(null, "Usuario modificado", "Atención", JOptionPane.INFORMATION_MESSAGE);
+                    return true;
+                } else {
+                    JOptionPane.showMessageDialog(null, "El número de C.I. seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, "El número de cedula y el Alias seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
         return false;
     }
 }
