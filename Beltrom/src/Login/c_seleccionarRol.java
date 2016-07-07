@@ -6,6 +6,8 @@ package Login;
 
 import DB_manager.DB_Funcionario;
 import DB_manager.DB_manager;
+import DB_manager.DB_rol;
+import DB_manager.DB_rol_usuario;
 import Entities.M_funcionario;
 import MenuPrincipal.MenuPrincipal;
 import beltrom.C_inicio;
@@ -17,7 +19,6 @@ import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Vector;
-import sun.applet.Main;
 
 /**
  *
@@ -89,6 +90,8 @@ public class c_seleccionarRol implements ActionListener, KeyListener {
                 ex.printStackTrace();
             }
             getFuncionario().setOcupacion((String) vista.jcbRol.getSelectedItem());
+            c_main.setRol_usuario(DB_rol_usuario.obtenerRolUsuario(getFuncionario().getId_funcionario()));
+            c_main.getRol_usuario().setRolActual(DB_rol.obtenerRol((String) vista.jcbRol.getSelectedItem()));
             MenuPrincipal c_menuPrincipal = new MenuPrincipal(c_main);
             c_menuPrincipal.mostrarVista();
         }
@@ -126,7 +129,8 @@ public class c_seleccionarRol implements ActionListener, KeyListener {
                     ex.printStackTrace();
                 }
                 getFuncionario().setOcupacion((String) vista.jcbRol.getSelectedItem());
-                ///controlarAccesoBarraMenu(DB_manager.obtenerTablas(funcionario.getOcupacion()));
+                c_main.setRol_usuario(DB_rol_usuario.obtenerRolUsuario(getFuncionario().getId_funcionario()));
+                c_main.getRol_usuario().setRolActual(DB_rol.obtenerRol((String) vista.jcbRol.getSelectedItem()));
                 MenuPrincipal c_menuPrincipal = new MenuPrincipal(c_main);
                 c_menuPrincipal.mostrarVista();
             }

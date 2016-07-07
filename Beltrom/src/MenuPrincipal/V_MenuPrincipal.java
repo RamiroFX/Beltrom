@@ -6,8 +6,6 @@ package MenuPrincipal;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.text.SimpleDateFormat;
 import javax.swing.JButton;
@@ -31,7 +29,7 @@ class V_MenuPrincipal extends JInternalFrame {
 
     public V_MenuPrincipal() {
         super("Menú principal", true, true, true, true);
-        setSize(600,400);
+        setSize(600, 400);
         setName("menuPrincipal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         inicializarVista();

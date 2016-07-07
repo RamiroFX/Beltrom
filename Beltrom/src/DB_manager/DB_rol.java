@@ -274,6 +274,39 @@ public class DB_rol {
         return rol;
     }
 
+    public static M_rol obtenerRol(String descripcion) {
+
+        M_rol rol = null;
+        String query = "SELECT ID_ROL, DESCRIPCION "
+                + "FROM ROL "
+                + "WHERE DESCRIPCION = '" + descripcion + "';";
+        try {
+            pst = DB_manager.getConection().prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                rol = new M_rol();
+                rol.setId(rs.getInt("ID_ROL"));
+                rol.setDescripcion(rs.getString("DESCRIPCION"));
+            }
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(DB_rol.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_rol.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+        return rol;
+    }
+
     public static void agregarAccesoRol(int idRol, int idMenu, int idMenuItem) {
         String INSERT_PERMISO_ROL = "INSERT INTO PERMISO_ROL(ID_ROL, ID_MENU, ID_MENU_ITEM)VALUES (?, ?, ?);";
         try {

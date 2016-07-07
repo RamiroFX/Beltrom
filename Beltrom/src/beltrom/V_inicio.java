@@ -31,7 +31,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
@@ -126,7 +125,7 @@ public class V_inicio extends JFrame {
     public void setJtfUsuario(String jtfUsuario) {
         this.jtfUsuario.setText("Conectado como: " + jtfUsuario);
     }
-    
+
     /**
      * @return the currentJIF
      */
@@ -140,7 +139,7 @@ public class V_inicio extends JFrame {
     public void setCurrentJIF(JInternalFrame currentJIF) {
         this.currentJIF = currentJIF;
     }
-    
+
     public V_BarraMenu getJMenuBar() {
         return this.barraMenu;
     }

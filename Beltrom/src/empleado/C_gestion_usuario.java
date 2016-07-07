@@ -42,6 +42,11 @@ public class C_gestion_usuario implements Gestion {
                 new javax.swing.text.DefaultFormatterFactory(
                 new javax.swing.text.NumberFormatter(
                 new java.text.DecimalFormat("#,##0"))));
+        System.out.println("/**********/Controlando acceso/**********/");
+        System.out.println("Usuario: "+c_main.getFuncionario().getAlias());
+        System.out.println("Rol actual: "+c_main.getRol_usuario().getRolActual().getDescripcion());        
+        System.out.println("/****************************************/");
+        System.out.println("usuario.vista: "+this.vista.getName());        
     }
 
     /**
