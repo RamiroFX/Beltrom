@@ -7,7 +7,8 @@ import java.util.Date;
 
 public class M_funcionario extends M_persona {
 
-    private String ocupacion, observacion, alias, email, nro_celular, nro_telefono,direccion;
+    private String ocupacion, observacion, alias, email, nro_celular,
+            nro_telefono, direccion, password;
     private Date fechaIngreso;
     private Integer id_funcionario;
 
@@ -15,6 +16,21 @@ public class M_funcionario extends M_persona {
 
     public M_funcionario() {
         super();
+    }
+    
+    public M_funcionario(String ocupacion, String observacion, String alias, String email, String nro_celular, String nro_telefono, String direccion, String password, Date fechaIngreso, Integer id_funcionario, ArrayList rol, String nombre, String apellido, String sexo, String pais, String ciudad, Date fechaNacimiento, String estadoCivil, Integer idPersona, Integer ci) {
+        super(nombre, apellido, sexo, pais, ciudad, fechaNacimiento, estadoCivil, idPersona, ci);
+        this.ocupacion = ocupacion;
+        this.observacion = observacion;
+        this.alias = alias;
+        this.email = email;
+        this.nro_celular = nro_celular;
+        this.nro_telefono = nro_telefono;
+        this.direccion = direccion;
+        this.password = password;
+        this.fechaIngreso = fechaIngreso;
+        this.id_funcionario = id_funcionario;
+        this.rol = rol;
     }
 
     public boolean validarUsuario(String url, int dbms, String pass) throws SQLException {
@@ -66,7 +82,7 @@ public class M_funcionario extends M_persona {
     public void setId_funcionario(Integer id_funcionario) {
         this.id_funcionario = id_funcionario;
     }
-    
+
     /**
      * @return the observacion
      */
@@ -163,5 +179,19 @@ public class M_funcionario extends M_persona {
      */
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * @param password the password to set
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

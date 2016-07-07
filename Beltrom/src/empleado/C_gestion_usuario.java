@@ -4,15 +4,12 @@
  */
 package empleado;
 
-import DB_manager.DB_Funcionario;
 import Utilities.c_packColumn;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
-import javax.swing.ImageIcon;
-import Entities.M_funcionario;
 import GestionRol.Gestion_rol;
 import Interface.Gestion;
 import beltrom.C_inicio;
@@ -25,44 +22,26 @@ import java.awt.event.KeyEvent;
 public class C_gestion_usuario implements Gestion {
 
     public C_inicio c_main;
-    private M_funcionario m_funcionario;
-    private ImageIcon foto;
-    int idFuncionario;
+    M_gestion_usuario modelo;
     V_gestion_usuario vista;
-    String imagePath;
 
-    public C_gestion_usuario(C_inicio c_main) {
+    public C_gestion_usuario(M_gestion_usuario modelo, V_gestion_usuario vista, C_inicio c_main) {
         this.c_main = c_main;
-        this.m_funcionario = new M_funcionario();
-        this.vista = new V_gestion_usuario();
+        this.modelo = modelo;
+        this.vista = vista;
         inicializarVista();
         agregarListeners();
     }
 
-    /**
-     * @return the m_funcionario
-     */
-    public M_funcionario getFuncionario() {
-        return m_funcionario;
-    }
-
-    /**
-     * @param m_funcionario the m_funcionario to set
-     */
-    public void setFuncionario(M_funcionario m_funcionario) {
-        this.m_funcionario = m_funcionario;
-    }
-
     @Override
     public final void inicializarVista() {
-        //this.vista.jtUsuario.setModel(DB_Funcionario.consultarFuncionario("", false, true, true));
         c_packColumn.packColumns(this.vista.jtUsuario, 2);
-        this.vista.jbBuscarUsuario.setEnabled(false);
-        this.vista.jbActualizarUsuario.setEnabled(false);
+        this.vista.jbModificarUsuario.setEnabled(false);
+        this.vista.jbEliminarUsuario.setEnabled(false);
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
-                        new javax.swing.text.NumberFormatter(
-                                new java.text.DecimalFormat("#,##0"))));
+                new javax.swing.text.NumberFormatter(
+                new java.text.DecimalFormat("#,##0"))));
     }
 
     /**
@@ -88,10 +67,9 @@ public class C_gestion_usuario implements Gestion {
      */
     @Override
     public final void agregarListeners() {
-        //this.v_jifGesUsu.jbBorrar.addActionListener(this);
-        //this.v_jifGesUsu.jtfBuscar.addActionListener(this);
         this.vista.jbCrearUsuario.addActionListener(this);
-        this.vista.jbActualizarUsuario.addActionListener(this);
+        this.vista.jbModificarUsuario.addActionListener(this);
+        this.vista.jbEliminarUsuario.addActionListener(this);
         this.vista.jtUsuario.addMouseListener(this);
         this.vista.jtfBuscar.addKeyListener(this);
         this.vista.jbGestionRol.addActionListener(this);
@@ -99,6 +77,7 @@ public class C_gestion_usuario implements Gestion {
         this.vista.jckbNombreApellido.addActionListener(this);
         this.vista.jrbExclusivo.addActionListener(this);
         this.vista.jrbInclusivo.addActionListener(this);
+        this.vista.jbCambiarPassword.addActionListener(this);
     }
 
     public void displayQueryResults() {
@@ -126,37 +105,35 @@ public class C_gestion_usuario implements Gestion {
                 if (vista.jckbCedula.isSelected()) {
                     ruc = true;
                 }
-                vista.jtUsuario.setModel(DB_Funcionario.consultarFuncionario(busqueda, isExclusivo, entidad, ruc));
+                vista.jtUsuario.setModel(modelo.consultarFuncionario(busqueda, isExclusivo, entidad, ruc));
                 c_packColumn.packColumns(vista.jtUsuario, 2);
-                vista.jbActualizarUsuario.setEnabled(false);
+                vista.jbModificarUsuario.setEnabled(false);
+                vista.jbEliminarUsuario.setEnabled(false);
             }
         });
     }
 
-    /*public void itemStateChanged(ItemEvent e) {
-     if(e.getItem().equals(this.v_jifGesUsu.jrbBuscar[0])){
-     System.out.println("jrbBuscar[0])");
-     }else if(e.getItem().equals(this.v_jifGesUsu.jrbBuscar[1])){
-     System.out.println("jrbBuscar[1])");
-     }else if(e.getItem().equals(this.v_jifGesUsu.jrbBuscar[2])){
-     System.out.println("jrbBuscar[2])");
-     }
-     }*/
+    private void cambiarContraseña() {
+        CambiarPassword cp = new CambiarPassword(this.c_main.vista, c_main);
+        cp.setVisible(true);
+    }
+
     public void actionPerformed(ActionEvent e) {
-        /*if(e.getSource()==this.v_jifGesUsu.jtfBuscar){
-         //producto= c_DBmanager.mostrarProducto(jtfBuscar.getText());
-         displayQueryResults(this.v_jifGesUsu.jtfBuscar.getText());
-         }
-         if(e.getSource()==this.v_jifGesUsu.jbBuscar){
-         //producto= c_DBmanager.mostrarProducto(jtfBuscar.getText());
-         displayQueryResults(this.v_jifGesUsu.jtfBuscar.getText());
-         }
-         else if(e.getSource()==this.v_jifGesUsu.jbBorrar){
-         this.v_jifGesUsu.jtfBuscar.setText("");
-         this.v_jifGesUsu.jtfBuscar.requestFocusInWindow();
-         }*/
         if (e.getSource() == this.vista.jbCrearUsuario) {
-        } else if (e.getSource() == this.vista.jbActualizarUsuario) {
+            Crear_empleado crearEmpleado = new Crear_empleado(c_main);
+            crearEmpleado.mostrarVista();
+        } else if (e.getSource() == this.vista.jbModificarUsuario) {
+            int row = this.vista.jtUsuario.getSelectedRow();
+            int idEmpleado = Integer.valueOf(String.valueOf(this.vista.jtUsuario.getValueAt(row, 0)));
+            Modificar_empleado modEmpleado = new Modificar_empleado(c_main, idEmpleado);
+            modEmpleado.mostrarVista();
+        } else if (e.getSource() == this.vista.jbEliminarUsuario) {
+            int row = this.vista.jtUsuario.getSelectedRow();
+            int idEmpleado = Integer.valueOf(String.valueOf(this.vista.jtUsuario.getValueAt(row, 0)));
+            modelo.eliminarUsuario(idEmpleado);
+            this.vista.jtUsuario.setModel(modelo.consultarFuncionario("", false, false, false));
+        } else if (e.getSource() == this.vista.jbCambiarPassword) {
+            cambiarContraseña();
         } else if (e.getSource() == this.vista.jbGestionRol) {
             Gestion_rol gestion_rol = new Gestion_rol(c_main);
             gestion_rol.mostrarVista();
@@ -170,73 +147,50 @@ public class C_gestion_usuario implements Gestion {
             displayQueryResults();
         }
     }
-    /*
-     private void cambiarImagen() {
-     JFileChooser selector = new JFileChooser();
-     FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & PNG", "jpg", "png");
-     selector.setFileFilter(filter);
-     int estado = selector.showOpenDialog(this.vista);
-     if (estado == JFileChooser.APPROVE_OPTION) {
-     File archivoelegido = selector.getSelectedFile();
-     imagePath = archivoelegido.getPath();
-     ImageIcon imagen = new ImageIcon(imagePath);
-     if (imagen.getIconHeight() > 200 && imagen.getIconWidth() > 200) {
-     JOptionPane.showMessageDialog(selector, "Seleccione una imagen de 200 x 200 pixeles", "Atencion", JOptionPane.INFORMATION_MESSAGE);
-     } else {
-     try {
-     byte[] byteImage = Utilities.ImageToByte(archivoelegido);
-     DB_Funcionario.actualizarImagen(byteImage, idFuncionario, archivoelegido.getName());
-     this.vista.jlFoto.setIcon(imagen);
-     } catch (FileNotFoundException ex) {
-     Logger.getLogger(C_gestion_usuario.class.getName()).log(Level.SEVERE, null, ex);
-     }
-     }
-     }
-     }*/
 
     @Override
     public void mouseClicked(MouseEvent e) {
         int fila = this.vista.jtUsuario.rowAtPoint(e.getPoint());
         int columna = this.vista.jtUsuario.columnAtPoint(e.getPoint());
-        idFuncionario = (Integer.valueOf((String) this.vista.jtUsuario.getValueAt(fila, 0)));
-        setFuncionario(DB_Funcionario.obtenerDatosFuncionarioID(idFuncionario));
+        int idFuncionario = (Integer.valueOf((String) this.vista.jtUsuario.getValueAt(fila, 0)));
+        //modelo.setFuncionario(DB_Funcionario.obtenerDatosFuncionarioID(idFuncionario));
+        modelo.setFuncionario(modelo.obtenerDatosFuncionarioID(idFuncionario));
         if ((fila > -1) && (columna > -1)) {
-            this.vista.jbActualizarUsuario.setEnabled(true);
-            //this.v_jifGesUsu.jbEliminar.setEnabled(true);
-            this.vista.jtfAlias.setText(getFuncionario().getAlias());
-            this.vista.jtfDireccion.setText(getFuncionario().getDireccion());
-            this.vista.jtfCorreoElectronico.setText(getFuncionario().getEmail());
+            this.vista.jbModificarUsuario.setEnabled(true);
+            this.vista.jbEliminarUsuario.setEnabled(true);
+            this.vista.jtfAlias.setText(modelo.getFuncionario().getAlias());
+            this.vista.jtfDireccion.setText(modelo.getFuncionario().getDireccion());
+            this.vista.jtfCorreoElectronico.setText(modelo.getFuncionario().getEmail());
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             try {
-                this.vista.jtfFechaIngreso.setText(sdf.format(getFuncionario().getFecha_ingreso()));
+                this.vista.jtfFechaIngreso.setText(sdf.format(modelo.getFuncionario().getFecha_ingreso()));
             } catch (java.lang.NullPointerException ex) {
                 this.vista.jtfFechaIngreso.setText("");
             }
             try {
-                this.vista.jtfFechaNacimiento.setText(sdf.format(getFuncionario().getFecha_nacimiento()));
+                this.vista.jtfFechaNacimiento.setText(sdf.format(modelo.getFuncionario().getFecha_nacimiento()));
             } catch (java.lang.NullPointerException ex) {
                 this.vista.jtfFechaNacimiento.setText("");
             }
-            this.vista.jtaObservacion.setText(getFuncionario().getObservacion());
-            this.vista.jtfNroCelular.setText(getFuncionario().getNro_celular());
-            this.vista.jtfNroTelefono.setText(getFuncionario().getNro_telefono());
+            this.vista.jtaObservacion.setText(modelo.getFuncionario().getObservacion());
+            this.vista.jtfNroCelular.setText(modelo.getFuncionario().getNro_celular());
+            this.vista.jtfNroTelefono.setText(modelo.getFuncionario().getNro_telefono());
             //Datos personales
-            //this.v_jifGesUsu.jtfIdPersona.setText(String.valueOf(getFuncionario().getIdPersona()));
-            this.vista.jtfNombre.setText(getFuncionario().getNombre());
-            this.vista.jtfApellido.setText(getFuncionario().getApellido());
-            this.vista.jftCedulaIdentidad.setValue(getFuncionario().getCedula());
-            this.vista.jtfGenero.setText(getFuncionario().getSexo());
-            this.vista.jtfEstadoCivil.setText(getFuncionario().getEstado_civil());
-            this.vista.jtfNacionalidad.setText(getFuncionario().getPais());
-            this.vista.jtfCiudad.setText(getFuncionario().getCiudad());
+            this.vista.jtfNombre.setText(modelo.getFuncionario().getNombre());
+            this.vista.jtfApellido.setText(modelo.getFuncionario().getApellido());
+            this.vista.jftCedulaIdentidad.setValue(modelo.getFuncionario().getCedula());
+            this.vista.jtfGenero.setText(modelo.getFuncionario().getSexo());
+            this.vista.jtfEstadoCivil.setText(modelo.getFuncionario().getEstado_civil());
+            this.vista.jtfNacionalidad.setText(modelo.getFuncionario().getPais());
+            this.vista.jtfCiudad.setText(modelo.getFuncionario().getCiudad());
             this.vista.jcbRol.removeAllItems();
-            Vector vRolUsuario = DB_Funcionario.obtenerRolFuncionario(getFuncionario());
+            Vector vRolUsuario = modelo.obtenerRolFuncionario();
             for (int i = 0; i < vRolUsuario.size(); i++) {
                 this.vista.jcbRol.addItem(vRolUsuario.get(i));
             }
-            //this.vista.jlFoto.setIcon((Icon) DB_Funcionario.obtenerImagenFuncionario(idFuncionario));
         } else {
-            this.vista.jbActualizarUsuario.setEnabled(false);
+            this.vista.jbModificarUsuario.setEnabled(false);
+            this.vista.jbEliminarUsuario.setEnabled(false);
         }
         if (e.getClickCount() == 2) {
         }

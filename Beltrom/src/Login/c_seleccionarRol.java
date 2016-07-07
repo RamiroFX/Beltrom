@@ -84,7 +84,7 @@ public class c_seleccionarRol implements ActionListener, KeyListener {
         } else if (e.getSource() == vista.jbAceptar) {
             try {
                 vista.dispose();
-                c_main.vista.setJtfUsuario(DB_manager.obtenerNombreUsuario());
+                c_main.vista.setJtfUsuario(DB_manager.obtenerNombreUsuarioDB());
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -121,7 +121,7 @@ public class c_seleccionarRol implements ActionListener, KeyListener {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                 try {
                     vista.dispose();
-                    c_main.vista.setJtfUsuario(DB_manager.obtenerNombreUsuario());
+                    c_main.vista.setJtfUsuario(DB_manager.obtenerNombreUsuarioDB());
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }

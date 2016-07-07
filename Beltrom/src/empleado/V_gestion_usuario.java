@@ -31,8 +31,9 @@ public class V_gestion_usuario extends JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jspObservacion;
     private javax.swing.JTabbedPane jTabbedPane;
-    public javax.swing.JButton jbActualizarUsuario;
-    public javax.swing.JButton jbBuscarUsuario;
+    public javax.swing.JButton jbModificarUsuario;
+    public javax.swing.JButton jbEliminarUsuario;
+    public javax.swing.JButton jbCambiarPassword;
     public javax.swing.JButton jbCrearUsuario;
     public javax.swing.JButton jbGestionRol;
     private javax.swing.JLabel jlAlias;
@@ -137,8 +138,9 @@ public class V_gestion_usuario extends JInternalFrame {
         jlRol = new javax.swing.JLabel();
         jcbRol = new javax.swing.JComboBox();
         jbCrearUsuario = new javax.swing.JButton();
-        jbActualizarUsuario = new javax.swing.JButton();
-        jbBuscarUsuario = new javax.swing.JButton();
+        jbModificarUsuario = new javax.swing.JButton();
+        jbEliminarUsuario = new javax.swing.JButton("Eliminar usuario");
+        jbCambiarPassword = new javax.swing.JButton("Cambiar contraseña");
 
         jpDatosPersonales1 = new javax.swing.JPanel();
         jpDatosPersonales1.setLayout(new java.awt.BorderLayout());
@@ -252,12 +254,12 @@ public class V_gestion_usuario extends JInternalFrame {
         jpSouth = new javax.swing.JPanel();
         jpSouth.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jbCrearUsuario.setText("Crear usuario");
-        jbActualizarUsuario.setText("Actualizar usuario");
-        jbBuscarUsuario.setText("Buscar usuario");
+        jbModificarUsuario.setText("Actualizar usuario");
         jbGestionRol = new JButton("Gestión de roles");
         jpSouth.add(jbCrearUsuario);
-        jpSouth.add(jbActualizarUsuario);
-        jpSouth.add(jbBuscarUsuario);
+        jpSouth.add(jbModificarUsuario);
+        jpSouth.add(jbEliminarUsuario);
+        jpSouth.add(jbCambiarPassword);
         jpSouth.add(jbGestionRol);
 
         //ADDING INTO CONTAINER

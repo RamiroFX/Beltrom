@@ -153,11 +153,9 @@ public class DB_Funcionario {
         String id_pais = "SELECT ID_PAIS FROM PAIS WHERE DESCRIPCION LIKE'" + funcionario.getPais() + "'";
         String id_estado_civil = "SELECT ID_ESTADO_CIVIL FROM ESTADO_CIVIL WHERE DESCRIPCION LIKE'" + funcionario.getEstado_civil() + "'";
         String id_sexo = "SELECT ID_SEXO FROM SEXO WHERE DESCRIPCION LIKE'" + funcionario.getSexo() + "'";
-        String INSERT_FUNCIONARIO = "INSERT INTO FUNCIONARIO(ID_PERSONA, ALIAS, FECHA_INGRESO, NRO_CELULAR, NRO_TELEFONO, EMAIL, DIRECCION, OBSERVACION)VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+        String INSERT_FUNCIONARIO = "INSERT INTO FUNCIONARIO(ID_PERSONA, ALIAS, FECHA_INGRESO, NRO_CELULAR, NRO_TELEFONO, EMAIL, DIRECCION, OBSERVACION, PASSWORD)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
         String INSERT_PERSONA = "INSERT INTO PERSONA(CI, NOMBRE, APELLIDO, ID_SEXO, FECHA_NACIMIENTO, ID_ESTADO_CIVIL, ID_PAIS, ID_CIUDAD)VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        String createUser = "CREATE USER " + funcionario.getAlias() + " "
-                + " PASSWORD '" + pass + "'"
-                + " NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN";
+
         try {
             DB_manager.habilitarTransaccionManual();
             pst = DB_manager.getConection().prepareStatement(id_ciudad, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -277,6 +275,7 @@ public class DB_Funcionario {
             } catch (Exception e) {
                 pst.setNull(8, Types.VARCHAR);
             }
+            pst.setString(9, funcionario.getPassword());//NOT NULL
             pst.executeUpdate();
             rs = pst.getGeneratedKeys();
             while (rs != null && rs.next()) {
@@ -291,9 +290,6 @@ public class DB_Funcionario {
                 pst.executeUpdate();
                 pst.close();
             }
-            pst = DB_manager.getConection().prepareStatement(createUser);
-            pst.executeUpdate();
-            pst.close();
             DB_manager.establecerTransaccion();
         } catch (SQLException ex) {
             System.out.println(ex.getNextException());
@@ -412,9 +408,8 @@ public class DB_Funcionario {
         String estadoCivil = " (SELECT DESCRIPCION FROM ESTADO_CIVIL WHERE ID_ESTADO_CIVIL= P.ID_ESTADO_CIVIL)\"estado_civil\"";
         String queryFunc = "F.id_funcionario, P.id_persona, alias, fecha_ingreso, nro_celular, nro_telefono,email, direccion, observacion";
         String queryPers = "ci, nombre, apellido," + genero + ", fecha_nacimiento, " + pais + "," + ciudad + ", " + estadoCivil + "";
-        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario F, persona P " + "WHERE F.id_persona = P.id_persona " 
-                + "AND (ALIAS = '" + alias + "' AND PASSWORD ='"+password+"');";
-        System.out.println("Query: " + Query);
+        String Query = "SELECT " + queryFunc + "," + queryPers + " FROM funcionario F, persona P " + "WHERE F.id_persona = P.id_persona "
+                + "AND (ALIAS = '" + alias + "' AND PASSWORD ='" + password + "');";
         try {
             st = DB_manager.getConection().createStatement();
             rs = st.executeQuery(Query);
@@ -883,6 +878,51 @@ public class DB_Funcionario {
         }
     }
 
+    public static boolean isPasswordCorrect(int idFuncionario, String alias, String password) {
+        String QUERY = "SELECT ID_FUNCIONARIO FROM FUNCIONARIO WHERE ID_FUNCIONARIO = " + idFuncionario + " AND ALIAS ='" + alias + "' AND PASSWORD ='" + password + "';";
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            return rs.isBeforeFirst();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public static void actualizarContraseña(int idFuncionario, String alias, String password) {
+        String UPDATE_FUNCIONARIO = "UPDATE FUNCIONARIO SET PASSWORD = ?  "
+                + "WHERE ID_FUNCIONARIO = " + idFuncionario + " AND ALIAS = '" + alias + "';";
+        try {
+            DB_manager.habilitarTransaccionManual();
+            pst = DB_manager.getConection().prepareStatement(UPDATE_FUNCIONARIO);
+            pst.setString(1, password);//NOT NULL
+            pst.executeUpdate();
+            DB_manager.establecerTransaccion();
+        } catch (SQLException ex) {
+            System.out.println(ex.getNextException());
+            if (DB_manager.getConection() != null) {
+                try {
+                    DB_manager.getConection().rollback();
+                } catch (SQLException ex1) {
+                    Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                    lgr.log(Level.WARNING, ex1.getMessage(), ex1);
+                }
+            }
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (pst != null) {
+                    pst.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+    }
+
     /*
      * DELETE
      */
@@ -1153,5 +1193,174 @@ public class DB_Funcionario {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
+    }
+
+    public static boolean existeEmpleado(M_funcionario funcionario) {
+        String QUERY = "SELECT alias,ci FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (ALIAS = '" + funcionario.getAlias() + "' OR CI = " + funcionario.getCedula() + ");";
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            return rs.isBeforeFirst();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+    /*
+     * 
+     * 
+     */
+
+    public static boolean verificarAlias(M_funcionario funcionario) {
+        String QUERY = "SELECT alias FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (ALIAS = '" + funcionario.getAlias() + "');";
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            //retorna TRUE si contiene filas, si no contiene filas retorna FALSE
+            boolean b = rs.isBeforeFirst();
+            System.out.println("1226-verificarAlias: " + QUERY);
+            System.out.println("1226-verificarAlias: " + b);
+            return b;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean verificarCI(M_funcionario funcionario) {
+        String QUERY = "SELECT P.CI FROM funcionario F, persona P WHERE F.ID_PERSONA = P.ID_PERSONA AND (CI = " + funcionario.getCedula() + ");";
+        try {
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = st.executeQuery(QUERY);
+            //retorna TRUE si contiene filas, si no contiene filas retorna FALSE
+            boolean b = rs.isBeforeFirst();
+            System.out.println("1226-verificarCI: " + QUERY);
+            System.out.println("1226-verificarCI: " + b);
+            return b;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;
+    }
+
+    public static ResultSetTableModel consultarRolUsuario(int idFuncionario) {
+        ResultSetTableModel rstm = null;
+        String q = "SELECT r.id_rol \"ID\", r.descripcion \"Descripción\" "
+                + "FROM funcionario f, rol r, rol_usuario ru "
+                + "WHERE ru.id_funcionario = f.id_funcionario "
+                + "AND ru.id_rol = r.id_rol "
+                + "AND F.ID_FUNCIONARIO =" + idFuncionario + ";";
+        try {
+            String query = q;
+            st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            // se ejecuta el query y se obtienen los resultados en un ResultSet
+            rs = st.executeQuery(query);
+            rstm = new ResultSetTableModel(rs);
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } /*finally {
+         try {
+         if (rs != null) {
+         rs.close();
+         }
+         if (st != null) {
+         st.close();
+         }
+         } catch (SQLException ex) {
+         Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+         lgr.log(Level.WARNING, ex.getMessage(), ex);
+         } /*finally {
+         try {
+         if (rs != null) {
+         rs.close();
+         }
+         if (st != null) {
+         st.close();
+         }
+         } catch (SQLException ex) {
+         Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+         lgr.log(Level.WARNING, ex.getMessage(), ex);
+         }
+         }*/
+
+        return rstm;
+    }
+
+    public static void quitarRol(Integer id_funcionario, int idRol) {
+        String QUITAR_ROL_USUARIO = "DELETE FROM ROL_USUARIO WHERE ID_ROL = " + idRol + " AND ID_FUNCIONARIO = " + id_funcionario + ";";
+
+        try {
+            DB_manager.habilitarTransaccionManual();
+            st = DB_manager.getConection().createStatement();
+            st.executeUpdate(QUITAR_ROL_USUARIO);
+            st.close();
+            DB_manager.establecerTransaccion();
+        } catch (SQLException ex) {
+            System.out.println(ex.getNextException());
+            if (DB_manager.getConection() != null) {
+                try {
+                    DB_manager.getConection().rollback();
+                } catch (SQLException ex1) {
+                    Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                    lgr.log(Level.WARNING, ex1.getMessage(), ex1);
+                }
+            }
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+    }
+
+    public static int eliminarFuncionarioFX(M_funcionario funcionario) {
+        int result = 0;
+        String DELETE_FUNCIONARIO = "DELETE FROM  funcionario "
+                + " WHERE id_funcionario = " + funcionario.getId_funcionario() + "";
+        //String idPersona="(SELECT ID_PERSONA FROM PERSONA,FUNCIONARIO WHERE ID_PERSONA = ID_PERSONA AND ID_FUNCIONARIO ="+funcionario+")";
+        String DELETE_PERSONA = "DELETE FROM  persona "
+                + " WHERE id_persona =" + funcionario.getId_persona();
+        String DELETE_ROL_USUARIO = "DELETE FROM ROL_USUARIO WHERE ID_FUNCIONARIO = " + funcionario.getId_funcionario();
+
+
+        try {
+            DB_manager.habilitarTransaccionManual();
+            st = DB_manager.getConection().createStatement();
+            result = st.executeUpdate(DELETE_ROL_USUARIO);
+            st = DB_manager.getConection().createStatement();
+            result = st.executeUpdate(DELETE_FUNCIONARIO);
+            st = DB_manager.getConection().createStatement();
+            result = st.executeUpdate(DELETE_PERSONA);
+            DB_manager.establecerTransaccion();
+        } catch (SQLException ex) {
+            System.out.println(ex.getNextException());
+            if (DB_manager.getConection() != null) {
+                try {
+                    DB_manager.getConection().rollback();
+                } catch (SQLException ex1) {
+                    Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                    lgr.log(Level.WARNING, ex1.getMessage(), ex1);
+                }
+            }
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+        return result;
     }
 }

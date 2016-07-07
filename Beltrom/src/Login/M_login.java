@@ -37,7 +37,7 @@ public class M_login {
 
     public String obtenerNombreUsuario() {
         try {
-            return DB_manager.obtenerNombreUsuario();
+            return DB_manager.obtenerNombreUsuarioDB();
         } catch (SQLException ex) {
             Logger.getLogger(M_login.class.getName()).log(Level.SEVERE, null, ex);
         }

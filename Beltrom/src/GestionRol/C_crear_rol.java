@@ -131,7 +131,7 @@ public class C_crear_rol extends MouseAdapter implements ActionListener {
         if (e.getSource().equals(this.vista.jtPermisosSeleccionados)) {
             int fila = this.vista.jtPermisosSeleccionados.rowAtPoint(e.getPoint());
             int columna = this.vista.jtPermisosSeleccionados.columnAtPoint(e.getPoint());
-            int idMenuItem = (Integer.valueOf((String) this.vista.jtPermisosDisponibles.getValueAt(fila, 2)));
+            int idMenuItem = (Integer.valueOf((String) this.vista.jtPermisosSeleccionados.getValueAt(fila, 2)));
             if ((fila > -1) && (columna > -1)) {
                 this.vista.jbQuitar.setEnabled(true);
             } else {

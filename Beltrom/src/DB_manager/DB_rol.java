@@ -110,11 +110,7 @@ public class DB_rol {
         try {
             st = DB_manager.getConection().createStatement();
             rs = st.executeQuery(Query);
-            if (rs.next()) {
-                return true;
-            } else {
-                return false;
-            }
+            return rs.next();
         } catch (SQLException ex) {
             Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
