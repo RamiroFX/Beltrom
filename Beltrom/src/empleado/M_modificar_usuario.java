@@ -65,10 +65,6 @@ class M_modificar_usuario {
         return DB_rol.consultarRoles("");
     }
 
-    private boolean verificarDatosEmpleado(M_funcionario funcionario) {
-        return DB_Funcionario.existeEmpleado(funcionario);
-    }
-
     public void quitarRol(int idRol) {
         int opcion = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea quitar el rol seleccionado?", "Atención", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (opcion == JOptionPane.YES_OPTION) {
@@ -81,7 +77,6 @@ class M_modificar_usuario {
     }
 
     public void agregarRol(int idRol, String rolDescripcion) {
-        ///agregar filtros para datos repetidos
         Vector roles = DB_Funcionario.obtenerRolFuncionario(getFuncionario());
         for (int i = 0; i < roles.size(); i++) {
             if (roles.get(i).toString().equals(rolDescripcion)) {
@@ -119,7 +114,9 @@ class M_modificar_usuario {
                 //SE PREGUNTA SI ES REPETIDO
                 if (!DB_Funcionario.verificarAlias(nuevo)) {
                     System.out.println("if (DB_Funcionario.verificarAlias(nuevo))");
+                    //SE PREGUNTA SI CAMBIO LA CEDULA
                     if (funcionario.getCedula().intValue() != nuevo.getCedula().intValue()) {
+                        //SE PREGUNTA SI ES REPETIDO
                         if (!DB_Funcionario.verificarCI(nuevo)) {
                             System.out.println("DB_Funcionario.verificarCI(nuevo)");
                             DB_Funcionario.actualizarFuncionario(nuevo);
@@ -141,17 +138,18 @@ class M_modificar_usuario {
             }
             if (funcionario.getCedula().intValue() != nuevo.getCedula().intValue()) {
                 System.out.println("if (funcionario.getCedula().intValue() != nuevo.getCedula().intValue())");
+                //SE PREGUNTA SI CAMBIO LA CEDULA
                 if (!DB_Funcionario.verificarCI(nuevo)) {
                     System.out.println("DB_Funcionario.verificarCI(nuevo)");
                     if (!DB_Funcionario.verificarAlias(nuevo)) {
                         System.out.println("if (DB_Funcionario.verificarAlias(nuevo))");
+                        DB_Funcionario.actualizarFuncionario(nuevo);
+                        JOptionPane.showMessageDialog(null, "Usuario modificado", "Atención", JOptionPane.INFORMATION_MESSAGE);
+                        return true;
                     } else {
                         JOptionPane.showMessageDialog(null, "El Alias seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
                         return false;
                     }
-                    DB_Funcionario.actualizarFuncionario(nuevo);
-                    JOptionPane.showMessageDialog(null, "Usuario modificado", "Atención", JOptionPane.INFORMATION_MESSAGE);
-                    return true;
                 } else {
                     JOptionPane.showMessageDialog(null, "El número de C.I. seleccionado se encuentra en uso.", "Atención", JOptionPane.ERROR_MESSAGE);
                     return false;

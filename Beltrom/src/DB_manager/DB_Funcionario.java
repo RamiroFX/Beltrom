@@ -1319,4 +1319,48 @@ public class DB_Funcionario {
             }
         }
     }
+
+    public static int eliminarFuncionarioFX(M_funcionario funcionario) {
+        int result = 0;
+        String DELETE_FUNCIONARIO = "DELETE FROM  funcionario "
+                + " WHERE id_funcionario = " + funcionario.getId_funcionario() + "";
+        //String idPersona="(SELECT ID_PERSONA FROM PERSONA,FUNCIONARIO WHERE ID_PERSONA = ID_PERSONA AND ID_FUNCIONARIO ="+funcionario+")";
+        String DELETE_PERSONA = "DELETE FROM  persona "
+                + " WHERE id_persona =" + funcionario.getId_persona();
+        String DELETE_ROL_USUARIO = "DELETE FROM ROL_USUARIO WHERE ID_FUNCIONARIO = " + funcionario.getId_funcionario();
+
+
+        try {
+            DB_manager.habilitarTransaccionManual();
+            st = DB_manager.getConection().createStatement();
+            result = st.executeUpdate(DELETE_ROL_USUARIO);
+            st = DB_manager.getConection().createStatement();
+            result = st.executeUpdate(DELETE_FUNCIONARIO);
+            st = DB_manager.getConection().createStatement();
+            result = st.executeUpdate(DELETE_PERSONA);
+            DB_manager.establecerTransaccion();
+        } catch (SQLException ex) {
+            System.out.println(ex.getNextException());
+            if (DB_manager.getConection() != null) {
+                try {
+                    DB_manager.getConection().rollback();
+                } catch (SQLException ex1) {
+                    Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                    lgr.log(Level.WARNING, ex1.getMessage(), ex1);
+                }
+            }
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+        return result;
+    }
 }

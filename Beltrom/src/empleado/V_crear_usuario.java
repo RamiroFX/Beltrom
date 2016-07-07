@@ -7,6 +7,7 @@ package empleado;
 import com.toedter.calendar.JDateChooser;
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -83,7 +84,7 @@ public class V_crear_usuario extends javax.swing.JDialog {
         jlFechaNacimiento.setHorizontalAlignment(swingConstant);
         dccFechaNacimiento = new JDateChooser();
         dccFechaNacimiento.setDateFormatString("dd/MM/yyyy");
-        jlCedulaIdentidad = new javax.swing.JLabel("Cedula de identidad (*)");
+        jlCedulaIdentidad = new javax.swing.JLabel("Cedula de identidad (**)");
         jlCedulaIdentidad.setHorizontalAlignment(swingConstant);
         jftCedulaIdentidad = new javax.swing.JFormattedTextField();
         jlNacionalidad = new javax.swing.JLabel("Nacionalidad");
@@ -188,7 +189,7 @@ public class V_crear_usuario extends javax.swing.JDialog {
         //Labels, textfields, buttons, combobox, list & passwordfields
         jlAlias = new javax.swing.JLabel();
         jlAlias.setHorizontalAlignment(swingConstant);
-        jlAlias.setText("Alias (*)");
+        jlAlias.setText("Alias (**)");
         jtfAlias = new javax.swing.JTextField();
         jlFechaIngreso = new javax.swing.JLabel();
         jlFechaIngreso.setHorizontalAlignment(swingConstant);
@@ -260,8 +261,9 @@ public class V_crear_usuario extends javax.swing.JDialog {
     }
 
     private void initPaneNorth() {
-        jpNorth = new javax.swing.JPanel();
-        jpNorth.add(new JLabel("Los campos marcados con un asterisco(*) son obligatorios."));
+        jpNorth = new javax.swing.JPanel(new MigLayout("center"));
+        jpNorth.add(new JLabel("Los campos marcados con un asterisco(*) son obligatorios."),"wrap");
+        jpNorth.add(new JLabel("Los campos marcados con dos asteriscos(**) son únicos."));
     }
 
     private void initPaneRol() {
@@ -279,10 +281,10 @@ public class V_crear_usuario extends javax.swing.JDialog {
 
         javax.swing.JPanel left = new javax.swing.JPanel(new java.awt.BorderLayout());
         javax.swing.JPanel right = new javax.swing.JPanel(new java.awt.BorderLayout());
-        left.add(jspRolesSeleccionados,BorderLayout.CENTER);
-        left.add(jbQuitarRol,BorderLayout.SOUTH);
-        right.add(jspRolesDisponibles,BorderLayout.CENTER);
-        right.add(jbAgregarRol,BorderLayout.SOUTH);
+        left.add(jspRolesSeleccionados, BorderLayout.CENTER);
+        left.add(jbQuitarRol, BorderLayout.SOUTH);
+        right.add(jspRolesDisponibles, BorderLayout.CENTER);
+        right.add(jbAgregarRol, BorderLayout.SOUTH);
 
         jpRol.add(left);
         jpRol.add(right);

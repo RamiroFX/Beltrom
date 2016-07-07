@@ -37,6 +37,7 @@ public class C_gestion_usuario implements Gestion {
     public final void inicializarVista() {
         c_packColumn.packColumns(this.vista.jtUsuario, 2);
         this.vista.jbModificarUsuario.setEnabled(false);
+        this.vista.jbEliminarUsuario.setEnabled(false);
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
                 new javax.swing.text.NumberFormatter(
@@ -68,6 +69,7 @@ public class C_gestion_usuario implements Gestion {
     public final void agregarListeners() {
         this.vista.jbCrearUsuario.addActionListener(this);
         this.vista.jbModificarUsuario.addActionListener(this);
+        this.vista.jbEliminarUsuario.addActionListener(this);
         this.vista.jtUsuario.addMouseListener(this);
         this.vista.jtfBuscar.addKeyListener(this);
         this.vista.jbGestionRol.addActionListener(this);
@@ -106,6 +108,7 @@ public class C_gestion_usuario implements Gestion {
                 vista.jtUsuario.setModel(modelo.consultarFuncionario(busqueda, isExclusivo, entidad, ruc));
                 c_packColumn.packColumns(vista.jtUsuario, 2);
                 vista.jbModificarUsuario.setEnabled(false);
+                vista.jbEliminarUsuario.setEnabled(false);
             }
         });
     }
@@ -124,6 +127,11 @@ public class C_gestion_usuario implements Gestion {
             int idEmpleado = Integer.valueOf(String.valueOf(this.vista.jtUsuario.getValueAt(row, 0)));
             Modificar_empleado modEmpleado = new Modificar_empleado(c_main, idEmpleado);
             modEmpleado.mostrarVista();
+        } else if (e.getSource() == this.vista.jbEliminarUsuario) {
+            int row = this.vista.jtUsuario.getSelectedRow();
+            int idEmpleado = Integer.valueOf(String.valueOf(this.vista.jtUsuario.getValueAt(row, 0)));
+            modelo.eliminarUsuario(idEmpleado);
+            this.vista.jtUsuario.setModel(modelo.consultarFuncionario("", false, false, false));
         } else if (e.getSource() == this.vista.jbCambiarPassword) {
             cambiarContraseña();
         } else if (e.getSource() == this.vista.jbGestionRol) {
@@ -149,7 +157,7 @@ public class C_gestion_usuario implements Gestion {
         modelo.setFuncionario(modelo.obtenerDatosFuncionarioID(idFuncionario));
         if ((fila > -1) && (columna > -1)) {
             this.vista.jbModificarUsuario.setEnabled(true);
-            //this.v_jifGesUsu.jbEliminar.setEnabled(true);
+            this.vista.jbEliminarUsuario.setEnabled(true);
             this.vista.jtfAlias.setText(modelo.getFuncionario().getAlias());
             this.vista.jtfDireccion.setText(modelo.getFuncionario().getDireccion());
             this.vista.jtfCorreoElectronico.setText(modelo.getFuncionario().getEmail());
@@ -182,6 +190,7 @@ public class C_gestion_usuario implements Gestion {
             }
         } else {
             this.vista.jbModificarUsuario.setEnabled(false);
+            this.vista.jbEliminarUsuario.setEnabled(false);
         }
         if (e.getClickCount() == 2) {
         }

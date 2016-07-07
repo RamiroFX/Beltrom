@@ -9,7 +9,7 @@ import DB_manager.DB_Funcionario;
 import DB_manager.ResultSetTableModel;
 import Entities.M_funcionario;
 import java.util.Vector;
-import javax.swing.table.TableModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -46,6 +46,12 @@ public class M_gestion_usuario {
 
     public M_funcionario obtenerDatosFuncionarioID(int idFuncionario) {
         return DB_Funcionario.obtenerDatosFuncionarioID(idFuncionario);
+    }
+
+    public void eliminarUsuario(int idEmpleado) {
+        M_funcionario funcionario = DB_Funcionario.obtenerDatosFuncionarioID(idEmpleado);
+        DB_Funcionario.eliminarFuncionarioFX(funcionario);
+        JOptionPane.showMessageDialog(null, "Usuario eliminado", "Atención", JOptionPane.INFORMATION_MESSAGE);
     }
 
 }
