@@ -91,6 +91,5 @@ public class DB_rol_usuario {
             }
         }
         return rol_usuario;
-
     }
 }

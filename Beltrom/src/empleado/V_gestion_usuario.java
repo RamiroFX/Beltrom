@@ -87,8 +87,8 @@ public class V_gestion_usuario extends JInternalFrame {
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
-        setTitle("Gestión de Usuarios ");
-        setName("jifGestionUsuario");
+        setTitle("Gestión de Usuarios");
+        setName("Gestión usuario'");
         setPreferredSize(new java.awt.Dimension(800, 600));
         initComponents();
     }
@@ -141,7 +141,10 @@ public class V_gestion_usuario extends JInternalFrame {
         jbModificarUsuario = new javax.swing.JButton();
         jbEliminarUsuario = new javax.swing.JButton("Eliminar usuario");
         jbCambiarPassword = new javax.swing.JButton("Cambiar contraseña");
-
+        jbCrearUsuario.setName("crear empleado");
+        jbModificarUsuario.setName("modificar empleado");
+        jbEliminarUsuario.setName("borrar empleado");
+        
         jpDatosPersonales1 = new javax.swing.JPanel();
         jpDatosPersonales1.setLayout(new java.awt.BorderLayout());
 
@@ -256,6 +259,7 @@ public class V_gestion_usuario extends JInternalFrame {
         jbCrearUsuario.setText("Crear usuario");
         jbModificarUsuario.setText("Actualizar usuario");
         jbGestionRol = new JButton("Gestión de roles");
+        jbGestionRol.setName("roles");
         jpSouth.add(jbCrearUsuario);
         jpSouth.add(jbModificarUsuario);
         jpSouth.add(jbEliminarUsuario);
@@ -270,6 +274,7 @@ public class V_gestion_usuario extends JInternalFrame {
     
     private void initFilter() {
         jtfBuscar = new JTextField();
+        jtfBuscar.setName("buscar empleado");
         jckbNombreApellido = new JCheckBox("Nombre/Apellido");
         jckbNombreApellido.setSelected(true);
         jckbCedula = new JCheckBox("Cedula");

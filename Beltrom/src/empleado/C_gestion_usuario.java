@@ -4,6 +4,7 @@
  */
 package empleado;
 
+import Entities.M_menu_item;
 import Utilities.c_packColumn;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import GestionRol.Gestion_rol;
 import Interface.Gestion;
 import beltrom.C_inicio;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 /**
  *
@@ -21,12 +23,12 @@ import java.awt.event.KeyEvent;
  */
 public class C_gestion_usuario implements Gestion {
 
-    public C_inicio c_main;
+    public C_inicio c_inicio;
     M_gestion_usuario modelo;
     V_gestion_usuario vista;
 
     public C_gestion_usuario(M_gestion_usuario modelo, V_gestion_usuario vista, C_inicio c_main) {
-        this.c_main = c_main;
+        this.c_inicio = c_main;
         this.modelo = modelo;
         this.vista = vista;
         inicializarVista();
@@ -40,22 +42,48 @@ public class C_gestion_usuario implements Gestion {
         this.vista.jbEliminarUsuario.setEnabled(false);
         this.vista.jftCedulaIdentidad.setFormatterFactory(
                 new javax.swing.text.DefaultFormatterFactory(
-                new javax.swing.text.NumberFormatter(
-                new java.text.DecimalFormat("#,##0"))));
-        System.out.println("/**********/Controlando acceso/**********/");
-        System.out.println("Usuario: "+c_main.getFuncionario().getAlias());
-        System.out.println("Rol actual: "+c_main.getRol_usuario().getRolActual().getDescripcion());        
-        System.out.println("/****************************************/");
-        System.out.println("usuario.vista: "+this.vista.getName());        
+                        new javax.swing.text.NumberFormatter(
+                                new java.text.DecimalFormat("#,##0"))));
+        this.vista.jtfBuscar.setEnabled(false);
+        this.vista.jckbCedula.setEnabled(false);
+        this.vista.jckbNombreApellido.setEnabled(false);
+        this.vista.jrbExclusivo.setEnabled(false);
+        this.vista.jrbInclusivo.setEnabled(false);
+        this.vista.jbCrearUsuario.setEnabled(false);
+        this.vista.jbModificarUsuario.setEnabled(false);
+        this.vista.jbEliminarUsuario.setEnabled(false);
+        this.vista.jbGestionRol.setEnabled(false);
+        ArrayList<M_menu_item> accesos = c_inicio.modelo.getRol_usuario().getAccesos();
+        for (int i = 0; i < accesos.size(); i++) {
+            if (this.vista.jbCrearUsuario.getName().equals(accesos.get(i).getItemDescripcion())) {
+                this.vista.jbCrearUsuario.setEnabled(true);
+            }
+            if (this.vista.jbModificarUsuario.getName().equals(accesos.get(i).getItemDescripcion())) {
+                this.vista.jbModificarUsuario.setEnabled(true);
+            }
+            if (this.vista.jbEliminarUsuario.getName().equals(accesos.get(i).getItemDescripcion())) {
+                this.vista.jbEliminarUsuario.setEnabled(true);
+            }
+            if (this.vista.jbGestionRol.getName().equals(accesos.get(i).getItemDescripcion())) {
+                this.vista.jbGestionRol.setEnabled(true);
+            }
+            if (this.vista.jtfBuscar.getName().equals(accesos.get(i).getItemDescripcion())) {
+                this.vista.jtfBuscar.setEnabled(true);
+                this.vista.jckbCedula.setEnabled(true);
+                this.vista.jckbNombreApellido.setEnabled(true);
+                this.vista.jrbExclusivo.setEnabled(true);
+                this.vista.jrbInclusivo.setEnabled(true);
+            }
+        }
     }
 
     /**
      * Establece el tamaño, posicion y visibilidad de la vista.
      */
     public void mostrarVista() {
-        this.vista.setSize(this.c_main.establecerTamañoPanel());
-        this.vista.setLocation(this.c_main.centrarPantalla(this.vista));
-        this.c_main.agregarVentana(this.vista);
+        this.vista.setSize(this.c_inicio.establecerTamañoPanel());
+        this.vista.setLocation(this.c_inicio.centrarPantalla(this.vista));
+        this.c_inicio.agregarVentana(this.vista);
     }
 
     /**
@@ -119,18 +147,18 @@ public class C_gestion_usuario implements Gestion {
     }
 
     private void cambiarContraseña() {
-        CambiarPassword cp = new CambiarPassword(this.c_main.vista, c_main);
+        CambiarPassword cp = new CambiarPassword(this.c_inicio.vista, c_inicio);
         cp.setVisible(true);
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.vista.jbCrearUsuario) {
-            Crear_empleado crearEmpleado = new Crear_empleado(c_main);
+            Crear_empleado crearEmpleado = new Crear_empleado(c_inicio);
             crearEmpleado.mostrarVista();
         } else if (e.getSource() == this.vista.jbModificarUsuario) {
             int row = this.vista.jtUsuario.getSelectedRow();
             int idEmpleado = Integer.valueOf(String.valueOf(this.vista.jtUsuario.getValueAt(row, 0)));
-            Modificar_empleado modEmpleado = new Modificar_empleado(c_main, idEmpleado);
+            Modificar_empleado modEmpleado = new Modificar_empleado(c_inicio, idEmpleado);
             modEmpleado.mostrarVista();
         } else if (e.getSource() == this.vista.jbEliminarUsuario) {
             int row = this.vista.jtUsuario.getSelectedRow();
@@ -140,7 +168,7 @@ public class C_gestion_usuario implements Gestion {
         } else if (e.getSource() == this.vista.jbCambiarPassword) {
             cambiarContraseña();
         } else if (e.getSource() == this.vista.jbGestionRol) {
-            Gestion_rol gestion_rol = new Gestion_rol(c_main);
+            Gestion_rol gestion_rol = new Gestion_rol(c_inicio);
             gestion_rol.mostrarVista();
         } else if (e.getSource() == this.vista.jrbExclusivo) {
             displayQueryResults();

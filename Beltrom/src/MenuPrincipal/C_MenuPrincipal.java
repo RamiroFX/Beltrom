@@ -4,13 +4,14 @@
  */
 package MenuPrincipal;
 
+import Entities.M_menu_item;
 import beltrom.C_inicio;
 import empleado.Gestion_empleado;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JInternalFrame;
 
@@ -21,24 +22,36 @@ import javax.swing.JInternalFrame;
 public class C_MenuPrincipal implements ActionListener {
 
     public V_MenuPrincipal vista;
-    public C_inicio inicio;
+    public C_inicio c_inicio;
 
     public C_MenuPrincipal(V_MenuPrincipal vista, C_inicio inicio) {
         this.vista = vista;
-        this.inicio = inicio;
+        this.c_inicio = inicio;
         inicializarVista();
         agregarListeners();
     }
 
     private void inicializarVista() {
-        java.util.Date date = new java.util.Date();
-        String fechaInicio = new Timestamp(date.getTime()).toString().substring(0, 11);
-        fechaInicio = fechaInicio + "00:00:00.000";
-        String fechaFinal = new Timestamp(date.getTime()).toString().substring(0, 11);
-        fechaFinal = fechaFinal + "23:59:59.000";
-        Timestamp tsInicio = Timestamp.valueOf(fechaInicio);
-        Timestamp tsFinal = Timestamp.valueOf(fechaFinal);
         this.vista.jftFecha.setValue(Calendar.getInstance().getTime());
+        this.vista.jbEmpleados.setEnabled(false);
+        this.vista.jbMovimientos.setEnabled(false);
+        this.vista.jbProveedores.setEnabled(false);
+        this.vista.jbProducto.setEnabled(false);
+        ArrayList<M_menu_item> accesos = c_inicio.modelo.getRol_usuario().getAccesos();
+        for (int i = 0; i < accesos.size(); i++) {
+            if (this.vista.jbEmpleados.getName().equals(accesos.get(i).getMenuDescripcion())) {
+                this.vista.jbEmpleados.setEnabled(true);
+            }
+            if (this.vista.jbMovimientos.getName().equals(accesos.get(i).getMenuDescripcion())) {
+                this.vista.jbMovimientos.setEnabled(true);
+            }
+            if (this.vista.jbProducto.getName().equals(accesos.get(i).getMenuDescripcion())) {
+                this.vista.jbProducto.setEnabled(true);
+            }
+            if (this.vista.jbProveedores.getName().equals(accesos.get(i).getMenuDescripcion())) {
+                this.vista.jbProveedores.setEnabled(true);
+            }
+        }
     }
 
     private void agregarListeners() {
@@ -51,16 +64,16 @@ public class C_MenuPrincipal implements ActionListener {
 
     void mostrarVista() {
         this.vista.setVisible(true);
-        this.inicio.agregarVentana(vista);
-        this.vista.setLocation(this.inicio.centrarPantalla(this.vista));
-        //this.inicio.centrarPantalla(vista);
+        this.c_inicio.agregarVentana(vista);
+        this.vista.setLocation(this.c_inicio.centrarPantalla(this.vista));
+        //this.c_inicio.centrarPantalla(vista);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         Object src = e.getSource();
         if (src.equals(this.vista.jbEmpleados)) {
-            Gestion_empleado ges_usuario = new Gestion_empleado(inicio);
+            Gestion_empleado ges_usuario = new Gestion_empleado(c_inicio);
             ges_usuario.mostrarVista();
         } else if (src.equals(this.vista.jbSalir)) {
             System.exit(0);

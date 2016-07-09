@@ -22,8 +22,8 @@ public class C_login implements ActionListener, KeyListener {
     V_login vista;
     C_inicio c_inicio;
 
-    public C_login(M_login modelo, V_login vista, C_inicio c_main) {
-        this.c_inicio = c_main;
+    public C_login(M_login modelo, V_login vista, C_inicio c_inicio) {
+        this.c_inicio = c_inicio;
         this.modelo = modelo;
         this.vista = vista;
         inicializarVista();
@@ -59,7 +59,7 @@ public class C_login implements ActionListener, KeyListener {
     }
 
     private void crearSeleccionRol() {
-        seleccionarRol seleccionarRol = new seleccionarRol(c_inicio, c_inicio.getFuncionario());
+        SeleccionarRol seleccionarRol = new SeleccionarRol(c_inicio);
         seleccionarRol.mostrarVista();
     }
 
@@ -85,9 +85,9 @@ public class C_login implements ActionListener, KeyListener {
                 //se conecta contra la base de datos
                 if (modelo.conectar("postgres", "postgres")) {
                     if (modelo.verificarUsuario(user, password)) {
-                        c_inicio.setFuncionario(modelo.funcionario);
+                        c_inicio.modelo.getRol_usuario().setFuncionario(modelo.funcionario);
                         mostrarMensaje("La conexion se ha establecido con exito \n"
-                                + "Bienvenido " + c_inicio.getFuncionario().getNombre() + " " + c_inicio.getFuncionario().getApellido() + "!");
+                                + "Bienvenido " + c_inicio.modelo.getRol_usuario().getFuncionario().getNombre() + " " + c_inicio.modelo.getRol_usuario().getFuncionario().getApellido() + "!");
                     //una vez correcto el nombre/contraseña se elimina la pantalla de logeo
                         //y se procede a mostrar la pantalla de seleccion de rol
                         vista.dispose();
@@ -96,7 +96,7 @@ public class C_login implements ActionListener, KeyListener {
                     //se habilita la opcion de deslogeo
                         //c_main.vista.getJMbarraMenu().jmiLogOut.setEnabled(true);
                         //se coloca en la barra de menu el nombre de usuario
-                        c_inicio.vista.setJtfUsuario(c_inicio.getFuncionario().getAlias());
+                        c_inicio.vista.setJtfUsuario(c_inicio.modelo.getRol_usuario().getFuncionario().getAlias());
                     }
                 } else {
                     mostrarMensaje("Atencion\n"

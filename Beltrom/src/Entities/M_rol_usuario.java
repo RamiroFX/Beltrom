@@ -15,11 +15,13 @@ public class M_rol_usuario {
     private M_funcionario funcionario;
     private M_rol rolActual;
     private ArrayList<M_rol> roles;
+    private ArrayList<M_menu_item>  accesos;
 
     public M_rol_usuario() {
         this.funcionario = new M_funcionario();
         this.rolActual = new M_rol();
         this.roles = new ArrayList<>();
+        this.accesos = new ArrayList<>();
     }
 
     public M_rol_usuario(M_funcionario funcionario, M_rol rol, ArrayList<M_rol> roles) {
@@ -68,5 +70,19 @@ public class M_rol_usuario {
      */
     public void setRoles(ArrayList<M_rol> roles) {
         this.roles = roles;
+    }
+
+    /**
+     * @return the accesos
+     */
+    public ArrayList<M_menu_item> getAccesos() {
+        return accesos;
+    }
+
+    /**
+     * @param accesos the accesos to set
+     */
+    public void setAccesos(ArrayList<M_menu_item> accesos) {
+        this.accesos = accesos;
     }
 }

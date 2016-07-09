@@ -5,6 +5,7 @@
 package beltrom;
 
 import Entities.M_funcionario;
+import Entities.M_rol_usuario;
 import Login.Login;
 
 /**
@@ -13,19 +14,19 @@ import Login.Login;
  */
 public class Inicio {
 
-    M_funcionario m_funcionario;
-    V_inicio v_mainframe;
-    C_inicio c_main;
+    M_inicio modelo;
+    V_inicio vista;
+    C_inicio controlador;
 
     public Inicio() {
-        v_mainframe = new V_inicio();
-        m_funcionario = new M_funcionario();
-        c_main = new C_inicio(v_mainframe, m_funcionario);
-        c_main.mostrarVista();
+        vista = new V_inicio();
+        modelo = new M_inicio();
+        controlador = new C_inicio(vista, modelo);
+        controlador.mostrarVista();
     }
 
     public void mostrarLogin() {
-        Login login = new Login(c_main);
+        Login login = new Login(controlador);
         login.mostrarVista();
     }
 }

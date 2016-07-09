@@ -63,12 +63,16 @@ class V_MenuPrincipal extends JInternalFrame {
         jpCenter = new JPanel();
         jbSalir = new JButton("Salir");
         jbProveedores = new JButton("Proveedores");
+        jbProveedores.setName("Gestión proveedor");
         jbProveedores.setPreferredSize(new Dimension(200, 100));
         jbProducto = new JButton("Productos");
+        jbProducto.setName("Gestión producto");
         jbProducto.setPreferredSize(new Dimension(200, 100));
         jbMovimientos = new JButton("Movimientos");
+        jbMovimientos.setName("Gestión movimiento");
         jbMovimientos.setPreferredSize(new Dimension(200, 100));
         jbEmpleados = new JButton("Empleados");
+        jbEmpleados.setName("Gestión empleado");
         jbEmpleados.setPreferredSize(new Dimension(200, 100));
         jftFecha = new JFormattedTextField(
                 new DefaultFormatterFactory(

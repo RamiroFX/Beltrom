@@ -28,12 +28,11 @@ import javax.swing.JInternalFrame;
 public class C_inicio implements ActionListener {
 
     public V_inicio vista = null;//referencia a la ventana principal.
-    private M_funcionario m_funcionario;
-    private M_rol_usuario rol_usuario;
+    public M_inicio modelo;
     private escuchadorVentana wa;
 
-    public C_inicio(V_inicio mainFrame, M_funcionario funcionario) {
-        this.m_funcionario = funcionario;
+    public C_inicio(V_inicio mainFrame, M_inicio modelo) {
+        this.modelo = modelo;
         this.vista = mainFrame;
         this.vista.setSize(obtenerDimensionDePantalla());
         wa = new escuchadorVentana();
@@ -100,31 +99,17 @@ public class C_inicio implements ActionListener {
     }
 
     /**
-     * @return the funcionario
-     */
-    public M_funcionario getFuncionario() {
-        return m_funcionario;
-    }
-
-    /**
-     * @param funcionario the funcionario to set
-     */
-    public void setFuncionario(M_funcionario funcionario) {
-        this.m_funcionario = funcionario;
-    }
-
-    /**
      * @return the rol_usuario
      */
     public M_rol_usuario getRol_usuario() {
-        return rol_usuario;
+        return this.modelo.getRol_usuario();
     }
 
     /**
      * @param rol_usuario the rol_usuario to set
      */
     public void setRol_usuario(M_rol_usuario rol_usuario) {
-        this.rol_usuario = rol_usuario;
+        this.modelo.setRol_usuario(rol_usuario);
     }
 
     @Override

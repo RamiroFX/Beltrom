@@ -59,7 +59,7 @@ public class DB_rol {
                     + "AND PR.ID_MENU = M.ID_MENU "
                     + "AND PR.ID_MENU_ITEM = MI.ID_MENU_ITEM "
                     + "AND R.ID_ROL = " + idRol + " ";
-            String ORDER_BY = " ORDER BY MI.DESCRIPCION ";
+            String ORDER_BY = " ORDER BY MI.ID_MENU_ITEM ";
             String query = SELECT + ORDER_BY;
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             // se ejecuta el query y se obtienen los resultados en un ResultSet
@@ -70,6 +70,45 @@ public class DB_rol {
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         }
         return rstm;
+    }
+
+    public static ArrayList<M_menu_item> obtenerAccesos(int idRol) {
+        ArrayList<M_menu_item> accesos = null;
+        String Q_ACCESOS = "SELECT M.ID_MENU \"idMenu\",M.DESCRIPCION \"Menu\", MI.ID_MENU_ITEM \"IdAcceso\",MI.DESCRIPCION \"Acceso\" "
+                    + "FROM PERMISO_ROL PR, MENU_ITEM MI, ROL R, MENU M "
+                    + "WHERE PR.ID_ROL = R.ID_ROL "
+                    + "AND PR.ID_MENU = M.ID_MENU "
+                    + "AND PR.ID_MENU_ITEM = MI.ID_MENU_ITEM "
+                    + "AND R.ID_ROL = " + idRol + " ";
+        try {
+            st = DB_manager.getConection().createStatement();
+            rs = st.executeQuery(Q_ACCESOS);
+            accesos = new ArrayList<>();
+            while (rs.next()) {
+                M_menu_item m = new M_menu_item();
+                m.setIdMenu(rs.getInt("idMenu"));
+                m.setMenuDescripcion(rs.getString("Menu"));
+                m.setItemId(rs.getInt("IdAcceso"));
+                m.setItemDescripcion(rs.getString("Acceso"));
+                accesos.add(m);
+            }
+        } catch (SQLException ex) {
+            Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (st != null) {
+                    st.close();
+                }
+            } catch (SQLException ex) {
+                Logger lgr = Logger.getLogger(DB_Funcionario.class.getName());
+                lgr.log(Level.WARNING, ex.getMessage(), ex);
+            }
+        }
+        return accesos;
     }
 
     public static boolean existeRolPrimeraVez(String nombreRol) {

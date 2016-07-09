@@ -95,8 +95,8 @@ public class CambiarPassword extends JDialog implements ActionListener {
     private void cambiarContraseña() {
         char[] passwordActual = jpfPasswordActual.getPassword();
         String pass = String.copyValueOf(passwordActual);
-        int idFuncionario = this.c_inicio.getFuncionario().getId_funcionario();
-        String alias = this.c_inicio.getFuncionario().getAlias();
+        int idFuncionario = this.c_inicio.modelo.getRol_usuario().getFuncionario().getId_funcionario();
+        String alias = this.c_inicio.modelo.getRol_usuario().getFuncionario().getAlias();
         if (DB_Funcionario.isPasswordCorrect(idFuncionario, alias, pass)) {
             char[] passwordNuevo1 = jpfPasswordNuevo1.getPassword();
             char[] passwordNuevo2 = jpfPasswordNuevo2.getPassword();

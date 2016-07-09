@@ -629,6 +629,7 @@ public class DB_Funcionario {
             String query = SELECT + FROM + WHERE + ORDER_BY;
             st = DB_manager.getConection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             // se ejecuta el query y se obtienen los resultados en un ResultSet
+            System.out.println("632-DB_funcionario: "+query);
             rs = st.executeQuery(query);
             rstm = new ResultSetTableModel(rs);
         } catch (SQLException ex) {

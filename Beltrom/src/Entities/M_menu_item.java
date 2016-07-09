@@ -13,6 +13,10 @@ public class M_menu_item {
     private int idItem, idMenu;
     private String itemDescripcion, menuDescripcion;
 
+    public M_menu_item() {
+    }
+
+    
     public M_menu_item(int idMenu, String menuDescripcion, int idItem, String itemDescripcion) {
         this.idMenu = idMenu;
         this.menuDescripcion = menuDescripcion;
