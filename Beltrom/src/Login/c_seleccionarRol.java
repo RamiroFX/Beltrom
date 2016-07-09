@@ -8,7 +8,6 @@ import DB_manager.DB_Funcionario;
 import DB_manager.DB_manager;
 import DB_manager.DB_rol;
 import DB_manager.DB_rol_usuario;
-import Entities.M_funcionario;
 import MenuPrincipal.MenuPrincipal;
 import beltrom.C_inicio;
 import java.awt.Point;
@@ -24,28 +23,26 @@ import java.util.Vector;
  *
  * @author Administrador
  */
-public class c_seleccionarRol implements ActionListener, KeyListener {
+public class C_seleccionarRol implements ActionListener, KeyListener {
 
-    public v_jifSeleccionarRol vista;
-    private M_funcionario funcionario;
-    C_inicio c_main; //referencia a la ventana principal
+    public V_jifSeleccionarRol vista;
+    C_inicio c_inicio; //referencia a la ventana principal
 
-    public c_seleccionarRol(v_jifSeleccionarRol jifSelRol, M_funcionario funcionario, C_inicio c_main) {
-        this.c_main = c_main;
-        this.funcionario = funcionario;
+    public C_seleccionarRol(V_jifSeleccionarRol jifSelRol, C_inicio c_main) {
+        this.c_inicio = c_main;
         this.vista = jifSelRol;
         inicializarVista();
         agregarListeners();
     }
 
     public void mostrarVista() {
-        this.vista.setSize((int) (this.c_main.vista.getWidth() * 0.3), (int) (this.c_main.vista.getHeight() * 0.2));
-        this.vista.setLocation(new Point((this.c_main.vista.getWidth() - this.vista.getWidth()) / 2, (this.c_main.vista.getHeight() - this.vista.getHeight() - 45) / 2));
-        this.c_main.agregarVentana(vista);
+        this.vista.setSize((int) (this.c_inicio.vista.getWidth() * 0.3), (int) (this.c_inicio.vista.getHeight() * 0.2));
+        this.vista.setLocation(new Point((this.c_inicio.vista.getWidth() - this.vista.getWidth()) / 2, (this.c_inicio.vista.getHeight() - this.vista.getHeight() - 45) / 2));
+        this.c_inicio.agregarVentana(vista);
     }
 
     private void inicializarVista() {
-        Vector vRolUsuario = DB_Funcionario.obtenerRolFuncionario(this.c_main.getFuncionario());
+        Vector vRolUsuario = DB_Funcionario.obtenerRolFuncionario(this.c_inicio.modelo.getRol_usuario().getFuncionario());
         for (int i = 0; i < vRolUsuario.size(); i++) {
             this.vista.jcbRol.addItem(vRolUsuario.get(i));
         }
@@ -65,50 +62,32 @@ public class c_seleccionarRol implements ActionListener, KeyListener {
             String rolMenuItem = it.next().toString();
             System.out.println(rolMenuItem);
 //            if (rolMenuItem.equals("jifGestionUsuario")) {
-//                c_main.v_mainFrame.getJMbarraMenu().jmGestionUsuario.setEnabled(true);
+//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionUsuario.setEnabled(true);
 //            } else if (rolMenuItem.equals("jifGestionProducto")) {
-//                c_main.v_mainFrame.getJMbarraMenu().jmGestionProducto.setEnabled(true);
+//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionProducto.setEnabled(true);
 //            } else if (rolMenuItem.equals("jifGestionCompra")) {
-//                c_main.v_mainFrame.getJMbarraMenu().jmGestionCompra.setEnabled(true);
+//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionCompra.setEnabled(true);
 //            } else if (rolMenuItem.equals("jifGestionVenta")) {
-//                c_main.v_mainFrame.getJMbarraMenu().jmGestionVenta.setEnabled(true);
+//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionVenta.setEnabled(true);
 //            }
         }
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vista.jbSalir) {
-            c_main.vista.setJtfUsuario("");
+            c_inicio.vista.setJtfUsuario("");
             //c_main.vista.getJMbarraMenu().jmiLogOut.setEnabled(false);
             //c_main.vista.getJMbarraMenu().jmiLogIn.setEnabled(true);
             vista.cerrar();
         } else if (e.getSource() == vista.jbAceptar) {
-            try {
-                vista.dispose();
-                c_main.vista.setJtfUsuario(DB_manager.obtenerNombreUsuarioDB());
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            getFuncionario().setOcupacion((String) vista.jcbRol.getSelectedItem());
-            c_main.setRol_usuario(DB_rol_usuario.obtenerRolUsuario(getFuncionario().getId_funcionario()));
-            c_main.getRol_usuario().setRolActual(DB_rol.obtenerRol((String) vista.jcbRol.getSelectedItem()));
-            MenuPrincipal c_menuPrincipal = new MenuPrincipal(c_main);
+            vista.dispose();
+            c_inicio.modelo.getRol_usuario().getFuncionario().setOcupacion((String) vista.jcbRol.getSelectedItem());
+            c_inicio.setRol_usuario(DB_rol_usuario.obtenerRolUsuario(c_inicio.modelo.getRol_usuario().getFuncionario().getId_funcionario()));
+            c_inicio.getRol_usuario().setRolActual(DB_rol.obtenerRol((String) vista.jcbRol.getSelectedItem()));
+            c_inicio.getRol_usuario().setAccesos(DB_rol.obtenerAccesos(c_inicio.getRol_usuario().getRolActual().getId()));            
+            MenuPrincipal c_menuPrincipal = new MenuPrincipal(c_inicio);
             c_menuPrincipal.mostrarVista();
         }
-    }
-
-    /**
-     * @return the funcionario
-     */
-    public M_funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    /**
-     * @param funcionario the funcionario to set
-     */
-    public void setFuncionario(M_funcionario funcionario) {
-        this.funcionario = funcionario;
     }
 
     public void keyTyped(KeyEvent e) {
@@ -122,16 +101,12 @@ public class c_seleccionarRol implements ActionListener, KeyListener {
         }
         if (this.vista.jbAceptar.hasFocus()) {
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                try {
-                    vista.dispose();
-                    c_main.vista.setJtfUsuario(DB_manager.obtenerNombreUsuarioDB());
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-                getFuncionario().setOcupacion((String) vista.jcbRol.getSelectedItem());
-                c_main.setRol_usuario(DB_rol_usuario.obtenerRolUsuario(getFuncionario().getId_funcionario()));
-                c_main.getRol_usuario().setRolActual(DB_rol.obtenerRol((String) vista.jcbRol.getSelectedItem()));
-                MenuPrincipal c_menuPrincipal = new MenuPrincipal(c_main);
+                vista.dispose();
+                c_inicio.modelo.getRol_usuario().getFuncionario().setOcupacion((String) vista.jcbRol.getSelectedItem());
+                c_inicio.setRol_usuario(DB_rol_usuario.obtenerRolUsuario(c_inicio.modelo.getRol_usuario().getFuncionario().getId_funcionario()));
+                c_inicio.getRol_usuario().setRolActual(DB_rol.obtenerRol((String) vista.jcbRol.getSelectedItem()));
+                c_inicio.getRol_usuario().setAccesos(DB_rol.obtenerAccesos(c_inicio.getRol_usuario().getRolActual().getId()));            
+                MenuPrincipal c_menuPrincipal = new MenuPrincipal(c_inicio);
                 c_menuPrincipal.mostrarVista();
             }
         }

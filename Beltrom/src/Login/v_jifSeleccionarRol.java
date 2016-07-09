@@ -25,14 +25,14 @@ import javax.swing.SwingConstants;
  * Esta ventana es la encargada de gestionar el ingreso de los usuarios al siste-
  * ma.
  */
-public class v_jifSeleccionarRol extends JInternalFrame{
+public class V_jifSeleccionarRol extends JInternalFrame{
     public JTextField txtNombre; //Campo de nombre
     public JPasswordField txtPassword; //Campo de password
     public JButton jbAceptar, jbSalir; //botones salir y aceptar
     public JComboBox jcbRol;
     private  JPanel jpTop,jpBot; //paneles
 
-    public v_jifSeleccionarRol(){
+    public V_jifSeleccionarRol(){
         super("Rol", false,true,false);
         setName("Login");
         setName("SeleccionRol");
