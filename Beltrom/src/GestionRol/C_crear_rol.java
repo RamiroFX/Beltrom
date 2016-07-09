@@ -23,6 +23,7 @@ public class C_crear_rol extends MouseAdapter implements ActionListener {
         this.vista = vista;
         inicializarVista();
         agregarListeners();
+        //comentario nuevo
     }
 
     /**
