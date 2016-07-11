@@ -14,12 +14,12 @@ public class SeleccionarRol {
 
     private C_seleccionarRol controlador;
     private V_jifSeleccionarRol vista;
-    private C_inicio c_main;
+    private C_inicio c_inicio;
 
     public SeleccionarRol(C_inicio c_main) {
-        this.c_main = c_main;
+        this.c_inicio = c_main;
         vista = new V_jifSeleccionarRol();
-        controlador = new C_seleccionarRol(vista, this.c_main);
+        controlador = new C_seleccionarRol(vista, this.c_inicio);
     }
 
     /**

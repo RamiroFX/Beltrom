@@ -5,7 +5,6 @@
 package Login;
 
 import DB_manager.DB_Funcionario;
-import DB_manager.DB_manager;
 import DB_manager.DB_rol;
 import DB_manager.DB_rol_usuario;
 import MenuPrincipal.MenuPrincipal;
@@ -15,8 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -54,23 +51,6 @@ public class C_seleccionarRol implements ActionListener, KeyListener {
         vista.jbSalir.addActionListener(this);
         vista.jcbRol.addActionListener(this);
         vista.jcbRol.addKeyListener(this);
-    }
-
-    private void controlarAccesoBarraMenu(Vector v) {
-        Iterator it = v.iterator();
-        while (it.hasNext()) {
-            String rolMenuItem = it.next().toString();
-            System.out.println(rolMenuItem);
-//            if (rolMenuItem.equals("jifGestionUsuario")) {
-//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionUsuario.setEnabled(true);
-//            } else if (rolMenuItem.equals("jifGestionProducto")) {
-//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionProducto.setEnabled(true);
-//            } else if (rolMenuItem.equals("jifGestionCompra")) {
-//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionCompra.setEnabled(true);
-//            } else if (rolMenuItem.equals("jifGestionVenta")) {
-//                c_inicio.v_mainFrame.getJMbarraMenu().jmGestionVenta.setEnabled(true);
-//            }
-        }
     }
 
     public void actionPerformed(ActionEvent e) {
